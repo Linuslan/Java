@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.saleoa.common.annotation.Column;
 import com.saleoa.common.annotation.Table;
-import com.saleoa.common.utils.JdbcType;
+import com.saleoa.common.constant.JdbcType;
 
 @Table(name="tbl_oa_level")
 public class Level {
@@ -15,7 +15,7 @@ public class Level {
 	//升级需要的积分
 	@Column(name="reward_points")
 	private Long rewardPoints;
-	//@Column(name="create_date")
+	@Column(name="create_date")
 	private Date createDate;
 	public Long getId() {
 		return id;

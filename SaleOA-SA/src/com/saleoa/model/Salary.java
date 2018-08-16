@@ -4,7 +4,7 @@ import java.util.Date;
 
 import com.saleoa.common.annotation.Column;
 import com.saleoa.common.annotation.Table;
-import com.saleoa.common.utils.JdbcType;
+import com.saleoa.common.constant.JdbcType;
 
 @Table(name="tbl_oa_salary")
 public class Salary {

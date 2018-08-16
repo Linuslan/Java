@@ -1,4 +1,4 @@
-package com.saleoa.common.utils;
+package com.saleoa.common.constant;
 
 public class JdbcType {
 	public final static String INTEGER = "INTEGER";

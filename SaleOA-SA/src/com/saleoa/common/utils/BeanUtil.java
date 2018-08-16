@@ -498,6 +498,21 @@ public class BeanUtil {
 		return map;
 	}
 	
+	public static Long parseLong(Object obj) {
+		if(null != obj) {
+			if(obj instanceof Long) {
+				return (Long) obj;
+			}
+			try {
+				return Long.parseLong(obj.toString());
+			} catch(Exception ex) {
+				ex.printStackTrace();
+				return null;
+			}
+		}
+		return null;
+	}
+	
 	/*
 	public static void main(String[] args) {
 		List<ReimburseContent> contents = new ArrayList<ReimburseContent> ();

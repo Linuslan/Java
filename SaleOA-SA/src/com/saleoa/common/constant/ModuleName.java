@@ -1,4 +1,4 @@
-package com.saleoa.common.utils;
+package com.saleoa.common.constant;
 
 public class ModuleName {
 	public final static String EMPLOYEE = "员工管理";

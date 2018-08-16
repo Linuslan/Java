@@ -23,7 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.MenuListener;
 
-import com.saleoa.common.utils.ModuleName;
+import com.saleoa.common.constant.ModuleName;
+import com.saleoa.ui.employee.EmployeePanel;
+import com.saleoa.ui.level.LevelPanel;
 
 public class MainEntry {
 	private JTabbedPane tabPanel = null;
@@ -132,6 +134,9 @@ public class MainEntry {
 				if(ModuleName.LEVEL.equals(item.getName())) {
 					LevelPanel levelPanel = new LevelPanel();
 					tabPanel.add(levelPanel);
+				} else if(ModuleName.EMPLOYEE.equals(item.getName())) {
+					EmployeePanel employeePanel = new EmployeePanel();
+					tabPanel.add(employeePanel);
 				}
 			}
 		};
