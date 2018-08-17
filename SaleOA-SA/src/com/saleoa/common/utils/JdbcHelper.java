@@ -102,6 +102,10 @@ public class JdbcHelper {
 		Field[] fields = cls.getDeclaredFields();
 		for(int i = 0; i < fields.length; i ++) {
 			Field field = fields[i];
+			Object value = BeanUtil.getValue(obj, field.getName());
+			if(null == value) {
+				continue;
+			}
 			Annotation[] fieldAnnoArr = field.getDeclaredAnnotations();
 			for(int j = 0; j < fieldAnnoArr.length; j ++) {
 				Annotation annotation = fieldAnnoArr[j];
@@ -215,6 +219,124 @@ public class JdbcHelper {
 		sql += " WHERE id="+id;
 		System.out.println(sql);
 		return sql;
+	}
+	
+	private static String updateSql(Object obj, List<Object> values) throws Exception {
+		Class cls = obj.getClass();
+		Long id = BeanUtil.parseLong(BeanUtil.getValue(obj, "id"));
+		if(null == id) {
+			ExceptionUtil.throwExcep("id is null");
+		}
+		String sql = "";
+		String tableName = AnnotationUtil.getTableName(cls);
+		List<Map<String, Object>> valueList = new ArrayList<Map<String, Object>> ();
+		Field[] fields = cls.getDeclaredFields();
+		for(int i = 0; i < fields.length; i ++) {
+			Field field = fields[i];
+			Object value = BeanUtil.getValue(obj, field.getName());
+			if(null != value && !"id".equals(field.getName())) {
+				Annotation[] fieldAnnoArr = field.getDeclaredAnnotations();
+				for(int j = 0; j < fieldAnnoArr.length; j ++) {
+					Annotation annotation = fieldAnnoArr[j];
+					if(annotation.annotationType().equals(Column.class)) {
+						String columnName = ((Column)annotation).name();
+						String jdbcType = ((Column)annotation).jdbcType();
+						Map<String, Object> valueMap = new HashMap<String, Object> ();
+						valueMap.put("columnName", columnName);
+						valueMap.put("value", value);
+						valueMap.put("jdbcType", jdbcType);
+						valueList.add(valueMap);
+					}
+				}
+			}
+		}
+		if(StringUtil.isEmpty(tableName)) {
+			ExceptionUtil.throwExcep("Table name is null.");
+		}
+		if(valueList.isEmpty()) {
+			ExceptionUtil.throwExcep("Column not found.");
+		}
+		sql = "UPDATE "+tableName+" SET ";
+		Iterator<Map<String, Object>> iter = valueList.iterator();
+		while(iter.hasNext()) {
+			Map<String, Object> map = iter.next();
+			String columnName = map.get("columnName").toString();
+			Object value = map.get("value");
+			String jdbcType = map.get("jdbcType").toString();
+			sql += columnName+= "=?";
+			if(JdbcType.TEXT.equals(jdbcType)) {
+				if(value instanceof Date) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					value = sdf.format(value);
+				}
+			}
+			values.add(value);
+			if(iter.hasNext()) {
+				sql += ",";
+			}
+		}
+		
+		sql += " WHERE id=?";
+		values.add(BeanUtil.getValue(obj, "id"));
+		System.out.println(sql);
+		return sql;
+	}
+	
+	private static boolean updatePrepared(List<Object> values, PreparedStatement ps) throws Exception {
+		boolean success = false;
+		Iterator<Object> valueIter = values.iterator();
+		int idx = 0;
+		while(valueIter.hasNext()) {
+			idx ++;
+			Object value = valueIter.next();
+			if(value instanceof String) {
+				ps.setString(idx, value.toString());
+			} else if(value instanceof Integer) {
+				ps.setInt(idx, (Integer)value);
+			} else if(value instanceof Long) {
+				ps.setLong(idx, (Long)value);
+			} else if(value instanceof Float) {
+				ps.setFloat(idx, (Float)value);
+			} else if(value instanceof Double) {
+				ps.setDouble(idx, (Double)value);
+			}
+		}
+		ps.addBatch();
+		success = true;
+		return success;
+	}
+	
+	public static boolean update(Object object) throws Exception {
+		boolean success = false;
+		List<Object> values = new ArrayList<Object> ();
+		String sql = updateSql(object, values);
+		PreparedStatement ps = getConnection().prepareStatement(sql);
+		updatePrepared(values, ps);
+		ps.executeBatch();
+		success = true;
+		return success;
+	}
+	
+	public static boolean updateBatch(List<? extends Object> objects) throws Exception {
+		boolean success = false;
+		List<List<Object>> valuesList = new ArrayList<List<Object>> ();
+		PreparedStatement ps = null;
+		for(int i = 0; i < objects.size(); i ++) {
+			List<Object> values = new ArrayList<Object> ();
+			Object object = objects.get(i);
+			String sql = updateSql(object, values);
+			if(null == ps) {
+				ps = getConnection().prepareStatement(sql);
+			}
+			valuesList.add(values);
+		}
+		for(int i = 0; i < valuesList.size(); i ++) {
+			updatePrepared(valuesList.get(i), ps);
+		}
+		
+		ps.executeBatch();
+		success = true;
+		return success;
 	}
 	
 	public static String deleteSql(Object obj) throws Exception {
@@ -353,9 +475,35 @@ public class JdbcHelper {
 		return isSuccess;
 	}
 	
+	public static void initEmployee() {
+		try {
+			Employee employee = new Employee();
+			employee.setId(0L);
+			employee.setCreateDate(new Date());
+			employee.setIsDelete(0);
+			employee.setLevelId(50L);
+			employee.setLevelName("最高级");
+			employee.setName("无");
+			employee.setRegisterDate(new Date());
+			employee.setRewardPoints(10000L);
+			employee.setSalary(0L);
+			employee.setStatus(0);
+			employee.setUpdateDate(new Date());
+			employee.setIntroducerId(0L);
+			employee.setIntroducerName("");
+			employee.setLeaderId(0L);
+			employee.setLeaderName("");
+			String insertSql = JdbcHelper.insertSql(employee);
+			JdbcHelper.executeSql(insertSql);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
-			//initTable();
+			initTable();
+			//initEmployee();
 			/*Level level = new Level();
 			level.setId(1L);
 			level.setName("二级");
@@ -378,6 +526,8 @@ public class JdbcHelper {
 			ILevelDao dao = new ILevelDaoImpl();
 			List<Level> levels = dao.select(map);
 			System.out.println(levels.size());*/
+			//String updateSql = "UPDATE tbl_oa_employee SET NAME='无' WHERE id=0";
+			//executeSql(updateSql);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -29,18 +30,24 @@ public class DialogModify {
 	ILevelDao levelDao = new ILevelDaoImpl();
 	private Long id;
 	private String name = "";
-	private Long point=0L;
+	private Long minPoint=0L;
+	private Long maxPoint=0L;
+	private Integer level=0;
+	private Long bonus = 0L;
 
 	public void initDialog(final Level level, final LevelPanel parent) {
 		if(null != level) {
 			id = level.getId();
 			name = level.getName();
-			point = level.getRewardPoints();
+			minPoint = level.getMinPoint();
+			maxPoint = level.getMaxPoint();
+			this.level = level.getLevel();
+			bonus = level.getBonus();
 		}
 		final JDialog dialog = new JDialog();
 		dialog.setBackground(Color.WHITE);
 		int dialogWidth = 400;
-		int dialogHeight = 250;
+		int dialogHeight = 300;
 		dialog.setSize(dialogWidth, dialogHeight);
 		dialog.setLocation((screenSize.width-dialogWidth)/2, (screenSize.height-dialogHeight)/2);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -58,19 +65,51 @@ public class DialogModify {
 		panel.add(nameIpt);
 		nameIpt.setLocation(FormCss.getLocation(nameLbl, null));
 		nameIpt.setText(name);
-		JLabel pointLbl = new JLabel("升级积分：");
-		pointLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(pointLbl);
-		pointLbl.setLocation(FormCss.getLocation(null, nameLbl));
-		final JFormattedTextField pointIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
-		pointIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		pointIpt.setLocation(FormCss.getLocation(pointLbl, nameIpt));
-		panel.add(pointIpt);
-		pointIpt.setText(String.valueOf(point));
+		
+		JLabel levelLbl = new JLabel("等级数字：");
+		levelLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(levelLbl);
+		levelLbl.setLocation(FormCss.getLocation(null, nameLbl));
+		final JTextField levelIpt = new JTextField();
+		levelIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(levelIpt);
+		levelIpt.setLocation(FormCss.getLocation(levelLbl, nameIpt));
+		levelIpt.setText(String.valueOf(this.level));
+		
+		JLabel minPointLbl = new JLabel("最小积分：");
+		minPointLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(minPointLbl);
+		minPointLbl.setLocation(FormCss.getLocation(null, levelLbl));
+		final JFormattedTextField minPointIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
+		minPointIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		minPointIpt.setLocation(FormCss.getLocation(minPointLbl, levelIpt));
+		panel.add(minPointIpt);
+		minPointIpt.setText(String.valueOf(minPoint));
+		
+		JLabel maxPointLbl = new JLabel("最大积分：");
+		maxPointLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(maxPointLbl);
+		maxPointLbl.setLocation(FormCss.getLocation(null, minPointLbl));
+		final JFormattedTextField maxPointIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
+		maxPointIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		maxPointIpt.setLocation(FormCss.getLocation(maxPointLbl, minPointIpt));
+		panel.add(maxPointIpt);
+		maxPointIpt.setText(String.valueOf(maxPoint));
+		
+		JLabel bonusLbl = new JLabel("奖励金：");
+		bonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(bonusLbl);
+		bonusLbl.setLocation(FormCss.getLocation(null, maxPointLbl));
+		final JFormattedTextField bonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance());
+		bonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		bonusIpt.setLocation(FormCss.getLocation(bonusLbl, maxPointLbl));
+		panel.add(bonusIpt);
+		bonusIpt.setText(String.valueOf(bonus));
+		
 		JButton saveBtn = new JButton("保存");
-		saveBtn.setSize(60, 50);
+		saveBtn.setSize(60, 30);
 		panel.add(saveBtn);
-		Point p = FormCss.getLocation(null, pointIpt);
+		Point p = FormCss.getLocation(null, bonusIpt);
 		p.x = (dialogWidth-saveBtn.getSize().width)/2;
 		System.out.println("saveBtn position: x="+p.x+", y="+p.y);
 		saveBtn.setLocation(p);
@@ -79,15 +118,35 @@ public class DialogModify {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				String name = nameIpt.getText();
-				String pointStr = pointIpt.getText();
-				pointStr = pointStr.replaceAll(",", "");
-				Long point = Long.parseLong(pointStr);
+				String minPointStr = minPointIpt.getText();
+				minPointStr = minPointStr.replaceAll(",", "");
+				String maxPointStr = maxPointIpt.getText();
+				maxPointStr = maxPointStr.replaceAll(",", "");
+				String bonusStr = bonusIpt.getText();
+				bonusStr = bonusStr.replaceAll(",", "");
+				Long minPoint = Long.parseLong(minPointStr);
+				Long maxPoint = Long.parseLong(maxPointStr);
+				Integer levelNum = Integer.parseInt(levelIpt.getText());
+				Double bonuslf = Double.parseDouble(bonusStr);
+				Long bonus = (long) (bonuslf*100);
 				if(StringUtil.isEmpty(name)) {
 					JOptionPane.showMessageDialog(dialog, "请输入等级名称", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				if(null == point || 0 >= point) {
-					JOptionPane.showMessageDialog(dialog, "请输入有效的升级积分", "温馨提示",JOptionPane.WARNING_MESSAGE);
+				if(null == minPoint || 0 >= minPoint) {
+					JOptionPane.showMessageDialog(dialog, "请输入有效的最小积分", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(maxPoint <= minPoint) {
+					JOptionPane.showMessageDialog(dialog, "最大积分不能小于或等于最小积分", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(null == levelNum || 0 >= levelNum) {
+					JOptionPane.showMessageDialog(dialog, "请输入有效的等级数字", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(null == bonus || 0 >= bonus) {
+					JOptionPane.showMessageDialog(dialog, "请输入有效的奖金", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				Level temp = new Level();
@@ -100,7 +159,10 @@ public class DialogModify {
 					temp.setCreateDate(new Date());
 				}
 				temp.setName(name);
-				temp.setRewardPoints(point);
+				temp.setMinPoint(minPoint);
+				temp.setMaxPoint(maxPoint);
+				temp.setLevel(levelNum);
+				temp.setBonus(bonus);
 				boolean success = false;
 				if(null == temp.getId()) {
 					success = levelDao.add(temp);
@@ -112,7 +174,7 @@ public class DialogModify {
 					parent.initGrid();
 					JOptionPane.showMessageDialog(dialog, "保存成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 				}
-				System.out.println("接收到的数据为：name="+name+", point="+point);
+				System.out.println("接收到的数据为：name="+name+", point="+minPoint);
 			}
 			
 		});

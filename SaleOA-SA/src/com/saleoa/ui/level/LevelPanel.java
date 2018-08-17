@@ -52,7 +52,9 @@ public class LevelPanel extends JPanel {
 		final LevelPanel lp = this;
 		cols.add("编号");
 		cols.add("等级");
-		cols.add("积分");
+		cols.add("最小积分");
+		cols.add("最大积分");
+		cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		table.setRowHeight(TableCss.ROW_HEIGHT);
@@ -144,7 +146,9 @@ public class LevelPanel extends JPanel {
         		Vector<String> newRow = new Vector<String> ();
 				newRow.add(String.valueOf(level.getId()));
 				newRow.add(levels.get(i).getName());
-				newRow.add(String.valueOf(level.getRewardPoints()));
+				newRow.add(String.valueOf(level.getMinPoint()));
+				newRow.add(String.valueOf(level.getMaxPoint()));
+				newRow.add(String.valueOf(level.getBonus()/100.0));
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

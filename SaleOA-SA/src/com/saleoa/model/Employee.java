@@ -17,7 +17,7 @@ public class Employee {
 	
 	//当前等级
 	@Column(name="level", jdbcType=JdbcType.INTEGER)
-	private Integer level;
+	private Long levelId;
 	
 	@Column(name="level_name")
 	private String levelName;
@@ -78,12 +78,12 @@ public class Employee {
 		this.name = name;
 	}
 
-	public Integer getLevel() {
-		return level;
+	public Long getLevelId() {
+		return levelId;
 	}
 
-	public void setLevel(Integer level) {
-		this.level = level;
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
 	}
 
 	public Long getRewardPoints() {

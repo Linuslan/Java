@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,7 @@ import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.StringUtil;
-import com.saleoa.dao.ILevelDao;
-import com.saleoa.dao.ILevelDaoImpl;
 import com.saleoa.model.Employee;
-import com.saleoa.model.Level;
 import com.saleoa.service.IEmployeeService;
 import com.saleoa.service.IEmployeeServiceImpl;
 import com.saleoa.ui.MainEntry;
@@ -48,6 +46,7 @@ public class EmployeePanel extends JPanel {
 		cols.add("姓名");
 		cols.add("等级");
 		cols.add("当前积分");
+		cols.add("本月工资");
 		cols.add("入职时间");
 		cols.add("介绍人");
 		cols.add("上级");
@@ -81,7 +80,14 @@ public class EmployeePanel extends JPanel {
 				System.out.println("获取到的id为"+id);
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<Employee> list = employeeService.select(paramMap);
+				List<Employee> list = null;
+				try {
+					list = employeeService.select(paramMap);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					list = new ArrayList<Employee>();
+				}
 				Employee employee = list.get(0);
 				EmployeeDialog dialog = new EmployeeDialog();
 				dialog.initDialog(employee, ep);
@@ -107,7 +113,14 @@ public class EmployeePanel extends JPanel {
 				}
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<Employee> list = employeeService.select(paramMap);
+				List<Employee> list = null;
+				try {
+					list = employeeService.select(paramMap);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					list = new ArrayList<Employee>();
+				}
 				Employee employee = list.get(0);
 				if(null == employee) {
 					JOptionPane.showMessageDialog(ep, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
@@ -144,6 +157,7 @@ public class EmployeePanel extends JPanel {
 				newRow.add(employee.getName());
 				newRow.add(employee.getLevelName());
 				newRow.add(String.valueOf(employee.getRewardPoints()));
+				newRow.add(String.valueOf(employee.getSalary()/100.0));
 				newRow.add(DateUtil.formatFullDate(employee.getRegisterDate()));
 				newRow.add(employee.getIntroducerName());
 				newRow.add(StringUtil.isEmpty(employee.getLeaderName())?"":employee.getLeaderName());

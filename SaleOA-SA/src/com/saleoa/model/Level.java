@@ -13,10 +13,18 @@ public class Level {
 	@Column(name="name")
 	private String name;
 	//升级需要的积分
-	@Column(name="reward_points")
-	private Long rewardPoints;
+	@Column(name="min_point", jdbcType=JdbcType.INTEGER)
+	private Long minPoint;
+	@Column(name="max_point", jdbcType=JdbcType.INTEGER)
+	private Long maxPoint;
+	//等级字段
+	@Column(name="level", jdbcType=JdbcType.INTEGER)
+	private Integer level;
 	@Column(name="create_date")
 	private Date createDate;
+	//等级对应的奖金
+	@Column(name="bonus", jdbcType=JdbcType.INTEGER)
+	private Long bonus;
 	public Long getId() {
 		return id;
 	}
@@ -29,16 +37,34 @@ public class Level {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Long getRewardPoints() {
-		return rewardPoints;
+	public Long getMinPoint() {
+		return minPoint;
 	}
-	public void setRewardPoints(Long rewardPoints) {
-		this.rewardPoints = rewardPoints;
+	public void setMinPoint(Long minPoint) {
+		this.minPoint = minPoint;
+	}
+	public Long getMaxPoint() {
+		return maxPoint;
+	}
+	public void setMaxPoint(Long maxPoint) {
+		this.maxPoint = maxPoint;
 	}
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public Long getBonus() {
+		return bonus;
+	}
+	public void setBonus(Long bonus) {
+		this.bonus = bonus;
+	}
+	public Integer getLevel() {
+		return level;
+	}
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 }

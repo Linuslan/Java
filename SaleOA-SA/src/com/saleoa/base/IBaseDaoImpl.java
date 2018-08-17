@@ -2,7 +2,7 @@ package com.saleoa.base;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +37,17 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		// TODO Auto-generated method stub
 		boolean success = false;
 		try {
-			String sql = JdbcHelper.updateSql(t);
-			JdbcHelper.executeSql(sql);
-			success = true;
+			success = JdbcHelper.update(t);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return success;
+	}
+	
+	public boolean updateBatch(List<T> list) {
+		boolean success = false;
+		try {
+			success = JdbcHelper.updateBatch(list);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -86,6 +94,13 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		return null;
 	}
 
+	public T selectById(Long id) {
+		Map<String, Object> paramMap = new HashMap<String, Object> ();
+		paramMap.put("id", id);
+		List<T> list = this.select(paramMap);
+		return list.get(0);
+	}
+	
 	public T selectOne(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
 		return null;
