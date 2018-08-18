@@ -40,25 +40,29 @@ public class IEmployeeServiceImpl extends IBaseServiceImpl<Employee> implements
 		long bonus = maxLevel.getBonus();
 		Long introducerId = employee.getIntroducerId();
 		List<Employee> updates = new ArrayList<Employee> ();
-		Employee introducer = this.dao.selectById(introducerId);
-		introducer.setRewardPoints(introducer.getRewardPoints()+1);
-		Long introducerLevelId = introducer.getLevelId();
-		Level introducerLevel = this.levelDao.selectById(introducerLevelId);
-		long introducerSalary = introducer.getSalary()+introducerLevel.getBonus();
-		introducer.setSalary(introducerSalary);
-		Level nextLevel = this.levelDao.selectByPoint(introducer.getRewardPoints());
-		if(null == nextLevel) {
-			ExceptionUtil.throwExcep("未查询到介绍人积分对应的等级，积分："+introducer.getRewardPoints());
+		if(0l < introducerId) {
+			Employee introducer = this.dao.selectById(introducerId);
+			introducer.setRewardPoints(introducer.getRewardPoints()+1);
+			Long introducerLevelId = introducer.getLevelId();
+			Level introducerLevel = this.levelDao.selectById(introducerLevelId);
+			long introducerSalary = introducer.getSalary()+introducerLevel.getBonus();
+			introducer.setSalary(introducerSalary);
+			Level nextLevel = this.levelDao.selectByPoint(introducer.getRewardPoints());
+			if(null == nextLevel) {
+				ExceptionUtil.throwExcep("未查询到介绍人积分对应的等级，积分："+introducer.getRewardPoints());
+			}
+			introducer.setLevelId(nextLevel.getId());
+			introducer.setLevelName(nextLevel.getName());
+			//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
+			if(bonus-introducerLevel.getBonus() > 0 && 0l < introducer.getId()) {
+				upgradeIntroducer(introducer, bonus, updates);
+			}
+			updates.add(introducer);
 		}
-		introducer.setLevelId(nextLevel.getId());
-		introducer.setLevelName(nextLevel.getName());
-		//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
-		if(bonus-introducerLevel.getBonus() > 0 && 0l < introducer.getId()) {
-			upgradeIntroducer(introducer, bonus, updates);
-		}
-		updates.add(introducer);
 		this.dao.add(employee);
-		this.dao.updateBatch(updates);
+		if(!updates.isEmpty()) {
+			this.dao.updateBatch(updates);
+		}
 		success = true;
 		return success;
 	}
@@ -66,6 +70,9 @@ public class IEmployeeServiceImpl extends IBaseServiceImpl<Employee> implements
 	public boolean upgradeIntroducer(Employee employee, long bonus, List<Employee> updates) throws Exception {
 		boolean success = false;
 		Long introducerId = employee.getIntroducerId();
+		if(0l >= introducerId) {
+			return true;
+		}
 		Long levelId = employee.getLevelId();
 		Level level = this.levelDao.selectById(levelId);
 		Employee introducer = this.dao.selectById(introducerId);
@@ -85,7 +92,7 @@ public class IEmployeeServiceImpl extends IBaseServiceImpl<Employee> implements
 		introducer.setLevelId(nextLevel.getId());
 		introducer.setLevelName(nextLevel.getName());
 		//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
-		if(bonus-introducerLevel.getBonus() > 0 && 0l < introducer.getId()) {
+		if(bonus-introducerLevel.getBonus() > 0) {
 			upgradeIntroducer(introducer, bonus, updates);
 		}
 		updates.add(introducer);

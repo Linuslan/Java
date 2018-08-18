@@ -203,11 +203,16 @@ public class BeanUtil {
 			String getMethod = "";
 			Field field = null;
 			try {
-				field = object.getClass().getDeclaredField(key);
-			} catch(Exception ex) {
-				Class superCls = object.getClass().getSuperclass();
-				field = superCls.getDeclaredField(key);
+				try {
+					field = object.getClass().getDeclaredField(key);
+				} catch(Exception ex) {
+					Class superCls = object.getClass().getSuperclass();
+					field = superCls.getDeclaredField(key);
+				}
+			} catch(Exception e) {
+				e.printStackTrace();
 			}
+			
 			if(null != field) {
 				String name = field.getName();
 				if(null != name && !"".equals(name.trim()) && name.trim().equals(key.trim())) {

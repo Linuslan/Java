@@ -15,6 +15,9 @@ public class Employee {
 	@Column(name="name")
 	private String name;
 	
+	@Column(name="name_en")
+	private String nameEn;
+	
 	//当前等级
 	@Column(name="level", jdbcType=JdbcType.INTEGER)
 	private Long levelId;
@@ -40,6 +43,10 @@ public class Employee {
 	//更新时间
 	@Column(name="update_date")
 	private Date updateDate;
+	
+	//离职时间
+	@Column(name="fire_date")
+	private Date fireDate;
 	
 	//当前在职状态
 	@Column(name="status", jdbcType=JdbcType.INTEGER, defaultValue="0")
@@ -184,5 +191,21 @@ public class Employee {
 	
 	public String toString() {
 		return name;
+	}
+
+	public String getNameEn() {
+		return nameEn;
+	}
+
+	public void setNameEn(String nameEn) {
+		this.nameEn = nameEn;
+	}
+
+	public Date getFireDate() {
+		return fireDate;
+	}
+
+	public void setFireDate(Date fireDate) {
+		this.fireDate = fireDate;
 	}
 }

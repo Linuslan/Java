@@ -484,6 +484,7 @@ public class JdbcHelper {
 			employee.setLevelId(50L);
 			employee.setLevelName("最高级");
 			employee.setName("无");
+			employee.setNameEn("wu");
 			employee.setRegisterDate(new Date());
 			employee.setRewardPoints(10000L);
 			employee.setSalary(0L);
@@ -502,8 +503,8 @@ public class JdbcHelper {
 	
 	public static void main(String[] args) {
 		try {
-			initTable();
-			//initEmployee();
+			//initTable();
+			initEmployee();
 			/*Level level = new Level();
 			level.setId(1L);
 			level.setName("二级");

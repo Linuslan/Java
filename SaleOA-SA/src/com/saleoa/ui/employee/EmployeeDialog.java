@@ -22,7 +22,9 @@ import javax.swing.JTextField;
 
 import com.eltima.components.ui.DatePicker;
 import com.saleoa.common.constant.FormCss;
+import com.saleoa.common.ui.JAutoCompleteComboBox;
 import com.saleoa.common.utils.BeanUtil;
+import com.saleoa.common.utils.PinyinUtil;
 import com.saleoa.common.utils.StringUtil;
 import com.saleoa.model.Employee;
 import com.saleoa.service.IEmployeeService;
@@ -67,7 +69,8 @@ public class EmployeeDialog {
 		introducerLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(introducerLbl);
 		introducerLbl.setLocation(FormCss.getLocation(null, nameLbl));
-		final JComboBox<Employee> introducerComb = new JComboBox<Employee>();
+		//final JComboBox<Employee> introducerComb = new JComboBox<Employee>();
+		final JAutoCompleteComboBox<Employee> introducerComb = new JAutoCompleteComboBox<Employee>();
 		List<Employee> employeeList = null;
 		try {
 			employeeList = this.employeeService.select(null);
@@ -106,7 +109,7 @@ public class EmployeeDialog {
 		leaderLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(leaderLbl);
 		leaderLbl.setLocation(FormCss.getLocation(null, datePicker));
-		final JComboBox<Employee> leaderComb = new JComboBox<Employee>();
+		final JAutoCompleteComboBox<Employee> leaderComb = new JAutoCompleteComboBox<Employee>();
 		for(int i = 0; i < employeeList.size(); i ++) {
 			leaderComb.addItem(employeeList.get(i));
 		}
@@ -143,7 +146,9 @@ public class EmployeeDialog {
 					temp.setCreateDate(new Date());
 				}
 				String name = nameIpt.getText();
+				String nameEn = PinyinUtil.getStringPinYin(name);
 				temp.setName(name);
+				temp.setNameEn(nameEn);
 				Employee introducer = (Employee)introducerComb.getSelectedItem();
 				temp.setIntroducerId(introducer.getId());
 				temp.setIntroducerName(introducer.getName());

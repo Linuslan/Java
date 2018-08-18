@@ -31,6 +31,9 @@ public class Salary {
 	@Column(name="money", jdbcType=JdbcType.INTEGER)
 	private Long money;
 	
+	@Column(name="deduct_money", jdbcType=JdbcType.INTEGER)
+	private Long deductMoney;
+	
 	//创建时间
 	@Column(name="create_date")
 	private Date createDate;
@@ -125,5 +128,13 @@ public class Salary {
 
 	public void setIsDelete(Integer isDelete) {
 		this.isDelete = isDelete;
+	}
+
+	public Long getDeductMoney() {
+		return deductMoney;
+	}
+
+	public void setDeductMoney(Long deductMoney) {
+		this.deductMoney = deductMoney;
 	}
 }
