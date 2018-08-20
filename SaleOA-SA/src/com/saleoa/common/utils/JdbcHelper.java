@@ -16,15 +16,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.saleoa.base.IBaseDaoImpl;
 import com.saleoa.common.annotation.Column;
-import com.saleoa.common.annotation.Table;
 import com.saleoa.common.constant.JdbcType;
-import com.saleoa.dao.ILevelDao;
-import com.saleoa.dao.ILevelDaoImpl;
 import com.saleoa.model.Employee;
 import com.saleoa.model.Level;
 import com.saleoa.model.Salary;
+import com.saleoa.model.Sale;
 
 public class JdbcHelper {
 	private static Connection conn = null;
@@ -34,6 +31,30 @@ public class JdbcHelper {
 			conn = DriverManager.getConnection(url);
 		}
 		return conn;
+	}
+	
+	public static boolean close(ResultSet rs, PreparedStatement ps, Connection conn) {
+		boolean success = false;
+		try {
+			if(null != rs) {
+				rs.close();
+				rs = null;
+			}
+			
+			if(null != ps) {
+				ps.close();
+				ps = null;
+			}
+			
+			if(null != conn) {
+				conn.close();
+				conn = null;
+			}
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return success;
 	}
 	
 	public static Long id(Class cls) throws Exception {
@@ -463,6 +484,7 @@ public class JdbcHelper {
 		Class<Employee> employeeCls = Employee.class;
 		Class<Level> levelCls = Level.class;
 		Class<Salary> salaryCls = Salary.class;
+		Class<Sale> saleCls = Sale.class;
 		String sql = tableSql(employeeCls);
 		executeSql(sql);
 		System.out.println(sql);
@@ -470,6 +492,9 @@ public class JdbcHelper {
 		executeSql(sql);
 		System.out.println(sql);
 		sql = tableSql(salaryCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableSql(saleCls);
 		executeSql(sql);
 		System.out.println(sql);
 		return isSuccess;
@@ -494,6 +519,7 @@ public class JdbcHelper {
 			employee.setIntroducerName("");
 			employee.setLeaderId(0L);
 			employee.setLeaderName("");
+			employee.setFireDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
 			String insertSql = JdbcHelper.insertSql(employee);
 			JdbcHelper.executeSql(insertSql);
 		} catch(Exception ex) {
@@ -503,8 +529,8 @@ public class JdbcHelper {
 	
 	public static void main(String[] args) {
 		try {
-			//initTable();
-			initEmployee();
+			initTable();
+			//initEmployee();
 			/*Level level = new Level();
 			level.setId(1L);
 			level.setName("¶þ¼¶");

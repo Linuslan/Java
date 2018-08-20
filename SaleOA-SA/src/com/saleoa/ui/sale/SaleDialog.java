@@ -58,7 +58,7 @@ public class SaleDialog {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		dialog.add(panel, BorderLayout.CENTER);
-		JLabel nameLbl = new JLabel("ÐÕÃû£º");
+		JLabel nameLbl = new JLabel("ÊÛ³ö±àºÅ£º");
 		nameLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(nameLbl);
 		nameLbl.setLocation(FormCss.getLocation(null, null));

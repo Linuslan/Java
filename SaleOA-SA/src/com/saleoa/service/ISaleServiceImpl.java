@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.saleoa.base.IBaseServiceImpl;
 import com.saleoa.common.utils.ExceptionUtil;
+import com.saleoa.dao.ISaleDao;
 import com.saleoa.dao.ISaleDaoImpl;
 import com.saleoa.dao.ILevelDao;
 import com.saleoa.dao.ILevelDaoImpl;
@@ -15,9 +16,20 @@ import com.saleoa.model.Level;
 public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		ISaleService {
 	private ILevelDao levelDao;
+	private ISaleDao saleDao;
 	public ISaleServiceImpl() {
-		this.dao = new ISaleDaoImpl();
+		saleDao = new ISaleDaoImpl();
 		levelDao = new ILevelDaoImpl();
+		this.dao = saleDao;
+	}
+	
+	/**
+	 * 获取某个用户最大的售出套数
+	 * @param id
+	 * @return
+	 */
+	public Long getMaxNoByEmployeeId(Long id) {
+		return this.saleDao.getMaxNoByEmployeeId(id);
 	}
 	
 	public boolean add(Sale sale) throws Exception {

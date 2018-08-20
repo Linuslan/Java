@@ -17,6 +17,10 @@ public class Sale {
 	@Column(name="name_en")
 	private String nameEn;
 	
+	//售出的套数，即第几套
+	@Column(name="sale_no", jdbcType=JdbcType.INTEGER)
+	private Integer saleNo;
+	
 	@Column(name="employee_id", jdbcType=JdbcType.INTEGER)
 	private Long employeeId;
 	
@@ -131,5 +135,13 @@ public class Sale {
 	
 	public String toString() {
 		return name;
+	}
+
+	public Integer getSaleNo() {
+		return saleNo;
+	}
+
+	public void setSaleNo(Integer saleNo) {
+		this.saleNo = saleNo;
 	}
 }
