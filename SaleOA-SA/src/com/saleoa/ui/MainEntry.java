@@ -26,6 +26,7 @@ import javax.swing.event.MenuListener;
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.ui.employee.EmployeePanel;
 import com.saleoa.ui.level.LevelPanel;
+import com.saleoa.ui.sale.SalePanel;
 
 public class MainEntry {
 	private JTabbedPane tabPanel = null;
@@ -58,6 +59,10 @@ public class MainEntry {
 		salaryItem.setName(ModuleName.SALARY);
 		salaryItem.addActionListener(menuItemListener());
 		menu.add(salaryItem);
+		JMenuItem saleItem = new JMenuItem(ModuleName.SALE);
+		saleItem.setName(ModuleName.SALE);
+		saleItem.addActionListener(menuItemListener());
+		menu.add(saleItem);
 		//JPanel panel = new JPanel();
 		
 		//获得系统托盘实例
@@ -137,6 +142,9 @@ public class MainEntry {
 				} else if(ModuleName.EMPLOYEE.equals(item.getName())) {
 					EmployeePanel employeePanel = new EmployeePanel();
 					tabPanel.add(employeePanel);
+				} else if(ModuleName.SALE.equals(item.getName())) {
+					SalePanel salePanel = new SalePanel();
+					tabPanel.add(salePanel);
 				}
 			}
 		};
