@@ -145,6 +145,11 @@ public class SaleDialog {
 					JOptionPane.showMessageDialog(dialog, "请选择归属人", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+				Employee employee = (Employee)employeeComb.getSelectedItem();
+				if(0L == employee.getId()) {
+					JOptionPane.showMessageDialog(dialog, "请选择归属人", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				if(StringUtil.isEmpty(saleNoIpt.getText())) {
 					JOptionPane.showMessageDialog(dialog, "请输入编号", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
@@ -164,7 +169,6 @@ public class SaleDialog {
 					temp.setCreateDate(new Date());
 				}
 				int saleNo = Integer.parseInt(saleNoIpt.getText());
-				Sale employee = (Sale)employeeComb.getSelectedItem();
 				String name = employee.getName()+saleNo;
 				String nameEn = PinyinUtil.getStringPinYin(name);
 				temp.setName(name);

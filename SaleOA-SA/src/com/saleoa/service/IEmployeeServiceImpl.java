@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.saleoa.base.IBaseServiceImpl;
+import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.ExceptionUtil;
 import com.saleoa.dao.IEmployeeDaoImpl;
 import com.saleoa.dao.ILevelDao;
@@ -32,12 +33,13 @@ public class IEmployeeServiceImpl extends IBaseServiceImpl<Employee> implements
 		employee.setSalary(0l);
 		employee.setCreateDate(new Date());
 		employee.setUpdateDate(new Date());
+		employee.setFireDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
 		employee.setStatus(0);
 		if(null == employee.getLeaderId()) {
 			employee.setLeaderId(0L);
 			employee.setLeaderName("");
 		}
-		long bonus = maxLevel.getBonus();
+		/*long bonus = maxLevel.getBonus();
 		Long introducerId = employee.getIntroducerId();
 		List<Employee> updates = new ArrayList<Employee> ();
 		if(0l < introducerId) {
@@ -58,11 +60,11 @@ public class IEmployeeServiceImpl extends IBaseServiceImpl<Employee> implements
 				upgradeIntroducer(introducer, bonus, updates);
 			}
 			updates.add(introducer);
-		}
+		}*/
 		this.dao.add(employee);
-		if(!updates.isEmpty()) {
+		/*if(!updates.isEmpty()) {
 			this.dao.updateBatch(updates);
-		}
+		}*/
 		success = true;
 		return success;
 	}

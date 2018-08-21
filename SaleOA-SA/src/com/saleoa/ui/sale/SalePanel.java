@@ -46,6 +46,9 @@ public class SalePanel extends JPanel {
 		cols.add("归属人");
 		cols.add("上套产品");
 		cols.add("售出时间");
+		cols.add("积分");
+		cols.add("等级");
+		cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		table.setRowHeight(TableCss.ROW_HEIGHT);
@@ -154,6 +157,9 @@ public class SalePanel extends JPanel {
 				newRow.add(sale.getEmployeeName());
 				newRow.add(sale.getLastSaleName());
 				newRow.add(DateUtil.formatFullDate(sale.getSaleDate()));
+				newRow.add(String.valueOf(sale.getRewardPoints()));
+				newRow.add(String.valueOf(sale.getLevelName()));
+				newRow.add(String.valueOf(sale.getSalary()/100.0));
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

@@ -53,6 +53,9 @@ public class Sale {
 	
 	@Column(name="level_id", jdbcType=JdbcType.INTEGER)
 	private Long levelId;
+	
+	@Column(name="level_name", jdbcType=JdbcType.TEXT)
+	private String levelName;
 
 	public Long getId() {
 		return id;
@@ -176,5 +179,13 @@ public class Sale {
 
 	public void setLevelId(Long levelId) {
 		this.levelId = levelId;
+	}
+
+	public String getLevelName() {
+		return levelName;
+	}
+
+	public void setLevelName(String levelName) {
+		this.levelName = levelName;
 	}
 }

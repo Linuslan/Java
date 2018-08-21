@@ -527,10 +527,38 @@ public class JdbcHelper {
 		}
 	}
 	
+	public static void initSale() {
+		try {
+			Sale sale = new Sale();
+			sale.setId(0L);
+			sale.setCreateDate(new Date());
+			sale.setIsDelete(0);
+			sale.setLevelId(50L);
+			sale.setLevelName("最高级");
+			sale.setName("无");
+			sale.setNameEn("wu");
+			sale.setSaleNo(1);
+			sale.setSaleDate(new Date());
+			sale.setRewardPoints(10000L);
+			sale.setSalary(0L);
+			sale.setUpdateDate(new Date());
+			sale.setLastSaleId(0L);
+			sale.setLastSaleName("");
+			sale.setEmployeeId(0L);
+			sale.setEmployeeName("");
+			sale.setSaleDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
+			String insertSql = JdbcHelper.insertSql(sale);
+			JdbcHelper.executeSql(insertSql);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) {
 		try {
-			initTable();
+			//initTable();
 			//initEmployee();
+			//initSale();
 			/*Level level = new Level();
 			level.setId(1L);
 			level.setName("二级");
