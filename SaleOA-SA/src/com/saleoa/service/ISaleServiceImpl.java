@@ -54,8 +54,9 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 			Level lastSaleLevel = this.levelDao.selectById(lastSaleLevelId);
 			long lastSaleSalary = lastSale.getSalary()+lastSaleLevel.getBonus();
 			lastSale.setSalary(lastSaleSalary);
+			bonus = bonus-lastSaleLevel.getBonus();
 			//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
-			if(bonus-lastSaleLevel.getBonus() > 0 && 0l < lastSale.getId()) {
+			if(bonus > 0 && 0l < lastSale.getId()) {
 				upgradeSale(lastSale, bonus, updates);
 			}
 			Level nextLevel = this.levelDao.selectByPoint(lastSale.getRewardPoints());
@@ -80,7 +81,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		if(0l >= lastSaleId) {
 			return true;
 		}
-		if(sale.getId() == 4l) {
+		if(sale.getId() == 3l) {
 			System.out.println("===========");
 		}
 		Long levelId = sale.getLevelId();
@@ -90,13 +91,14 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		Long lastSaleLevelId = lastSale.getLevelId();
 		Level lastSaleLevel = this.levelDao.selectById(lastSaleLevelId);
 		//有等级差才有奖金，且奖金有剩余
-		if(lastSaleLevel.getLevel() > level.getLevel() && bonus-lastSaleLevel.getBonus() > 0) {
+		if(lastSaleLevel.getLevel() > level.getLevel() && bonus > 0) {
 			long lastSaleBonus = lastSaleLevel.getBonus() - level.getBonus();
 			long lastSaleSalary = lastSale.getSalary()+lastSaleBonus;
 			lastSale.setSalary(lastSaleSalary);
+			bonus = bonus - lastSaleBonus;
 		}
 		//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
-		if(bonus-lastSaleLevel.getBonus() > 0) {
+		if(bonus > 0) {
 			upgradeSale(lastSale, bonus, updates);
 		}
 		Level nextLevel = this.levelDao.selectByPoint(lastSale.getRewardPoints());

@@ -104,7 +104,7 @@ public class DialogModify {
 		bonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		bonusIpt.setLocation(FormCss.getLocation(bonusLbl, maxPointLbl));
 		panel.add(bonusIpt);
-		bonusIpt.setText(String.valueOf(bonus));
+		bonusIpt.setText(String.valueOf(bonus/100.0));
 		
 		JButton saveBtn = new JButton("±£´æ");
 		saveBtn.setSize(60, 30);
