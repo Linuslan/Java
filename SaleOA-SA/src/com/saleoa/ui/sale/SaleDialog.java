@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -58,19 +60,11 @@ public class SaleDialog {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		dialog.add(panel, BorderLayout.CENTER);
-		JLabel nameLbl = new JLabel("售出编号：");
-		nameLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(nameLbl);
-		nameLbl.setLocation(FormCss.getLocation(null, null));
-		final JTextField nameIpt = new JTextField();
-		nameIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		panel.add(nameIpt);
-		nameIpt.setLocation(FormCss.getLocation(nameLbl, null));
-		nameIpt.setText(name);
+		
 		JLabel employeeLbl = new JLabel("归属人：");
 		employeeLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(employeeLbl);
-		employeeLbl.setLocation(FormCss.getLocation(null, nameLbl));
+		employeeLbl.setLocation(FormCss.getLocation(null, null));
 		//final JComboBox<Sale> employeeComb = new JComboBox<Sale>();
 		final JAutoCompleteComboBox<Employee> employeeComb = new JAutoCompleteComboBox<Employee>();
 		List<Employee> employeeList = null;
@@ -85,13 +79,23 @@ public class SaleDialog {
 			employeeComb.addItem(employeeList.get(i));
 		}
 		employeeComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		employeeComb.setLocation(FormCss.getLocation(employeeLbl, nameIpt));
+		employeeComb.setLocation(FormCss.getLocation(employeeLbl, null));
 		panel.add(employeeComb);
+		
+		JLabel saleNoLbl = new JLabel("售出编号：");
+		saleNoLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(saleNoLbl);
+		saleNoLbl.setLocation(FormCss.getLocation(null, employeeLbl));
+		final JFormattedTextField saleNoIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
+		saleNoIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(saleNoIpt);
+		saleNoIpt.setLocation(FormCss.getLocation(saleNoLbl, employeeComb));
+		saleNoIpt.setText(name);
 		
 		JLabel saleDateLbl = new JLabel("售出时间：");
 		saleDateLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(saleDateLbl);
-		saleDateLbl.setLocation(FormCss.getLocation(null, employeeLbl));
+		saleDateLbl.setLocation(FormCss.getLocation(null, saleNoLbl));
 		panel.add(saleDateLbl);
 		
 		String DefaultFormat = "yyyy-MM-dd HH:mm:ss";
@@ -101,7 +105,7 @@ public class SaleDialog {
         Font font = new Font("Times New Roman", Font.BOLD, 14);
         Dimension dimension = new Dimension(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		final DatePicker datePicker = new DatePicker(date, DefaultFormat, font, dimension);
-		datePicker.setLocation(FormCss.getLocation(saleDateLbl, employeeComb));
+		datePicker.setLocation(FormCss.getLocation(saleDateLbl, saleNoIpt));
 		datePicker.setLocale(Locale.CHINA);
         // 设置时钟面板可见
 		datePicker.setTimePanleVisible(true);
@@ -141,8 +145,8 @@ public class SaleDialog {
 					JOptionPane.showMessageDialog(dialog, "请选择归属人", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				if(StringUtil.isEmpty(nameIpt.getText())) {
-					JOptionPane.showMessageDialog(dialog, "请输入姓名", "温馨提示",JOptionPane.WARNING_MESSAGE);
+				if(StringUtil.isEmpty(saleNoIpt.getText())) {
+					JOptionPane.showMessageDialog(dialog, "请输入编号", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				if(null == datePicker.getValue()) {
@@ -159,11 +163,13 @@ public class SaleDialog {
 				} else {
 					temp.setCreateDate(new Date());
 				}
-				String name = nameIpt.getText();
+				int saleNo = Integer.parseInt(saleNoIpt.getText());
+				Sale employee = (Sale)employeeComb.getSelectedItem();
+				String name = employee.getName()+saleNo;
 				String nameEn = PinyinUtil.getStringPinYin(name);
 				temp.setName(name);
 				temp.setNameEn(nameEn);
-				Sale employee = (Sale)employeeComb.getSelectedItem();
+				temp.setSaleNo(saleNo);
 				temp.setEmployeeId(employee.getId());
 				temp.setEmployeeName(employee.getName());
 				Sale lastSale = (Sale) lastSaleComb.getSelectedItem();

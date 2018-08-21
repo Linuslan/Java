@@ -70,7 +70,7 @@ public class DialogModify {
 		levelLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(levelLbl);
 		levelLbl.setLocation(FormCss.getLocation(null, nameLbl));
-		final JTextField levelIpt = new JTextField();
+		final JFormattedTextField levelIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
 		levelIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		panel.add(levelIpt);
 		levelIpt.setLocation(FormCss.getLocation(levelLbl, nameIpt));

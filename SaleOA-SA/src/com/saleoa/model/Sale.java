@@ -44,6 +44,12 @@ public class Sale {
 	
 	@Column(name="is_delete", defaultValue="0")
 	private Integer isDelete=0;
+	
+	@Column(name="reward_points", jdbcType=JdbcType.INTEGER)
+	private Long rewardPoints;
+	
+	@Column(name="salary", jdbcType=JdbcType.INTEGER)
+	private Long salary;
 
 	public Long getId() {
 		return id;
@@ -143,5 +149,21 @@ public class Sale {
 
 	public void setSaleNo(Integer saleNo) {
 		this.saleNo = saleNo;
+	}
+
+	public Long getSalary() {
+		return salary;
+	}
+
+	public void setSalary(Long salary) {
+		this.salary = salary;
+	}
+
+	public Long getRewardPoints() {
+		return rewardPoints;
+	}
+
+	public void setRewardPoints(Long rewardPoints) {
+		this.rewardPoints = rewardPoints;
 	}
 }
