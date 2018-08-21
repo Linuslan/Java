@@ -50,6 +50,9 @@ public class Sale {
 	
 	@Column(name="salary", jdbcType=JdbcType.INTEGER)
 	private Long salary;
+	
+	@Column(name="level_id", jdbcType=JdbcType.INTEGER)
+	private Long levelId;
 
 	public Long getId() {
 		return id;
@@ -165,5 +168,13 @@ public class Sale {
 
 	public void setRewardPoints(Long rewardPoints) {
 		this.rewardPoints = rewardPoints;
+	}
+
+	public Long getLevelId() {
+		return levelId;
+	}
+
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
 	}
 }
