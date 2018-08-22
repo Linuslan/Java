@@ -1,6 +1,7 @@
 package com.saleoa.common.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
@@ -18,6 +19,13 @@ public class DateUtil {
 			ex.printStackTrace();
 		}
 		return date;
+	}
+	
+	public static int getYear(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		int year = calendar.get(Calendar.YEAR);
+		return year;
 	}
 	
 	public static void main(String[] args) {

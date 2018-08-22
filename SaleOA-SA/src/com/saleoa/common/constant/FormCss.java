@@ -26,7 +26,7 @@ public class FormCss {
 			x = compX.getLocation().x+FormCss.LABEL_WIDTH + MARGIN_LEFT;
 		}
 		if(null != compY) {
-			y = compY.getLocation().y + FormCss.HEIGHT + MARGIN_TOP;
+			y = compY.getLocation().y + compY.getHeight() + MARGIN_TOP;
 		}
 		Point p = new Point(x, y);
 		return p;

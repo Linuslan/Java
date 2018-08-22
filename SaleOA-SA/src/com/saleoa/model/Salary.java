@@ -49,6 +49,13 @@ public class Salary {
 	//É¾³ý×´Ì¬£¬0£ºÎ´É¾³ý£»1£ºÒÑÉ¾³ý£»
 	@Column(name="is_delete", jdbcType=JdbcType.INTEGER)
 	private Integer isDelete;
+	
+	@Column(name="memo", length=4000)
+	private String memo;
+	
+	//×îÖÕ¹¤×Ê
+	@Column(name="total_money", jdbcType=JdbcType.INTEGER)
+	private Long totalMoney;
 
 	public Long getId() {
 		return id;
@@ -136,5 +143,21 @@ public class Salary {
 
 	public void setDeductMoney(Long deductMoney) {
 		this.deductMoney = deductMoney;
+	}
+
+	public String getMemo() {
+		return memo;
+	}
+
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
+
+	public Long getTotalMoney() {
+		return totalMoney;
+	}
+
+	public void setTotalMoney(Long totalMoney) {
+		this.totalMoney = totalMoney;
 	}
 }

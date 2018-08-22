@@ -115,6 +115,68 @@ public class JdbcHelper {
 		return sql;
 	}
 	
+	public static String insertSqlPrepared(Object obj, List<Object> values) throws Exception {
+		Class cls = obj.getClass();
+		String sql = "";
+		String tableName = AnnotationUtil.getTableName(cls);
+		List<Map<String, Object>> valueList = new ArrayList<Map<String, Object>> ();
+		Field[] fields = cls.getDeclaredFields();
+		for(int i = 0; i < fields.length; i ++) {
+			Field field = fields[i];
+			Object value = BeanUtil.getValue(obj, field.getName());
+			if(null == value) {
+				continue;
+			}
+			Annotation[] fieldAnnoArr = field.getDeclaredAnnotations();
+			for(int j = 0; j < fieldAnnoArr.length; j ++) {
+				Annotation annotation = fieldAnnoArr[j];
+				if(annotation.annotationType().equals(Column.class)) {
+					String columnName = ((Column)annotation).name();
+					String jdbcType = ((Column)annotation).jdbcType();
+					Map<String, Object> valueMap = new HashMap<String, Object> ();
+					valueMap.put("columnName", columnName);
+					valueMap.put("value", BeanUtil.getValue(obj, field.getName()));
+					valueMap.put("jdbcType", jdbcType);
+					valueList.add(valueMap);
+				}
+			}
+		}
+		if(StringUtil.isEmpty(tableName)) {
+			ExceptionUtil.throwExcep("Table name is null.");
+		}
+		if(valueList.isEmpty()) {
+			ExceptionUtil.throwExcep("Column not found.");
+		}
+		sql = "INSERT INTO "+tableName;
+		Iterator<Map<String, Object>> iter = valueList.iterator();
+		String columnSql = "(";
+		String valueSql = "(";
+		while(iter.hasNext()) {
+			Map<String, Object> map = iter.next();
+			String columnName = map.get("columnName").toString();
+			Object value = map.get("value");
+			String jdbcType = map.get("jdbcType").toString();
+			columnSql += columnName;
+			valueSql += "?";
+			if(JdbcType.TEXT.equals(jdbcType)) {
+				if(value instanceof Date) {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					value = sdf.format(value);
+				}
+			}
+			values.add(value);
+			
+			if(iter.hasNext()) {
+				columnSql += ",";
+				valueSql += ",";
+			}
+		}
+		columnSql += ")";
+		valueSql += ")";
+		sql += columnSql + " VALUES"+valueSql;
+		return sql;
+	}
+	
 	public static String insertSql(Object obj) throws Exception {
 		Class cls = obj.getClass();
 		String sql = "";
@@ -177,6 +239,53 @@ public class JdbcHelper {
 		sql += columnSql + " VALUES"+valueSql;
 		System.out.println(sql);
 		return sql;
+	}
+	
+	public static boolean insertBatch(List<? extends Object> list) throws Exception {
+		boolean success = false;
+		List<Object> values = new ArrayList<Object> ();
+		
+		Iterator<? extends Object> iter = list.iterator();
+		PreparedStatement ps = null;
+		while(iter.hasNext()) {
+			Object obj = iter.next();
+			values.clear();
+			try {
+				String sql = insertSqlPrepared(obj, values);
+				if(null == ps) {
+					ps = getConnection().prepareStatement(sql);
+				}
+				if(values.isEmpty()) {
+					continue;
+				}
+				Iterator<Object> iter2 = values.iterator();
+				int idx = 0;
+				while(iter2.hasNext()) {
+					idx ++;
+					Object value = iter2.next();
+					if(value instanceof String) {
+						ps.setString(idx, value.toString());
+					} else if(value instanceof Integer) {
+						ps.setInt(idx, (Integer)value);
+					} else if(value instanceof Long) {
+						ps.setLong(idx, (Long)value);
+					} else if(value instanceof Float) {
+						ps.setFloat(idx, (Float)value);
+					} else if(value instanceof Double) {
+						ps.setDouble(idx, (Double)value);
+					}
+				}
+				ps.addBatch();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		if(null != ps) {
+			ps.executeBatch();
+		}
+		success = true;
+		return success;
 	}
 	
 	public static String updateSql(Object obj) throws Exception {

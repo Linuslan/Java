@@ -26,6 +26,7 @@ import javax.swing.event.MenuListener;
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.ui.employee.EmployeePanel;
 import com.saleoa.ui.level.LevelPanel;
+import com.saleoa.ui.salary.SalaryPanel;
 import com.saleoa.ui.sale.SalePanel;
 
 public class MainEntry {
@@ -145,6 +146,9 @@ public class MainEntry {
 				} else if(ModuleName.SALE.equals(item.getName())) {
 					SalePanel salePanel = new SalePanel();
 					tabPanel.add(salePanel);
+				} else if(ModuleName.SALARY.equals(item.getName())) {
+					SalaryPanel salaryPanel = new SalaryPanel();
+					tabPanel.add(salaryPanel);
 				}
 			}
 		};

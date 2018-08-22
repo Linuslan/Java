@@ -12,4 +12,14 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 		salaryDao = new ISalaryDaoImpl();
 		this.dao = salaryDao;
 	}
+	
+	/**
+	 * 创建工资
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public boolean createSalary(int year, int month) {
+		return this.salaryDao.createSalary(year, month);
+	}
 }
