@@ -1,7 +1,9 @@
 package com.saleoa.ui.sale;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -10,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,12 +38,19 @@ public class SalePanel extends JPanel {
 	final Vector<String> cols = new Vector<String>();
 	DefaultTableModel model = null;
 	JTable table = null;
+	private long page = 10;
+	private int limit = 15;
+	private long totalCount = 0;
+	private long totalPage = 20;
+	private long currPage = 1;
 	public SalePanel() {
 		this.setName(ModuleName.SALE);
 		init();
 	}
 	
 	public void init() {
+		JPanel centerPanel = new JPanel();
+		
 		final SalePanel ep = this;
 		cols.add("编号");
 		cols.add("产品");
@@ -51,11 +62,13 @@ public class SalePanel extends JPanel {
 		cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
+		table.setBackground(Color.WHITE);
 		table.setRowHeight(TableCss.ROW_HEIGHT);
 		table.getTableHeader().setSize(0, TableCss.ROW_HEIGHT);
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout(3, 3));
 		JToolBar toolBar = new JToolBar();
-		toolBar.setSize(100, 50);
+		toolBar.setSize(100, 40);
+		toolBar.setPreferredSize(new Dimension(0, 30));
 		this.add(toolBar, BorderLayout.NORTH);
 		JButton addBtn = new JButton("新增");
 		addBtn.addActionListener(new ActionListener() {
@@ -140,9 +153,15 @@ public class SalePanel extends JPanel {
 		});
         // 创建显示表格的滚动面板
         JScrollPane scrollPane = new JScrollPane(table);
+        //scrollPane.setBackground(Color.WHITE);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        centerPanel.add(scrollPane);
+        centerPanel.setBackground(Color.WHITE);
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
         // 将滚动面板添加到边界布局的中间
-        this.add(scrollPane, BorderLayout.CENTER);
+        this.add(centerPanel, BorderLayout.CENTER);
         initGrid();
+        initPageBtn();
 	}
 	
 	public void initGrid() {
@@ -167,5 +186,57 @@ public class SalePanel extends JPanel {
         } catch(Exception ex) {
         	ex.printStackTrace();
         }
+	}
+	
+	public void initPageBtn() {
+		int pageBtnLimit = 10;
+		JButton prePageBtn = new JButton("上一页");
+        JButton nextPageBtn = new JButton("下一页");
+        JButton firstPageBtn = new JButton("首页");
+        JButton lastPageBtn = new JButton("尾页");
+        JPanel pageBtnPanel = new JPanel();
+        pageBtnPanel.setBackground(Color.WHITE);
+        pageBtnPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
+        pageBtnPanel.add(firstPageBtn);
+        pageBtnPanel.add(prePageBtn);
+        boolean leftHide = false;
+        boolean rightHide = false;
+        if(totalPage > pageBtnLimit) {
+        	long left = currPage - 4;
+        	long right = currPage + 4;
+        	if(left > 1) {
+        		leftHide = true;
+        	} else {
+        		left = 1;
+        	}
+        	
+        	if(totalPage > right) {
+        		rightHide = true;
+        	} else {
+        		right = totalPage;
+        	}
+        	if(leftHide) {
+        		JButton btn = new JButton("...");
+    			pageBtnPanel.add(btn);
+        	}
+        	for(;left <= right; left++) {
+        		if(left == currPage) {
+        			JLabel currLbl = new JLabel(String.valueOf(left));
+        			pageBtnPanel.add(currLbl);
+        		} else {
+        			JButton btn = new JButton(String.valueOf(left));
+        			pageBtnPanel.add(btn);
+        		}
+        		
+        	}
+        	if(rightHide) {
+        		JButton btn = new JButton("...");
+    			pageBtnPanel.add(btn);
+        	}
+        }
+        pageBtnPanel.add(nextPageBtn);
+        pageBtnPanel.add(lastPageBtn);
+        pageBtnPanel.setPreferredSize(new Dimension(0, 100));
+        this.add(pageBtnPanel, BorderLayout.SOUTH);
 	}
 }
