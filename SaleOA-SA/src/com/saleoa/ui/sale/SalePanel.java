@@ -30,6 +30,7 @@ import com.saleoa.model.Sale;
 import com.saleoa.service.ISaleService;
 import com.saleoa.service.ISaleServiceImpl;
 import com.saleoa.ui.MainEntry;
+import com.saleoa.ui.plugin.PagePanel;
 
 public class SalePanel extends JPanel {
 	ISaleService saleService = new ISaleServiceImpl();
@@ -41,8 +42,9 @@ public class SalePanel extends JPanel {
 	private long page = 10;
 	private int limit = 15;
 	private long totalCount = 0;
-	private long totalPage = 20;
-	private long currPage = 1;
+	long currPage=0;
+	long totalPage=0;
+	private PagePanel pagePanel = null;
 	public SalePanel() {
 		this.setName(ModuleName.SALE);
 		init();
@@ -161,7 +163,6 @@ public class SalePanel extends JPanel {
         // 将滚动面板添加到边界布局的中间
         this.add(centerPanel, BorderLayout.CENTER);
         initGrid();
-        initPageBtn();
 	}
 	
 	public void initGrid() {
@@ -183,60 +184,9 @@ public class SalePanel extends JPanel {
         	}
         	model = new DefaultTableModel(row, cols);
 			table.setModel(model);
+			pagePanel.refresh(currPage, totalPage);
         } catch(Exception ex) {
         	ex.printStackTrace();
         }
-	}
-	
-	public void initPageBtn() {
-		int pageBtnLimit = 10;
-		JButton prePageBtn = new JButton("上一页");
-        JButton nextPageBtn = new JButton("下一页");
-        JButton firstPageBtn = new JButton("首页");
-        JButton lastPageBtn = new JButton("尾页");
-        JPanel pageBtnPanel = new JPanel();
-        pageBtnPanel.setBackground(Color.WHITE);
-        pageBtnPanel.setLayout(new FlowLayout(FlowLayout.CENTER,10,5));
-        pageBtnPanel.add(firstPageBtn);
-        pageBtnPanel.add(prePageBtn);
-        boolean leftHide = false;
-        boolean rightHide = false;
-        if(totalPage > pageBtnLimit) {
-        	long left = currPage - 4;
-        	long right = currPage + 4;
-        	if(left > 1) {
-        		leftHide = true;
-        	} else {
-        		left = 1;
-        	}
-        	
-        	if(totalPage > right) {
-        		rightHide = true;
-        	} else {
-        		right = totalPage;
-        	}
-        	if(leftHide) {
-        		JButton btn = new JButton("...");
-    			pageBtnPanel.add(btn);
-        	}
-        	for(;left <= right; left++) {
-        		if(left == currPage) {
-        			JLabel currLbl = new JLabel(String.valueOf(left));
-        			pageBtnPanel.add(currLbl);
-        		} else {
-        			JButton btn = new JButton(String.valueOf(left));
-        			pageBtnPanel.add(btn);
-        		}
-        		
-        	}
-        	if(rightHide) {
-        		JButton btn = new JButton("...");
-    			pageBtnPanel.add(btn);
-        	}
-        }
-        pageBtnPanel.add(nextPageBtn);
-        pageBtnPanel.add(lastPageBtn);
-        pageBtnPanel.setPreferredSize(new Dimension(0, 100));
-        this.add(pageBtnPanel, BorderLayout.SOUTH);
 	}
 }
