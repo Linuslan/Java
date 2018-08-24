@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.saleoa.common.plugin.Page;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.JdbcHelper;
 
@@ -84,7 +85,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				
 			}
 			
-			String sql = JdbcHelper.selectSql(getTClass(), paramMap);
+			String sql = JdbcHelper.selectSql(getTClass(), paramMap, false, null, null);
 			System.out.println(sql);
 			List<T> list = JdbcHelper.select(sql, getTClass());
 			return list;
@@ -104,6 +105,25 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 	public T selectOne(Map<String, Object> paramMap) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public Page<T> selectPage(Map<String, Object> paramMap, long currPage, int limit) {
+		Page<T> page = null;
+		try {
+			String sql = JdbcHelper.selectSql(getTClass(), paramMap, false, currPage, limit);
+			List<T> list = JdbcHelper.select(sql, getTClass());
+			sql = JdbcHelper.selectSql(getTClass(), paramMap, true, null, null);
+			page = (Page<T>) JdbcHelper.select(sql, Page.class).get(0);
+			page.setData(list);
+			page.setLimit(limit);
+			page.setCurrPage(currPage);
+			page.setTotalPage(page.getTotalCount()%limit == 0 ? page.getTotalCount()/limit : page.getTotalCount()/limit+1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return page;
 	}
 	
 }

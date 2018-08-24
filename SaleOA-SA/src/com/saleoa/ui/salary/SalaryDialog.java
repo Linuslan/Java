@@ -25,7 +25,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import com.saleoa.common.constant.FormCss;
-import com.saleoa.common.ui.JAutoCompleteComboBox;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.StringUtil;
@@ -36,6 +35,7 @@ import com.saleoa.model.Salary;
 import com.saleoa.service.IEmployeeService;
 import com.saleoa.service.IEmployeeServiceImpl;
 import com.saleoa.ui.MainEntry;
+import com.saleoa.ui.plugin.JAutoCompleteComboBox;
 
 public class SalaryDialog {
 	private static Dimension screenSize = MainEntry.getScreanSize();

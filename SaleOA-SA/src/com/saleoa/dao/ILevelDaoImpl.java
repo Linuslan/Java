@@ -40,7 +40,7 @@ public class ILevelDaoImpl extends IBaseDaoImpl<Level> implements ILevelDao {
 			Map<String, Object> paramMap = new HashMap<String, Object> ();
 			paramMap.put("minPoint<=", point);
 			paramMap.put("maxPoint>=", point);
-			String sql = JdbcHelper.selectSql(Level.class, paramMap);
+			String sql = JdbcHelper.selectSql(Level.class, paramMap, false, null, null);
 			List<Level> levels = JdbcHelper.select(sql, Level.class);
 			if(null == levels || 0 >= levels.size()) {
 				ExceptionUtil.throwExcep("未查询到等级");

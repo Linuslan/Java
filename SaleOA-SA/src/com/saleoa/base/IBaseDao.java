@@ -3,6 +3,8 @@ package com.saleoa.base;
 import java.util.List;
 import java.util.Map;
 
+import com.saleoa.common.plugin.Page;
+
 public interface IBaseDao<T> {
 	public boolean add(T t);
 	
@@ -17,4 +19,6 @@ public interface IBaseDao<T> {
 	public T selectOne(Map<String, Object> paramMap);
 	
 	public T selectById(Long id);
+	
+	public Page<T> selectPage(Map<String, Object> paramMap, long currPage, int limit);
 }

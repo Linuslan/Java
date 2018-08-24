@@ -1,4 +1,4 @@
-package com.saleoa.common.ui;
+package com.saleoa.ui.plugin;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;

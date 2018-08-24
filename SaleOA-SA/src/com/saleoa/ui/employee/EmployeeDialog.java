@@ -22,7 +22,6 @@ import javax.swing.JTextField;
 
 import com.eltima.components.ui.DatePicker;
 import com.saleoa.common.constant.FormCss;
-import com.saleoa.common.ui.JAutoCompleteComboBox;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.PinyinUtil;
 import com.saleoa.common.utils.StringUtil;
@@ -30,6 +29,7 @@ import com.saleoa.model.Employee;
 import com.saleoa.service.IEmployeeService;
 import com.saleoa.service.IEmployeeServiceImpl;
 import com.saleoa.ui.MainEntry;
+import com.saleoa.ui.plugin.JAutoCompleteComboBox;
 
 public class EmployeeDialog {
 	private static Dimension screenSize = MainEntry.getScreanSize();

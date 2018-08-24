@@ -4,15 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,18 +23,26 @@ import javax.swing.JTable;
 import javax.swing.JToolBar;
 import javax.swing.table.DefaultTableModel;
 
+import com.eltima.components.ui.DatePicker;
+import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
+import com.saleoa.model.Employee;
 import com.saleoa.model.Sale;
+import com.saleoa.service.IEmployeeService;
+import com.saleoa.service.IEmployeeServiceImpl;
 import com.saleoa.service.ISaleService;
 import com.saleoa.service.ISaleServiceImpl;
 import com.saleoa.ui.MainEntry;
+import com.saleoa.ui.plugin.JAutoCompleteComboBox;
+import com.saleoa.ui.plugin.JGridPanel;
 import com.saleoa.ui.plugin.PagePanel;
 
-public class SalePanel extends JPanel {
+public class SalePanel extends JGridPanel<Sale> {
 	ISaleService saleService = new ISaleServiceImpl();
+	IEmployeeService employeeService = new IEmployeeServiceImpl();
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final Vector<Vector<String>> row = new Vector<Vector<String>> ();
 	final Vector<String> cols = new Vector<String>();
@@ -42,9 +51,9 @@ public class SalePanel extends JPanel {
 	private long page = 10;
 	private int limit = 15;
 	private long totalCount = 0;
-	long currPage=0;
-	long totalPage=0;
-	private PagePanel pagePanel = null;
+	long currPage=1;
+	long totalPage=20;
+	private PagePanel<Sale> pagePanel = new PagePanel<Sale>(this, saleService);
 	public SalePanel() {
 		this.setName(ModuleName.SALE);
 		init();
@@ -52,7 +61,7 @@ public class SalePanel extends JPanel {
 	
 	public void init() {
 		JPanel centerPanel = new JPanel();
-		
+		centerPanel.setLayout(new BorderLayout());
 		final SalePanel ep = this;
 		cols.add("编号");
 		cols.add("产品");
@@ -68,10 +77,75 @@ public class SalePanel extends JPanel {
 		table.setRowHeight(TableCss.ROW_HEIGHT);
 		table.getTableHeader().setSize(0, TableCss.ROW_HEIGHT);
 		this.setLayout(new BorderLayout(3, 3));
+		
+		//查询框
+		JPanel searchPanel = new JPanel();
+		searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
+		this.add(searchPanel, BorderLayout.NORTH);
+		searchPanel.setPreferredSize(new Dimension(0, 50));
+		searchPanel.setBackground(Color.WHITE);
+		JLabel employeeLbl = new JLabel("归属人：");
+		employeeLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		//employeeLbl.setLocation(FormCss.getLocation(null, null));
+		searchPanel.add(employeeLbl);
+		final JAutoCompleteComboBox<Employee> employeeSearchComb = new JAutoCompleteComboBox<Employee>();
+		employeeSearchComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(employeeSearchComb);
+		try {
+			List<Employee> employeeList = employeeService.select(null);
+			for(int i = 0; i < employeeList.size(); i ++) {
+				employeeSearchComb.addItem(employeeList.get(i));
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		JLabel saleDateStartLbl = new JLabel("售出时间始：");
+		saleDateStartLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(saleDateStartLbl);
+		Font font = new Font("Times New Roman", Font.BOLD, 14);
+        Dimension dimension = new Dimension(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		final DatePicker saleDateStartPicker = new DatePicker(new Date(), "yyyy-MM-dd HH:mm:ss", font, dimension);
+		searchPanel.add(saleDateStartPicker);
+		
+		JLabel saleDateEndLbl = new JLabel("售出时间止：");
+		saleDateEndLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(saleDateEndLbl);
+		final DatePicker saleDateEndPicker = new DatePicker(new Date(), "yyyy-MM-dd HH:mm:ss", font, dimension);
+		searchPanel.add(saleDateEndPicker);
+		
+		JButton searchBtn = new JButton("查询");
+		searchBtn.setSize(60, 50);
+		searchPanel.add(searchBtn);
+		searchBtn.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				paramMap.clear();
+				if(null != employeeSearchComb.getSelectedItem()) {
+					Employee employee = (Employee) employeeSearchComb.getSelectedItem();
+					if(employee.getId() > 0) {
+						paramMap.put("employeeId", employee.getId());
+					}
+				}
+				if(null != saleDateStartPicker.getValue()) {
+					Date saleDateStart = (Date) saleDateStartPicker.getValue();
+					paramMap.put("saleDate>=", DateUtil.formatFullDate(saleDateStart));
+				}
+				if(null != saleDateEndPicker.getValue()) {
+					Date saleDateEnd = (Date) saleDateEndPicker.getValue();
+					paramMap.put("saleDate<=", DateUtil.formatFullDate(saleDateEnd));
+				}
+				pagePanel.loadData(null);
+			}
+			
+		});
+		
+		
 		JToolBar toolBar = new JToolBar();
-		toolBar.setSize(100, 40);
+		//toolBar.setSize(100, 40);
 		toolBar.setPreferredSize(new Dimension(0, 30));
-		this.add(toolBar, BorderLayout.NORTH);
+		centerPanel.add(toolBar, BorderLayout.NORTH);
 		JButton addBtn = new JButton("新增");
 		addBtn.addActionListener(new ActionListener() {
 			
@@ -157,20 +231,20 @@ public class SalePanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         //scrollPane.setBackground(Color.WHITE);
         scrollPane.getViewport().setBackground(Color.WHITE);
-        centerPanel.add(scrollPane);
+        centerPanel.add(scrollPane, BorderLayout.CENTER);
         centerPanel.setBackground(Color.WHITE);
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
         // 将滚动面板添加到边界布局的中间
         this.add(centerPanel, BorderLayout.CENTER);
+        this.add(pagePanel, BorderLayout.SOUTH);
         initGrid();
+        pagePanel.loadData(1l);
 	}
 	
 	public void initGrid() {
 		try {
 			row.clear();
-        	List<Sale> list = saleService.select(null);
-        	for(int i = 0; i < list.size(); i ++) {
-        		Sale sale = list.get(i);
+        	for(int i = 0; i < data.size(); i ++) {
+        		Sale sale = data.get(i);
         		Vector<String> newRow = new Vector<String> ();
 				newRow.add(String.valueOf(sale.getId()));
 				newRow.add(sale.getName());
@@ -184,9 +258,12 @@ public class SalePanel extends JPanel {
         	}
         	model = new DefaultTableModel(row, cols);
 			table.setModel(model);
-			pagePanel.refresh(currPage, totalPage);
         } catch(Exception ex) {
         	ex.printStackTrace();
         }
+	}
+	
+	public void refresh(long currPage) {
+		initGrid();
 	}
 }

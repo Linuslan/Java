@@ -482,59 +482,74 @@ public class JdbcHelper {
 		return sql;
 	}
 	
-	public static String selectSql(Class cls, Map<String, Object> paramMap) throws Exception {
+	public static String selectSql(Class cls, Map<String, Object> paramMap, boolean count, Long page, Integer limit) throws Exception {
 		String sql = "";
 		String tableName = AnnotationUtil.getTableName(cls);
-		sql += "SELECT * FROM "+tableName;
-		if(null == paramMap || paramMap.isEmpty()) {
-			return sql;
-		}
-		sql += " WHERE";
-		Field[] fields = cls.getDeclaredFields();
-		Map<String, Object> param = new HashMap<String, Object> ();
-		Iterator<Entry<String, Object>> paramIter = paramMap.entrySet().iterator();
-		while(paramIter.hasNext()) {
-			Entry<String, Object> entry = paramIter.next();
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			for(int i = 0; i < fields.length; i ++) {
-				Field field = fields[i];
-				String fieldName = field.getName();
-				String tail = "";
-				if(key.indexOf(fieldName)>0 || key.indexOf(fieldName) < 0) {
-					continue;
-				}
-				tail = key.substring(fieldName.length());
-				Annotation[] fieldAnnoArr = field.getDeclaredAnnotations();
-				for(int j = 0; j < fieldAnnoArr.length; j ++) {
-					Annotation annotation = fieldAnnoArr[j];
-					if(annotation.annotationType().equals(Column.class)) {
-						String name = ((Column)annotation).name()+(StringUtil.isEmpty(tail)?"=":tail);
-						Class type = field.getType();
-						if(type.equals(String.class) || type.equals(Date.class)) {
-							param.put(name, "'"+value+"'");
-						} else if(type.equals(Date.class)) {
-							SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							String date = sdf.format(value);
-							param.put(name, "'"+date+"'");
-						} else {
-							param.put(name, value);
+		sql += "SELECT "+(count ? "COUNT(*) total_count" : "*")+" FROM "+tableName;
+		try {
+			if(null == paramMap || paramMap.isEmpty()) {
+				ExceptionUtil.throwExcep("Condition map is null.");
+			}
+			sql += " WHERE";
+			Field[] fields = cls.getDeclaredFields();
+			Map<String, Object> param = new HashMap<String, Object> ();
+			Iterator<Entry<String, Object>> paramIter = paramMap.entrySet().iterator();
+			while(paramIter.hasNext()) {
+				Entry<String, Object> entry = paramIter.next();
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				for(int i = 0; i < fields.length; i ++) {
+					Field field = fields[i];
+					String fieldName = field.getName();
+					String tail = "";
+					if(key.indexOf(fieldName)>0 || key.indexOf(fieldName) < 0) {
+						continue;
+					}
+					tail = key.substring(fieldName.length());
+					Annotation[] fieldAnnoArr = field.getDeclaredAnnotations();
+					for(int j = 0; j < fieldAnnoArr.length; j ++) {
+						Annotation annotation = fieldAnnoArr[j];
+						if(annotation.annotationType().equals(Column.class)) {
+							String name = ((Column)annotation).name()+(StringUtil.isEmpty(tail)?"=":tail);
+							Class type = field.getType();
+							if(type.equals(String.class) || type.equals(Date.class)) {
+								param.put(name, "'"+value+"'");
+							} else if(type.equals(Date.class)) {
+								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								String date = sdf.format(value);
+								param.put(name, "'"+date+"'");
+							} else {
+								param.put(name, value);
+							}
 						}
 					}
+					break;
 				}
-				break;
 			}
-		}
-		
-		Set<Entry<String, Object>> entrySet = param.entrySet();
-		Iterator<Entry<String, Object>> iter = entrySet.iterator();
-		while(iter.hasNext()) {
-			Entry<String, Object> entry = iter.next();
-			String key = entry.getKey();
-			Object value = entry.getValue();
-			sql += " "+key+value;
-			if(iter.hasNext()) {
-				sql += " AND";
+			
+			Set<Entry<String, Object>> entrySet = param.entrySet();
+			Iterator<Entry<String, Object>> iter = entrySet.iterator();
+			while(iter.hasNext()) {
+				Entry<String, Object> entry = iter.next();
+				String key = entry.getKey();
+				Object value = entry.getValue();
+				sql += " "+key+value;
+				if(iter.hasNext()) {
+					sql += " AND";
+				}
+			}
+			
+		} catch(Exception ex) {
+			
+		} finally {
+			if(!count) {
+				if(null != limit) {
+					long limitStart = 0;
+					if(null != page) {
+						limitStart = (page-1)*limit;
+					}
+					sql += " LIMIT "+limitStart+","+limit;
+				}
 			}
 		}
 		System.out.println(sql);

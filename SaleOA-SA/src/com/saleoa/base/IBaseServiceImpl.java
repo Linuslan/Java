@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
+import com.saleoa.common.plugin.Page;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.JdbcHelper;
 
@@ -38,5 +39,10 @@ public class IBaseServiceImpl<T> implements IBaseService<T> {
 	
 	public T selectById(Long id) throws Exception {
 		return dao.selectById(id);
+	}
+
+	public Page<T> selectPage(Map<String, Object> paramMap, long currPage, int limit) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.selectPage(paramMap, currPage, limit);
 	}
 }
