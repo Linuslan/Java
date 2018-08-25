@@ -14,6 +14,10 @@ public class JGridPanel<T> extends JPanel {
 		
 	}
 	
+	public void refresh() {
+		
+	}
+	
 	public Map<String, Object> getParamMap() {
 		return paramMap;
 	}

@@ -17,7 +17,7 @@ import com.saleoa.common.plugin.Page;
 public class PagePanel<T> extends JPanel {
 	private long totalPage = 1;
 	private long currPage = 1;
-	private int limit = 1;
+	private int limit = 20;
 	private IBaseService<T> baseService = null;
 	private JGridPanel<T> parent = null;
 	private Map<String, Object> paramMap = null;
@@ -126,7 +126,7 @@ public class PagePanel<T> extends JPanel {
 			}
 			Page<T> pageObj = baseService.selectPage(parent.getParamMap(), this.currPage, limit);
 			parent.setData(pageObj.getData());
-			parent.initGrid();
+			//parent.initGrid();
 			totalPage = pageObj.getTotalPage();
 			this.currPage = pageObj.getCurrPage();
 			refresh(pageObj.getCurrPage());
@@ -160,6 +160,7 @@ public class PagePanel<T> extends JPanel {
 				page = Long.parseLong(text);
 			}
 			loadData(page);
+			parent.initGrid();
 		}
 		
 	}

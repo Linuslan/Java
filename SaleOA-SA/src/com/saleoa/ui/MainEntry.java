@@ -14,14 +14,19 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.event.MenuListener;
+import javax.swing.UIManager;
+
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+import org.pushingpixels.substance.api.SubstanceLookAndFeel;
+import org.pushingpixels.substance.api.painter.border.StandardBorderPainter;
+import org.pushingpixels.substance.api.shaper.ClassicButtonShaper;
+import org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.ui.employee.EmployeePanel;
@@ -160,7 +165,17 @@ public class MainEntry {
 		return screenSize;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		//JFrame.setDefaultLookAndFeelDecorated(true);
+		//JDialog.setDefaultLookAndFeelDecorated(true);
+        //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		try {
+			//BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
+			//BeautyEyeLNFHelper.translucencyAtFrameInactive = false;
+			//org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 		MainEntry entry = new MainEntry();
 		entry.createMain();
 	}

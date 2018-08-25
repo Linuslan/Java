@@ -5,5 +5,7 @@
 	<classpathentry kind="lib" path="lib/sqlite-jdbc-3.23.1.jar"/>
 	<classpathentry kind="lib" path="lib/datepicker.jar"/>
 	<classpathentry kind="lib" path="lib/pinyin4j-2.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/substance-6.0.jar"/>
+	<classpathentry kind="lib" path="lib/beautyeye_lnf.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -39,6 +39,10 @@ public class IEmployeeServiceImpl extends IBaseServiceImpl<Employee> implements
 			employee.setLeaderId(0L);
 			employee.setLeaderName("");
 		}
+		if(null == employee.getIntroducerId()) {
+			employee.setIntroducerId(0L);
+			employee.setIntroducerName("");
+		}
 		/*long bonus = maxLevel.getBonus();
 		Long introducerId = employee.getIntroducerId();
 		List<Employee> updates = new ArrayList<Employee> ();

@@ -23,6 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.saleoa.common.constant.FormCss;
@@ -57,6 +59,9 @@ public class LevelPanel extends JPanel {
 		cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);// 这句和上句作用一样
+		table.setDefaultRenderer(Object.class, tcr);
 		table.setRowHeight(TableCss.ROW_HEIGHT);
 		table.getTableHeader().setSize(0, TableCss.ROW_HEIGHT);
 		this.setLayout(new BorderLayout());

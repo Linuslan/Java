@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -21,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import com.eltima.components.ui.DatePicker;
@@ -73,6 +76,9 @@ public class SalePanel extends JGridPanel<Sale> {
 		cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
+		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
+		tcr.setHorizontalAlignment(SwingConstants.CENTER);// 这句和上句作用一样
+		table.setDefaultRenderer(Object.class, tcr);
 		table.setBackground(Color.WHITE);
 		table.setRowHeight(TableCss.ROW_HEIGHT);
 		table.getTableHeader().setSize(0, TableCss.ROW_HEIGHT);
@@ -105,14 +111,20 @@ public class SalePanel extends JGridPanel<Sale> {
 		searchPanel.add(saleDateStartLbl);
 		Font font = new Font("Times New Roman", Font.BOLD, 14);
         Dimension dimension = new Dimension(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		final DatePicker saleDateStartPicker = new DatePicker(new Date(), "yyyy-MM-dd HH:mm:ss", font, dimension);
+		final DatePicker saleDateStartPicker = new DatePicker(DateUtil.getStartDateTime(new Date()), "yyyy-MM-dd HH:mm:ss", font, dimension);
 		searchPanel.add(saleDateStartPicker);
+		saleDateStartPicker.setLocale(Locale.CHINA);
+        // 设置时钟面板可见
+		saleDateStartPicker.setTimePanleVisible(true);
 		
 		JLabel saleDateEndLbl = new JLabel("售出时间止：");
 		saleDateEndLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		searchPanel.add(saleDateEndLbl);
-		final DatePicker saleDateEndPicker = new DatePicker(new Date(), "yyyy-MM-dd HH:mm:ss", font, dimension);
+		final DatePicker saleDateEndPicker = new DatePicker(DateUtil.getEndDateTime(new Date()), "yyyy-MM-dd HH:mm:ss", font, dimension);
 		searchPanel.add(saleDateEndPicker);
+		saleDateEndPicker.setLocale(Locale.CHINA);
+        // 设置时钟面板可见
+		saleDateEndPicker.setTimePanleVisible(true);
 		
 		JButton searchBtn = new JButton("查询");
 		searchBtn.setSize(60, 50);
@@ -136,7 +148,7 @@ public class SalePanel extends JGridPanel<Sale> {
 					Date saleDateEnd = (Date) saleDateEndPicker.getValue();
 					paramMap.put("saleDate<=", DateUtil.formatFullDate(saleDateEnd));
 				}
-				pagePanel.loadData(null);
+				refresh();
 			}
 			
 		});
@@ -236,8 +248,7 @@ public class SalePanel extends JGridPanel<Sale> {
         // 将滚动面板添加到边界布局的中间
         this.add(centerPanel, BorderLayout.CENTER);
         this.add(pagePanel, BorderLayout.SOUTH);
-        initGrid();
-        pagePanel.loadData(1l);
+        refresh();
 	}
 	
 	public void initGrid() {
@@ -261,6 +272,11 @@ public class SalePanel extends JGridPanel<Sale> {
         } catch(Exception ex) {
         	ex.printStackTrace();
         }
+	}
+	
+	public void refresh() {
+		pagePanel.loadData(null);
+		initGrid();
 	}
 	
 	public void refresh(long currPage) {

@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import com.eltima.components.ui.DatePicker;
 import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.utils.BeanUtil;
+import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.PinyinUtil;
 import com.saleoa.common.utils.StringUtil;
 import com.saleoa.model.Employee;
@@ -37,12 +38,14 @@ public class EmployeeDialog {
 	private Long id;
 	private String name = "";
 	private Long point=0L;
+	private Integer status = 0;
 
 	public void initDialog(final Employee employee, final EmployeePanel parent) {
 		if(null != employee) {
 			id = employee.getId();
 			name = employee.getName();
 			point = employee.getRewardPoints();
+			status = employee.getStatus();
 		}
 		final JDialog dialog = new JDialog();
 		dialog.setBackground(Color.WHITE);
@@ -65,7 +68,7 @@ public class EmployeeDialog {
 		panel.add(nameIpt);
 		nameIpt.setLocation(FormCss.getLocation(nameLbl, null));
 		nameIpt.setText(name);
-		JLabel introducerLbl = new JLabel("介绍人：");
+		/*JLabel introducerLbl = new JLabel("介绍人：");
 		introducerLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(introducerLbl);
 		introducerLbl.setLocation(FormCss.getLocation(null, nameLbl));
@@ -84,12 +87,13 @@ public class EmployeeDialog {
 		}
 		introducerComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		introducerComb.setLocation(FormCss.getLocation(introducerLbl, nameIpt));
-		panel.add(introducerComb);
+		panel.add(introducerComb);*/
 		
 		JLabel registerDateLbl = new JLabel("入职时间：");
 		registerDateLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(registerDateLbl);
-		registerDateLbl.setLocation(FormCss.getLocation(null, introducerLbl));
+		//registerDateLbl.setLocation(FormCss.getLocation(null, introducerLbl));
+		registerDateLbl.setLocation(FormCss.getLocation(null, nameLbl));
 		panel.add(registerDateLbl);
 		
 		String DefaultFormat = "yyyy-MM-dd HH:mm:ss";
@@ -99,13 +103,30 @@ public class EmployeeDialog {
         Font font = new Font("Times New Roman", Font.BOLD, 14);
         Dimension dimension = new Dimension(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		final DatePicker datePicker = new DatePicker(date, DefaultFormat, font, dimension);
-		datePicker.setLocation(FormCss.getLocation(registerDateLbl, introducerComb));
+		//datePicker.setLocation(FormCss.getLocation(registerDateLbl, introducerComb));
+		datePicker.setLocation(FormCss.getLocation(registerDateLbl, nameIpt));
 		datePicker.setLocale(Locale.CHINA);
         // 设置时钟面板可见
 		datePicker.setTimePanleVisible(true);
 		panel.add(datePicker);
 		
-		JLabel leaderLbl = new JLabel("上级领导：");
+		JLabel statusLbl = new JLabel("状态：");
+		statusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(statusLbl);
+		statusLbl.setLocation(FormCss.getLocation(null, registerDateLbl));
+		final JAutoCompleteComboBox<String> statusComb = new JAutoCompleteComboBox<String>();
+		statusComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		statusComb.setLocation(FormCss.getLocation(statusLbl, datePicker));
+		panel.add(statusComb);
+		statusComb.addItem("在职");
+		statusComb.addItem("离职");
+		if(1==status) {
+			statusComb.setSelectedIndex(1);
+		} else {
+			statusComb.setSelectedIndex(0);
+		}
+		
+		/*JLabel leaderLbl = new JLabel("上级领导：");
 		leaderLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(leaderLbl);
 		leaderLbl.setLocation(FormCss.getLocation(null, datePicker));
@@ -116,21 +137,21 @@ public class EmployeeDialog {
 		
 		leaderComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		leaderComb.setLocation(FormCss.getLocation(leaderLbl, datePicker));
-		panel.add(leaderComb);
+		panel.add(leaderComb);*/
 		JButton saveBtn = new JButton("保存");
 		saveBtn.setSize(60, 40);
 		panel.add(saveBtn);
-		Point p = FormCss.getLocation(null, leaderComb);
+		Point p = FormCss.getLocation(null, statusComb);
 		p.x = (dialogWidth-saveBtn.getSize().width)/2;
 		System.out.println("saveBtn position: x="+p.x+", y="+p.y);
 		saveBtn.setLocation(p);
 		saveBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				if(null == introducerComb.getSelectedItem()) {
+				/*if(null == introducerComb.getSelectedItem()) {
 					JOptionPane.showMessageDialog(dialog, "请选择介绍人", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
-				}
+				}*/
 				if(StringUtil.isEmpty(nameIpt.getText())) {
 					JOptionPane.showMessageDialog(dialog, "请输入姓名", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
@@ -149,22 +170,27 @@ public class EmployeeDialog {
 				String nameEn = PinyinUtil.getStringPinYin(name);
 				temp.setName(name);
 				temp.setNameEn(nameEn);
-				Employee introducer = (Employee)introducerComb.getSelectedItem();
-				temp.setIntroducerId(introducer.getId());
-				temp.setIntroducerName(introducer.getName());
-				Employee leader = null;
+				//Employee introducer = (Employee)introducerComb.getSelectedItem();
+				//temp.setIntroducerId(introducer.getId());
+				//temp.setIntroducerName(introducer.getName());
+				/*Employee leader = null;
 				if(null != leaderComb.getSelectedItem()) {
 					leader = (Employee) leaderComb.getSelectedItem();
 					temp.setLeaderId(leader.getId());
 					temp.setLeaderName(leader.getName());
-				}
+				}*/
 				temp.setRegisterDate((Date) datePicker.getValue());
-				
+				temp.setStatus(statusComb.getSelectedIndex());
 				boolean success = false;
 				try {
 					if(null == temp.getId()) {
 						success = employeeService.add(temp);
 					} else {
+						if(temp.getStatus() == 1) {
+							temp.setFireDate(new Date());
+						} else {
+							temp.setFireDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
+						}
 						success = employeeService.update(temp);
 					}
 				} catch (Exception e) {
@@ -173,7 +199,7 @@ public class EmployeeDialog {
 				}
 				if(success) {
 					dialog.dispose();
-					parent.initGrid();
+					parent.refresh();
 					JOptionPane.showMessageDialog(dialog, "保存成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}

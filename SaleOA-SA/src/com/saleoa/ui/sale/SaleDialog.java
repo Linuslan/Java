@@ -194,7 +194,7 @@ public class SaleDialog {
 				}
 				if(success) {
 					dialog.dispose();
-					parent.initGrid();
+					parent.refresh();
 					JOptionPane.showMessageDialog(dialog, "保存成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 				}
 			}

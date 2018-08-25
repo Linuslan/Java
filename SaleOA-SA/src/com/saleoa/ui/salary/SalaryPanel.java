@@ -1,15 +1,20 @@
 package com.saleoa.ui.salary;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -19,28 +24,41 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.eltima.components.ui.DatePicker;
+import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
+import com.saleoa.common.utils.DateUtil;
+import com.saleoa.model.Employee;
 import com.saleoa.model.Salary;
+import com.saleoa.service.IEmployeeService;
+import com.saleoa.service.IEmployeeServiceImpl;
 import com.saleoa.service.ISalaryService;
 import com.saleoa.service.ISalaryServiceImpl;
 import com.saleoa.ui.MainEntry;
+import com.saleoa.ui.plugin.JAutoCompleteComboBox;
+import com.saleoa.ui.plugin.JGridPanel;
+import com.saleoa.ui.plugin.PagePanel;
 
 
-public class SalaryPanel extends JPanel {
+public class SalaryPanel extends JGridPanel<Salary> {
 	final ISalaryService salaryService = new ISalaryServiceImpl();
+	IEmployeeService employeeService = new IEmployeeServiceImpl();
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final Vector<Vector<String>> row = new Vector<Vector<String>> ();
 	final Vector<String> cols = new Vector<String>();
 	DefaultTableModel model = null;
 	JTable table = null;
+	private PagePanel<Salary> pagePanel = new PagePanel<Salary>(this, salaryService);
 	public SalaryPanel() {
 		this.setName(ModuleName.SALARY);
 		init();
 	}
 	
 	public void init() {
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
 		final SalaryPanel lp = this;
 		cols.add("编号");
 		cols.add("年");
@@ -59,10 +77,96 @@ public class SalaryPanel extends JPanel {
 		table.setDefaultRenderer(Object.class, tcr);
 		table.setRowHeight(TableCss.ROW_HEIGHT);
 		table.getTableHeader().setSize(0, TableCss.ROW_HEIGHT);
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BorderLayout(3, 3));
+		
+		//查询框
+		JPanel searchPanel = new JPanel();
+		searchPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,5));
+		this.add(searchPanel, BorderLayout.NORTH);
+		searchPanel.setPreferredSize(new Dimension(0, 50));
+		searchPanel.setBackground(Color.WHITE);
+		JLabel employeeLbl = new JLabel("员工：");
+		employeeLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		//employeeLbl.setLocation(FormCss.getLocation(null, null));
+		searchPanel.add(employeeLbl);
+		final JAutoCompleteComboBox<Employee> employeeSearchComb = new JAutoCompleteComboBox<Employee>();
+		employeeSearchComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(employeeSearchComb);
+		try {
+			List<Employee> employeeList = employeeService.select(null);
+			for(int i = 0; i < employeeList.size(); i ++) {
+				employeeSearchComb.addItem(employeeList.get(i));
+			}
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		JLabel yearSearchLbl = new JLabel("年份：");
+		yearSearchLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(yearSearchLbl);
+		final JComboBox<Integer> yearSearchComb = new JComboBox<Integer>();
+		int currYear = DateUtil.getYear(new Date());
+		int startYear = currYear - 5;
+		int yearSelectedIdx = 0;
+		for(int i = 0; i < 50; i ++) {
+			startYear ++;
+			yearSearchComb.addItem(startYear);
+			if(startYear == currYear) {
+				yearSelectedIdx = i;
+			}
+		}
+		yearSearchComb.setSelectedIndex(yearSelectedIdx);
+		searchPanel.add(yearSearchComb);
+		
+		JLabel monthSearchLbl = new JLabel("月份：");
+		monthSearchLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(monthSearchLbl);
+		final JComboBox<Integer> monthSearchComb = new JComboBox<Integer>();
+		monthSearchComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(monthSearchComb);
+		int month = 0;
+		int currMonth = DateUtil.getMonth(new Date());
+		int monthSelectedIdx = 0;
+		for(int i = 0; i < 12; i ++) {
+			month ++;
+			monthSearchComb.addItem(month);
+			if(month == currMonth) {
+				monthSelectedIdx = i;
+			}
+		}
+		monthSearchComb.setSelectedIndex(monthSelectedIdx);
+		
+		JButton searchBtn = new JButton("查询");
+		searchBtn.setSize(60, 50);
+		searchPanel.add(searchBtn);
+		searchBtn.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				paramMap.clear();
+				if(null != employeeSearchComb.getSelectedItem()) {
+					Employee employee = (Employee) employeeSearchComb.getSelectedItem();
+					if(employee.getId() > 0) {
+						paramMap.put("userId", employee.getId());
+					}
+				}
+				if(null != yearSearchComb.getSelectedItem()) {
+					Integer year = (Integer) yearSearchComb.getSelectedItem();
+					paramMap.put("year", year);
+				}
+				if(null != monthSearchComb.getSelectedItem()) {
+					Integer month = (Integer) monthSearchComb.getSelectedItem();
+					paramMap.put("month", month);
+				}
+				refresh();
+			}
+			
+		});
+		
 		JToolBar toolBar = new JToolBar();
-		toolBar.setSize(100, 50);
-		this.add(toolBar, BorderLayout.NORTH);
+		//toolBar.setSize(100, 50);
+		toolBar.setPreferredSize(new Dimension(0, 30));
+		centerPanel.add(toolBar, BorderLayout.NORTH);
 		JButton createSalaryBtn = new JButton("创建工资");
 		createSalaryBtn.addActionListener(new ActionListener() {
 			
@@ -171,16 +275,21 @@ public class SalaryPanel extends JPanel {
         // 创建显示表格的滚动面板
         JScrollPane scrollPane = new JScrollPane(table);
         // 将滚动面板添加到边界布局的中间
-        this.add(scrollPane, BorderLayout.CENTER);
-        initGrid();
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        centerPanel.add(scrollPane, BorderLayout.CENTER);
+        centerPanel.setBackground(Color.WHITE);
+        // 将滚动面板添加到边界布局的中间
+        this.add(centerPanel, BorderLayout.CENTER);
+        this.add(pagePanel, BorderLayout.SOUTH);
+        refresh();
+        
 	}
 	
 	public void initGrid() {
 		try {
 			row.clear();
-        	List<Salary> salarys = salaryService.select(null);
-        	for(int i = 0; i < salarys.size(); i ++) {
-        		Salary salary = salarys.get(i);
+        	for(int i = 0; i < data.size(); i ++) {
+        		Salary salary = data.get(i);
         		Vector<String> newRow = new Vector<String> ();
 				newRow.add(String.valueOf(salary.getId()));
 				newRow.add(String.valueOf(salary.getYear()));
@@ -198,5 +307,10 @@ public class SalaryPanel extends JPanel {
         } catch(Exception ex) {
         	ex.printStackTrace();
         }
+	}
+	
+	public void refresh() {
+		pagePanel.loadData(null);
+		initGrid();
 	}
 }

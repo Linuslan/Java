@@ -510,17 +510,19 @@ public class JdbcHelper {
 					for(int j = 0; j < fieldAnnoArr.length; j ++) {
 						Annotation annotation = fieldAnnoArr[j];
 						if(annotation.annotationType().equals(Column.class)) {
-							String name = ((Column)annotation).name()+(StringUtil.isEmpty(tail)?"=":tail);
+							String name = ((Column)annotation).name();
 							Class type = field.getType();
-							if(type.equals(String.class) || type.equals(Date.class)) {
-								param.put(name, "'"+value+"'");
+							String nameKey = name;
+							if(type.equals(String.class)) {
+								value = "'"+value+"'";
 							} else if(type.equals(Date.class)) {
-								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-								String date = sdf.format(value);
-								param.put(name, "'"+date+"'");
-							} else {
-								param.put(name, value);
+								//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+								//String date = sdf.format(value.toString());
+								value = "DATETIME('"+value+"')";
+								nameKey = "DATETIME("+name+")";
 							}
+							nameKey += StringUtil.isEmpty(tail)?"=":tail;
+							param.put(nameKey, value);
 						}
 					}
 					break;
@@ -540,7 +542,7 @@ public class JdbcHelper {
 			}
 			
 		} catch(Exception ex) {
-			
+			ex.printStackTrace();
 		} finally {
 			if(!count) {
 				if(null != limit) {
