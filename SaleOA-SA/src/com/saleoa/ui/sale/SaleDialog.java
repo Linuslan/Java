@@ -111,7 +111,7 @@ public class SaleDialog {
 		datePicker.setTimePanleVisible(true);
 		panel.add(datePicker);
 		
-		JLabel lastSaleLbl = new JLabel("上一套：");
+		JLabel lastSaleLbl = new JLabel("推荐人：");
 		lastSaleLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(lastSaleLbl);
 		lastSaleLbl.setLocation(FormCss.getLocation(null, datePicker));

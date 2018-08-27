@@ -69,7 +69,7 @@ public class SalePanel extends JGridPanel<Sale> {
 		cols.add("编号");
 		cols.add("产品");
 		cols.add("归属人");
-		cols.add("上套产品");
+		cols.add("推荐人");
 		cols.add("售出时间");
 		cols.add("积分");
 		cols.add("等级");
@@ -169,7 +169,7 @@ public class SalePanel extends JGridPanel<Sale> {
 		});
 		toolBar.add(addBtn);
 		
-		JButton editBtn = new JButton("修改");
+		/*JButton editBtn = new JButton("修改");
 		toolBar.add(editBtn);
 		editBtn.addActionListener(new ActionListener() {
 
@@ -228,8 +228,8 @@ public class SalePanel extends JGridPanel<Sale> {
 				}
 				int value = JOptionPane.showConfirmDialog(ep, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
-					//boolean success = levelDao.delete(level);
-					if(true/*success*/) {
+					boolean success = levelDao.delete(level);
+					if(success) {
 						ep.initGrid();
 						JOptionPane.showMessageDialog(ep, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 						return;
@@ -238,7 +238,7 @@ public class SalePanel extends JGridPanel<Sale> {
 				
 			}
 			
-		});
+		});*/
         // 创建显示表格的滚动面板
         JScrollPane scrollPane = new JScrollPane(table);
         //scrollPane.setBackground(Color.WHITE);

@@ -25,7 +25,7 @@ import com.saleoa.dao.ILevelDaoImpl;
 import com.saleoa.model.Level;
 import com.saleoa.ui.MainEntry;
 
-public class DialogModify {
+public class LevelDialog {
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	ILevelDao levelDao = new ILevelDaoImpl();
 	private Long id;

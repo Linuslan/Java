@@ -25,6 +25,7 @@ public class Level {
 	//等级对应的奖金
 	@Column(name="bonus", jdbcType=JdbcType.INTEGER)
 	private Long bonus;
+	
 	public Long getId() {
 		return id;
 	}

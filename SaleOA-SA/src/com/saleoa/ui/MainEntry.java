@@ -29,6 +29,7 @@ import org.pushingpixels.substance.api.shaper.ClassicButtonShaper;
 import org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import com.saleoa.common.constant.ModuleName;
+import com.saleoa.ui.department.DepartmentPanel;
 import com.saleoa.ui.employee.EmployeePanel;
 import com.saleoa.ui.level.LevelPanel;
 import com.saleoa.ui.salary.SalaryPanel;
@@ -69,6 +70,11 @@ public class MainEntry {
 		saleItem.setName(ModuleName.SALE);
 		saleItem.addActionListener(menuItemListener());
 		menu.add(saleItem);
+		
+		JMenuItem departmentItem = new JMenuItem(ModuleName.DEPARTMENT);
+		departmentItem.setName(ModuleName.DEPARTMENT);
+		departmentItem.addActionListener(menuItemListener());
+		menu.add(departmentItem);
 		//JPanel panel = new JPanel();
 		
 		//获得系统托盘实例
@@ -154,6 +160,9 @@ public class MainEntry {
 				} else if(ModuleName.SALARY.equals(item.getName())) {
 					SalaryPanel salaryPanel = new SalaryPanel();
 					tabPanel.add(salaryPanel);
+				} else if(ModuleName.DEPARTMENT.equals(item.getName())) {
+					DepartmentPanel departmentPanel = new DepartmentPanel();
+					tabPanel.add(departmentPanel);
 				}
 			}
 		};

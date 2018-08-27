@@ -1,4 +1,4 @@
-package com.saleoa.ui.level;
+package com.saleoa.ui.employeeRole;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -32,31 +32,29 @@ import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.StringUtil;
-import com.saleoa.dao.ILevelDao;
-import com.saleoa.dao.ILevelDaoImpl;
-import com.saleoa.model.Level;
+import com.saleoa.dao.IEmployeeRoleDao;
+import com.saleoa.dao.IEmployeeRoleDaoImpl;
+import com.saleoa.model.EmployeeRole;
 import com.saleoa.ui.MainEntry;
 
 
-public class LevelPanel extends JPanel {
-	ILevelDao levelDao = new ILevelDaoImpl();
+public class EmployeeRolePanel extends JPanel {
+	IEmployeeRoleDao employeeRoleDao = new IEmployeeRoleDaoImpl();
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final Vector<Vector<String>> row = new Vector<Vector<String>> ();
 	final Vector<String> cols = new Vector<String>();
 	DefaultTableModel model = null;
 	JTable table = null;
-	public LevelPanel() {
-		this.setName(ModuleName.LEVEL);
+	public EmployeeRolePanel() {
+		this.setName(ModuleName.DEPARTMENT);
 		init();
 	}
 	
 	public void init() {
-		final LevelPanel lp = this;
+		final EmployeeRolePanel lp = this;
 		cols.add("编号");
-		cols.add("等级");
-		cols.add("最小积分");
-		cols.add("最大积分");
-		cols.add("奖金");
+		cols.add("名称");
+		cols.add("备注");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
@@ -72,7 +70,7 @@ public class LevelPanel extends JPanel {
 		addBtn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				LevelDialog dialog = new LevelDialog();
+				EmployeeRoleDialog dialog = new EmployeeRoleDialog();
 				dialog.initDialog(null, lp);
 			}
 			
@@ -90,10 +88,10 @@ public class LevelPanel extends JPanel {
 				System.out.println("获取到的id为"+id);
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<Level> list = levelDao.select(paramMap);
-				Level level = list.get(0);
-				LevelDialog dialog = new LevelDialog();
-				dialog.initDialog(level, lp);
+				List<EmployeeRole> list = employeeRoleDao.select(paramMap);
+				EmployeeRole employeeRole = list.get(0);
+				EmployeeRoleDialog dialog = new EmployeeRoleDialog();
+				dialog.initDialog(employeeRole, lp);
 			}
 			
 		});
@@ -116,15 +114,15 @@ public class LevelPanel extends JPanel {
 				}
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<Level> list = levelDao.select(paramMap);
-				Level level = list.get(0);
-				if(null == level) {
+				List<EmployeeRole> list = employeeRoleDao.select(paramMap);
+				EmployeeRole employeeRole = list.get(0);
+				if(null == employeeRole) {
 					JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				int value = JOptionPane.showConfirmDialog(lp, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
-					//boolean success = levelDao.delete(level);
+					//boolean success = employeeRoleDao.delete(employeeRole);
 					if(true/*success*/) {
 						lp.initGrid();
 						JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
@@ -145,15 +143,13 @@ public class LevelPanel extends JPanel {
 	public void initGrid() {
 		try {
 			row.clear();
-        	List<Level> levels = levelDao.select(null);
-        	for(int i = 0; i < levels.size(); i ++) {
-        		Level level = levels.get(i);
+        	List<EmployeeRole> employeeRoles = employeeRoleDao.select(null);
+        	for(int i = 0; i < employeeRoles.size(); i ++) {
+        		EmployeeRole employeeRole = employeeRoles.get(i);
         		Vector<String> newRow = new Vector<String> ();
-				newRow.add(String.valueOf(level.getId()));
-				newRow.add(levels.get(i).getName());
-				newRow.add(String.valueOf(level.getMinPoint()));
-				newRow.add(String.valueOf(level.getMaxPoint()));
-				newRow.add(String.valueOf(level.getBonus()/100.0));
+				newRow.add(String.valueOf(employeeRole.getId()));
+				newRow.add(employeeRole.getName());
+				newRow.add(employeeRole.getMemo());
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);
