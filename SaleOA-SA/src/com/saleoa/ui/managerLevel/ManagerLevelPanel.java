@@ -32,14 +32,14 @@ import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.StringUtil;
-import com.saleoa.dao.ILevelDao;
-import com.saleoa.dao.ILevelDaoImpl;
-import com.saleoa.model.Level;
+import com.saleoa.dao.IManagerLevelDao;
+import com.saleoa.dao.IManagerLevelDaoImpl;
+import com.saleoa.model.ManagerLevel;
 import com.saleoa.ui.MainEntry;
 
 
 public class ManagerLevelPanel extends JPanel {
-	ILevelDao levelDao = new ILevelDaoImpl();
+	IManagerLevelDao managerLevelDao = new IManagerLevelDaoImpl();
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final Vector<Vector<String>> row = new Vector<Vector<String>> ();
 	final Vector<String> cols = new Vector<String>();
@@ -54,9 +54,10 @@ public class ManagerLevelPanel extends JPanel {
 		final ManagerLevelPanel lp = this;
 		cols.add("编号");
 		cols.add("等级");
-		cols.add("最小积分");
-		cols.add("最大积分");
-		cols.add("奖金");
+		cols.add("最小售出");
+		cols.add("最大售出");
+		cols.add("基础工资");
+		cols.add("奖金/套");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
@@ -90,10 +91,10 @@ public class ManagerLevelPanel extends JPanel {
 				System.out.println("获取到的id为"+id);
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<Level> list = levelDao.select(paramMap);
-				Level level = list.get(0);
+				List<ManagerLevel> list = managerLevelDao.select(paramMap);
+				ManagerLevel managerLevel = list.get(0);
 				ManagerLevelDialog dialog = new ManagerLevelDialog();
-				dialog.initDialog(level, lp);
+				dialog.initDialog(managerLevel, lp);
 			}
 			
 		});
@@ -116,15 +117,15 @@ public class ManagerLevelPanel extends JPanel {
 				}
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<Level> list = levelDao.select(paramMap);
-				Level level = list.get(0);
-				if(null == level) {
+				List<ManagerLevel> list = managerLevelDao.select(paramMap);
+				ManagerLevel managerLevel = list.get(0);
+				if(null == managerLevel) {
 					JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				int value = JOptionPane.showConfirmDialog(lp, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
-					//boolean success = levelDao.delete(level);
+					//boolean success = managerLevelDao.delete(managerLevel);
 					if(true/*success*/) {
 						lp.initGrid();
 						JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
@@ -145,15 +146,16 @@ public class ManagerLevelPanel extends JPanel {
 	public void initGrid() {
 		try {
 			row.clear();
-        	List<Level> levels = levelDao.select(null);
-        	for(int i = 0; i < levels.size(); i ++) {
-        		Level level = levels.get(i);
+        	List<ManagerLevel> managerLevels = managerLevelDao.select(null);
+        	for(int i = 0; i < managerLevels.size(); i ++) {
+        		ManagerLevel managerLevel = managerLevels.get(i);
         		Vector<String> newRow = new Vector<String> ();
-				newRow.add(String.valueOf(level.getId()));
-				newRow.add(levels.get(i).getName());
-				newRow.add(String.valueOf(level.getMinPoint()));
-				newRow.add(String.valueOf(level.getMaxPoint()));
-				newRow.add(String.valueOf(level.getBonus()/100.0));
+				newRow.add(String.valueOf(managerLevel.getId()));
+				newRow.add(managerLevels.get(i).getName());
+				newRow.add(String.valueOf(managerLevel.getMinSale()));
+				newRow.add(String.valueOf(managerLevel.getMaxSale()));
+				newRow.add(String.valueOf(managerLevel.getBasicSalary()/100.0));
+				newRow.add(String.valueOf(managerLevel.getCommission()/100.0));
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

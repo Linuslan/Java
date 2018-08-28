@@ -27,7 +27,7 @@ public class ManagerLevel {
 	
 	//³é³É
 	@Column(name="commission")
-	private Integer commission;
+	private Long commission;
 	
 	@Column(name="memo")
 	private String memo;
@@ -75,11 +75,11 @@ public class ManagerLevel {
 		this.maxSale = maxSale;
 	}
 
-	public Integer getCommission() {
+	public Long getCommission() {
 		return commission;
 	}
 
-	public void setCommission(Integer commission) {
+	public void setCommission(Long commission) {
 		this.commission = commission;
 	}
 

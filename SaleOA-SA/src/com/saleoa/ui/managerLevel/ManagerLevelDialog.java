@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,30 +18,29 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.saleoa.common.constant.FormCss;
+import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.StringUtil;
-import com.saleoa.dao.ILevelDao;
-import com.saleoa.dao.ILevelDaoImpl;
-import com.saleoa.model.Level;
+import com.saleoa.model.ManagerLevel;
+import com.saleoa.service.IManagerLevelService;
+import com.saleoa.service.IManagerLevelServiceImpl;
 import com.saleoa.ui.MainEntry;
 
 public class ManagerLevelDialog {
 	private static Dimension screenSize = MainEntry.getScreanSize();
-	ILevelDao levelDao = new ILevelDaoImpl();
+	IManagerLevelService managerLevelService = new IManagerLevelServiceImpl();
 	private Long id;
 	private String name = "";
-	private Long minPoint=0L;
-	private Long maxPoint=0L;
-	private Integer level=0;
-	private Long bonus = 0L;
+	private Integer minSale=0;
+	private Integer maxSale=0;
+	private Long basicSalary = 0L;
 
-	public void initDialog(final Level level, final ManagerLevelPanel parent) {
+	public void initDialog(final ManagerLevel level, final ManagerLevelPanel parent) {
 		if(null != level) {
 			id = level.getId();
 			name = level.getName();
-			minPoint = level.getMinPoint();
-			maxPoint = level.getMaxPoint();
-			this.level = level.getLevel();
-			bonus = level.getBonus();
+			this.minSale = level.getMinSale();
+			this.maxSale = level.getMaxSale();
+			this.basicSalary = level.getBasicSalary();
 		}
 		final JDialog dialog = new JDialog();
 		dialog.setBackground(Color.WHITE);
@@ -66,50 +64,50 @@ public class ManagerLevelDialog {
 		nameIpt.setLocation(FormCss.getLocation(nameLbl, null));
 		nameIpt.setText(name);
 		
-		JLabel levelLbl = new JLabel("等级数字：");
-		levelLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(levelLbl);
-		levelLbl.setLocation(FormCss.getLocation(null, nameLbl));
-		final JFormattedTextField levelIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
-		levelIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		panel.add(levelIpt);
-		levelIpt.setLocation(FormCss.getLocation(levelLbl, nameIpt));
-		levelIpt.setText(String.valueOf(this.level));
+		JLabel minSaleLbl = new JLabel("最低售出：");
+		minSaleLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(minSaleLbl);
+		minSaleLbl.setLocation(FormCss.getLocation(null, nameLbl));
+		final JFormattedTextField minSaleIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
+		minSaleIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		minSaleIpt.setLocation(FormCss.getLocation(minSaleLbl, nameIpt));
+		panel.add(minSaleIpt);
+		minSaleIpt.setText(String.valueOf(minSale));
 		
-		JLabel minPointLbl = new JLabel("最小积分：");
-		minPointLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(minPointLbl);
-		minPointLbl.setLocation(FormCss.getLocation(null, levelLbl));
-		final JFormattedTextField minPointIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
-		minPointIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		minPointIpt.setLocation(FormCss.getLocation(minPointLbl, levelIpt));
-		panel.add(minPointIpt);
-		minPointIpt.setText(String.valueOf(minPoint));
+		JLabel maxSaleLbl = new JLabel("最高售出：");
+		maxSaleLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(maxSaleLbl);
+		maxSaleLbl.setLocation(FormCss.getLocation(null, minSaleLbl));
+		final JFormattedTextField maxSaleIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
+		maxSaleIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		maxSaleIpt.setLocation(FormCss.getLocation(maxSaleLbl, minSaleIpt));
+		panel.add(maxSaleIpt);
+		maxSaleIpt.setText(String.valueOf(maxSale));
 		
-		JLabel maxPointLbl = new JLabel("最大积分：");
-		maxPointLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(maxPointLbl);
-		maxPointLbl.setLocation(FormCss.getLocation(null, minPointLbl));
-		final JFormattedTextField maxPointIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
-		maxPointIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		maxPointIpt.setLocation(FormCss.getLocation(maxPointLbl, minPointIpt));
-		panel.add(maxPointIpt);
-		maxPointIpt.setText(String.valueOf(maxPoint));
+		JLabel basicSalaryLbl = new JLabel("基础工资：");
+		basicSalaryLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(basicSalaryLbl);
+		basicSalaryLbl.setLocation(FormCss.getLocation(null, maxSaleLbl));
+		final JFormattedTextField basicSalaryIpt = new JFormattedTextField(NumberFormat.getNumberInstance());
+		basicSalaryIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		basicSalaryIpt.setLocation(FormCss.getLocation(basicSalaryLbl, maxSaleIpt));
+		panel.add(basicSalaryIpt);
+		basicSalaryIpt.setText(String.valueOf(basicSalary/100.0));
 		
-		JLabel bonusLbl = new JLabel("奖励金：");
-		bonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(bonusLbl);
-		bonusLbl.setLocation(FormCss.getLocation(null, maxPointLbl));
-		final JFormattedTextField bonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance());
-		bonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		bonusIpt.setLocation(FormCss.getLocation(bonusLbl, maxPointLbl));
-		panel.add(bonusIpt);
-		bonusIpt.setText(String.valueOf(bonus/100.0));
+		JLabel commissionLbl = new JLabel("奖金/套：");
+		commissionLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(commissionLbl);
+		commissionLbl.setLocation(FormCss.getLocation(null, basicSalaryLbl));
+		final JFormattedTextField commissionIpt = new JFormattedTextField(NumberFormat.getNumberInstance());
+		commissionIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		commissionIpt.setLocation(FormCss.getLocation(commissionLbl, basicSalaryIpt));
+		panel.add(commissionIpt);
+		commissionIpt.setText(String.valueOf(basicSalary/100.0));
 		
 		JButton saveBtn = new JButton("保存");
 		saveBtn.setSize(60, 30);
 		panel.add(saveBtn);
-		Point p = FormCss.getLocation(null, bonusIpt);
+		Point p = FormCss.getLocation(null, commissionIpt);
 		p.x = (dialogWidth-saveBtn.getSize().width)/2;
 		System.out.println("saveBtn position: x="+p.x+", y="+p.y);
 		saveBtn.setLocation(p);
@@ -118,63 +116,64 @@ public class ManagerLevelDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				String name = nameIpt.getText();
-				String minPointStr = minPointIpt.getText();
-				minPointStr = minPointStr.replaceAll(",", "");
-				String maxPointStr = maxPointIpt.getText();
-				maxPointStr = maxPointStr.replaceAll(",", "");
-				String bonusStr = bonusIpt.getText();
-				bonusStr = bonusStr.replaceAll(",", "");
-				Long minPoint = Long.parseLong(minPointStr);
-				Long maxPoint = Long.parseLong(maxPointStr);
-				Integer levelNum = Integer.parseInt(levelIpt.getText());
-				Double bonuslf = Double.parseDouble(bonusStr);
-				Long bonus = (long) (bonuslf*100);
+				String minSaleStr = minSaleIpt.getText();
+				minSaleStr = minSaleStr.replaceAll(",", "");
+				String maxSaleStr = maxSaleIpt.getText();
+				maxSaleStr = maxSaleStr.replaceAll(",", "");
+				String basicSalaryStr = basicSalaryIpt.getText();
+				basicSalaryStr = basicSalaryStr.replaceAll(",", "");
+				Integer minSale = Integer.parseInt(minSaleStr);
+				Integer maxSale = Integer.parseInt(maxSaleStr);
+				String commissionStr = commissionIpt.getText();
+				commissionStr = commissionStr.replaceAll(",", "");
+				Double commissionDl = Double.parseDouble(commissionStr);
+				Double baiscSalaryDl = Double.parseDouble(basicSalaryStr);
+				Long basicSalary = (long) (baiscSalaryDl*100);
+				Long commission = (long) (commissionDl*100);
 				if(StringUtil.isEmpty(name)) {
 					JOptionPane.showMessageDialog(dialog, "请输入等级名称", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				if(null == minPoint || 0 >= minPoint) {
-					JOptionPane.showMessageDialog(dialog, "请输入有效的最小积分", "温馨提示",JOptionPane.WARNING_MESSAGE);
+				if(null == minSale || 0 >= minSale) {
+					JOptionPane.showMessageDialog(dialog, "请输入有效的最小售出", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				if(maxPoint <= minPoint) {
-					JOptionPane.showMessageDialog(dialog, "最大积分不能小于或等于最小积分", "温馨提示",JOptionPane.WARNING_MESSAGE);
+				if(maxSale <= minSale) {
+					JOptionPane.showMessageDialog(dialog, "最大售出不能小于或等于最小售出", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				if(null == levelNum || 0 >= levelNum) {
-					JOptionPane.showMessageDialog(dialog, "请输入有效的等级数字", "温馨提示",JOptionPane.WARNING_MESSAGE);
+				if(null == basicSalary || 0 >= basicSalary) {
+					JOptionPane.showMessageDialog(dialog, "请输入有效的基础工资", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				if(null == bonus || 0 >= bonus) {
-					JOptionPane.showMessageDialog(dialog, "请输入有效的奖金", "温馨提示",JOptionPane.WARNING_MESSAGE);
-					return;
-				}
-				Level temp = new Level();
-				if(null != level && null != level.getId()) {
-					temp.setId(level.getId());
-				}
-				if(null != level && null != level.getCreateDate()) {
-					temp.setCreateDate(level.getCreateDate());
+				
+				ManagerLevel temp = new ManagerLevel();
+				if(null != level) {
+					BeanUtil.copyBean(level, temp);
 				} else {
-					temp.setCreateDate(new Date());
+					level.setCreateDate(new Date());
 				}
+				temp.setBasicSalary(basicSalary);
+				temp.setCommission(commission);
+				temp.setMaxSale(maxSale);
+				temp.setMinSale(minSale);
 				temp.setName(name);
-				temp.setMinPoint(minPoint);
-				temp.setMaxPoint(maxPoint);
-				temp.setLevel(levelNum);
-				temp.setBonus(bonus);
 				boolean success = false;
-				if(null == temp.getId()) {
-					success = levelDao.add(temp);
-				} else {
-					success = levelDao.update(temp);
+				try {
+					if(null == temp.getId()) {
+						success = managerLevelService.add(temp);
+					} else {
+						success = managerLevelService.update(temp);
+					}
+				} catch(Exception ex) {
+					ex.printStackTrace();
 				}
+				
 				if(success) {
 					dialog.dispose();
 					parent.initGrid();
 					JOptionPane.showMessageDialog(dialog, "保存成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 				}
-				System.out.println("接收到的数据为：name="+name+", point="+minPoint);
 			}
 			
 		});
