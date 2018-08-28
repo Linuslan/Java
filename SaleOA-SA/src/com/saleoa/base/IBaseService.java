@@ -8,6 +8,8 @@ import com.saleoa.common.plugin.Page;
 public interface IBaseService<T> {
 	public boolean add(T t) throws Exception;
 	
+	public boolean addBatch(List<T> list) throws Exception;
+	
 	public boolean update(T t) throws Exception;
 	
 	public boolean delete(T t) throws Exception;

@@ -22,6 +22,12 @@ public class SaleLog {
 	
 	@Column(name="salary", jdbcType=JdbcType.INTEGER)
 	private Long salary;
+	
+	@Column(name="create_date")
+	private Date createDate;
+	
+	@Column(name="update_date")
+	private Date updateDate;
 
 	public Long getId() {
 		return id;
@@ -61,5 +67,21 @@ public class SaleLog {
 
 	public void setSalary(Long salary) {
 		this.salary = salary;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getUpdateDate() {
+		return updateDate;
+	}
+
+	public void setUpdateDate(Date updateDate) {
+		this.updateDate = updateDate;
 	}
 }

@@ -8,6 +8,8 @@ import com.saleoa.common.plugin.Page;
 public interface IBaseDao<T> {
 	public boolean add(T t);
 	
+	public boolean addBatch(List<T> list);
+	
 	public boolean update(T t);
 	
 	public boolean updateBatch(List<T> list);

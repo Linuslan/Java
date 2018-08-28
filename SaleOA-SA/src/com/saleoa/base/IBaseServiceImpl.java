@@ -16,6 +16,11 @@ public class IBaseServiceImpl<T> implements IBaseService<T> {
 		// TODO Auto-generated method stub
 		return dao.add(t);
 	}
+	
+	public boolean addBatch(List<T> list) throws Exception {
+		// TODO Auto-generated method stub
+		return dao.addBatch(list);
+	}
 
 	public boolean update(T t) throws Exception {
 		// TODO Auto-generated method stub

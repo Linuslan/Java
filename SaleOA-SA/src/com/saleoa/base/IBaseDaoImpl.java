@@ -33,6 +33,24 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		}
 		return success;
 	}
+	
+	public boolean addBatch(List<T> list) {
+		// TODO Auto-generated method stub
+		boolean success = false;
+		try {
+			Long id = JdbcHelper.id(getTClass());
+			for(int i = 0; i < list.size(); i ++) {
+				id += i;
+				BeanUtil.setValue(list.get(i), "id", id);
+			}
+			JdbcHelper.insertBatch(list);
+			success = true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return success;
+	}
 
 	public boolean update(T t) {
 		// TODO Auto-generated method stub
