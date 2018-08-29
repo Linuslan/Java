@@ -7,13 +7,11 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -26,7 +24,13 @@ import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.PinyinUtil;
 import com.saleoa.common.utils.StringUtil;
+import com.saleoa.model.Department;
 import com.saleoa.model.Employee;
+import com.saleoa.model.EmployeeRole;
+import com.saleoa.service.IDepartmentService;
+import com.saleoa.service.IDepartmentServiceImpl;
+import com.saleoa.service.IEmployeeRoleService;
+import com.saleoa.service.IEmployeeRoleServiceImpl;
 import com.saleoa.service.IEmployeeService;
 import com.saleoa.service.IEmployeeServiceImpl;
 import com.saleoa.ui.MainEntry;
@@ -35,22 +39,34 @@ import com.saleoa.ui.plugin.JAutoCompleteComboBox;
 public class EmployeeDialog {
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	IEmployeeService employeeService = new IEmployeeServiceImpl();
+	IDepartmentService departmentService = new IDepartmentServiceImpl();
+	IEmployeeRoleService employeeRoleService = new IEmployeeRoleServiceImpl();
 	private Long id;
 	private String name = "";
-	private Long point=0L;
 	private Integer status = 0;
+	private Long employeeRoleId = 0L;
+	private String idNumber = "";
+	private String address = "";
+	private String inheritor = "";
+	private String inheritorPhone = "";
+	private Long departmentId = 0L;
 
 	public void initDialog(final Employee employee, final EmployeePanel parent) {
 		if(null != employee) {
 			id = employee.getId();
 			name = employee.getName();
-			point = employee.getRewardPoints();
 			status = employee.getStatus();
+			employeeRoleId = employee.getEmployeeRoleId();
+			idNumber = employee.getIdNumber();
+			address = employee.getAddress();
+			inheritor = employee.getInheritor();
+			inheritorPhone = employee.getInheritorPhone();
+			departmentId = employee.getDepartmentId();
 		}
 		final JDialog dialog = new JDialog();
 		dialog.setBackground(Color.WHITE);
-		int dialogWidth = 400;
-		int dialogHeight = 300;
+		int dialogWidth = 480;
+		int dialogHeight = 450;
 		dialog.setSize(dialogWidth, dialogHeight);
 		dialog.setLocation((screenSize.width-dialogWidth)/2, (screenSize.height-dialogHeight)/2);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -68,26 +84,6 @@ public class EmployeeDialog {
 		panel.add(nameIpt);
 		nameIpt.setLocation(FormCss.getLocation(nameLbl, null));
 		nameIpt.setText(name);
-		/*JLabel introducerLbl = new JLabel("介绍人：");
-		introducerLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(introducerLbl);
-		introducerLbl.setLocation(FormCss.getLocation(null, nameLbl));
-		//final JComboBox<Employee> introducerComb = new JComboBox<Employee>();
-		final JAutoCompleteComboBox<Employee> introducerComb = new JAutoCompleteComboBox<Employee>();
-		List<Employee> employeeList = null;
-		try {
-			employeeList = this.employeeService.select(null);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			employeeList = new ArrayList<Employee>();
-		}
-		for(int i = 0; i < employeeList.size(); i ++) {
-			introducerComb.addItem(employeeList.get(i));
-		}
-		introducerComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		introducerComb.setLocation(FormCss.getLocation(introducerLbl, nameIpt));
-		panel.add(introducerComb);*/
 		
 		JLabel registerDateLbl = new JLabel("入职时间：");
 		registerDateLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
@@ -110,13 +106,64 @@ public class EmployeeDialog {
 		datePicker.setTimePanleVisible(true);
 		panel.add(datePicker);
 		
+		JLabel employeeRoleLbl = new JLabel("职务：");
+		employeeRoleLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(employeeRoleLbl);
+		employeeRoleLbl.setLocation(FormCss.getLocation(null, registerDateLbl));
+		panel.add(employeeRoleLbl);
+		
+		final JAutoCompleteComboBox<EmployeeRole> employeeRoleComb = new JAutoCompleteComboBox<EmployeeRole>();
+		employeeRoleComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		employeeRoleComb.setLocation(FormCss.getLocation(employeeRoleLbl, datePicker));
+		panel.add(employeeRoleComb);
+		try {
+			List<EmployeeRole> employeeRoleList = this.employeeRoleService.select(null);
+			int selectedIdx = 0;
+			for(int i = 0; i < employeeRoleList.size(); i ++) {
+				EmployeeRole role = employeeRoleList.get(i);
+				employeeRoleComb.addItem(role);
+				if(null != employeeRoleId && role.getId() == employeeRoleId) {
+					selectedIdx = i;
+				}
+			}
+			employeeRoleComb.setSelectedIndex(selectedIdx);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		JLabel departmentLbl = new JLabel("班级：");
+		departmentLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(departmentLbl);
+		departmentLbl.setLocation(FormCss.getLocation(null, employeeRoleLbl));
+		panel.add(departmentLbl);
+		final JAutoCompleteComboBox<Department> departmentComb = new JAutoCompleteComboBox<Department>();
+		departmentComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		departmentComb.setLocation(FormCss.getLocation(departmentLbl, employeeRoleComb));
+		panel.add(departmentComb);
+		try {
+			List<Department> departmentList = this.departmentService.select(null);
+			int selectedIdx = 0;
+			for(int i = 0; i < departmentList.size(); i ++) {
+				Department dept = departmentList.get(i);
+				departmentComb.addItem(dept);
+				if(null != departmentId && dept.getId() == departmentId) {
+					selectedIdx = i;
+				}
+			}
+			departmentComb.setSelectedIndex(selectedIdx);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		JLabel statusLbl = new JLabel("状态：");
 		statusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(statusLbl);
-		statusLbl.setLocation(FormCss.getLocation(null, registerDateLbl));
+		statusLbl.setLocation(FormCss.getLocation(null, departmentLbl));
 		final JAutoCompleteComboBox<String> statusComb = new JAutoCompleteComboBox<String>();
 		statusComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		statusComb.setLocation(FormCss.getLocation(statusLbl, datePicker));
+		statusComb.setLocation(FormCss.getLocation(statusLbl, departmentComb));
 		panel.add(statusComb);
 		statusComb.addItem("在职");
 		statusComb.addItem("离职");
@@ -125,6 +172,46 @@ public class EmployeeDialog {
 		} else {
 			statusComb.setSelectedIndex(0);
 		}
+		
+		JLabel idNumberLbl = new JLabel("身份证号：");
+		idNumberLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(idNumberLbl);
+		idNumberLbl.setLocation(FormCss.getLocation(null, statusLbl));
+		final JTextField idNumberIpt = new JTextField();
+		idNumberIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(idNumberIpt);
+		idNumberIpt.setLocation(FormCss.getLocation(idNumberLbl, statusComb));
+		idNumberIpt.setText(idNumber);
+		
+		JLabel addressLbl = new JLabel("家庭住址：");
+		addressLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(addressLbl);
+		addressLbl.setLocation(FormCss.getLocation(null, idNumberLbl));
+		final JTextField addressIpt = new JTextField();
+		addressIpt.setSize(300, FormCss.HEIGHT);
+		panel.add(addressIpt);
+		addressIpt.setLocation(FormCss.getLocation(addressLbl, idNumberIpt));
+		addressIpt.setText(address);
+		
+		JLabel inheritorLbl = new JLabel("继承人：");
+		inheritorLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(inheritorLbl);
+		inheritorLbl.setLocation(FormCss.getLocation(null, addressLbl));
+		final JTextField inheritorIpt = new JTextField();
+		inheritorIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(inheritorIpt);
+		inheritorIpt.setLocation(FormCss.getLocation(inheritorLbl, addressIpt));
+		inheritorIpt.setText(inheritor);
+		
+		JLabel inheritorPhoneLbl = new JLabel("继承人电话：");
+		inheritorPhoneLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(inheritorPhoneLbl);
+		inheritorPhoneLbl.setLocation(FormCss.getLocation(null, inheritorLbl));
+		final JTextField inheritorPhoneIpt = new JTextField();
+		inheritorPhoneIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(inheritorPhoneIpt);
+		inheritorPhoneIpt.setLocation(FormCss.getLocation(inheritorPhoneLbl, inheritorIpt));
+		inheritorPhoneIpt.setText(inheritorPhone);
 		
 		/*JLabel leaderLbl = new JLabel("上级领导：");
 		leaderLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
@@ -141,23 +228,27 @@ public class EmployeeDialog {
 		JButton saveBtn = new JButton("保存");
 		saveBtn.setSize(60, 40);
 		panel.add(saveBtn);
-		Point p = FormCss.getLocation(null, statusComb);
+		Point p = FormCss.getLocation(null, inheritorPhoneIpt);
 		p.x = (dialogWidth-saveBtn.getSize().width)/2;
 		System.out.println("saveBtn position: x="+p.x+", y="+p.y);
 		saveBtn.setLocation(p);
 		saveBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent arg0) {
-				/*if(null == introducerComb.getSelectedItem()) {
-					JOptionPane.showMessageDialog(dialog, "请选择介绍人", "温馨提示",JOptionPane.WARNING_MESSAGE);
-					return;
-				}*/
 				if(StringUtil.isEmpty(nameIpt.getText())) {
 					JOptionPane.showMessageDialog(dialog, "请输入姓名", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				if(null == datePicker.getValue()) {
 					JOptionPane.showMessageDialog(dialog, "请选择介绍时间", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(null == employeeRoleComb.getSelectedItem()) {
+					JOptionPane.showMessageDialog(dialog, "请选择职务", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(null == departmentComb.getSelectedItem()) {
+					JOptionPane.showMessageDialog(dialog, "请选择班级", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				Employee temp = new Employee();
@@ -170,9 +261,6 @@ public class EmployeeDialog {
 				String nameEn = PinyinUtil.getStringPinYin(name);
 				temp.setName(name);
 				temp.setNameEn(nameEn);
-				//Employee introducer = (Employee)introducerComb.getSelectedItem();
-				//temp.setIntroducerId(introducer.getId());
-				//temp.setIntroducerName(introducer.getName());
 				/*Employee leader = null;
 				if(null != leaderComb.getSelectedItem()) {
 					leader = (Employee) leaderComb.getSelectedItem();
@@ -181,6 +269,16 @@ public class EmployeeDialog {
 				}*/
 				temp.setRegisterDate((Date) datePicker.getValue());
 				temp.setStatus(statusComb.getSelectedIndex());
+				temp.setAddress(addressIpt.getText());
+				Department department = (Department) departmentComb.getSelectedItem();
+				temp.setDepartmentId(department.getId());
+				temp.setDepartmentName(department.getName());
+				EmployeeRole employeeRole = (EmployeeRole) employeeRoleComb.getSelectedItem();
+				temp.setEmployeeRoleId(employeeRole.getId());
+				temp.setEmployeeRoleName(employeeRole.getName());
+				temp.setIdNumber(idNumberIpt.getText());
+				temp.setInheritor(inheritorIpt.getText());
+				temp.setInheritorPhone(inheritorPhoneIpt.getText());
 				boolean success = false;
 				try {
 					if(null == temp.getId()) {

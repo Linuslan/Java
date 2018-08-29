@@ -6,12 +6,12 @@ import com.saleoa.common.annotation.Column;
 import com.saleoa.common.annotation.Table;
 import com.saleoa.common.constant.JdbcType;
 
-@Table(name="tbl_oa_sale")
-public class SaleLog {
+@Table(name="tbl_oa_sale_salary")
+public class SaleSalary {
 	@Column(name="id", isPrimaryKey = true, jdbcType=JdbcType.INTEGER, isNotNull=true)
 	private Long id;
 	
-	@Column(name="sale_id")
+	@Column(name="sale_id", jdbcType=JdbcType.INTEGER)
 	private Long saleId;
 	
 	@Column(name="employee_id", jdbcType=JdbcType.INTEGER)

@@ -23,8 +23,8 @@ public class ISalaryDaoImpl extends IBaseDaoImpl<Salary> implements ISalaryDao {
 		String startTime = year+"-"+monthStr+"-01 00:00:00";
 		String endTime = year+"-"+monthStr+"-31 23:59:59";
 		boolean success = false;
-		String sql = "SELECT t.employee_id, t.employee_name, SUM(salary) salary FROM tbl_oa_sale t WHERE t.sale_date >='"+startTime+"'" +
-				" AND t.sale_date <= '"+endTime+"' GROUP BY t.employee_id, t.employee_name";
+		String sql = "SELECT t.employee_id, t.employee_name, SUM(salary) salary FROM tbl_oa_sale_salary t WHERE t.create_date >='"+startTime+"'" +
+				" AND t.create_date <= '"+endTime+"' GROUP BY t.employee_id, t.employee_name";
 		List<Salary> salaryList = new ArrayList<Salary>();
 		PreparedStatement ps = null;
 		try {

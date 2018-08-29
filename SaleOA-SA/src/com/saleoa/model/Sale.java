@@ -56,6 +56,12 @@ public class Sale {
 	
 	@Column(name="level_name", jdbcType=JdbcType.TEXT)
 	private String levelName;
+	
+	@Column(name="department_id", jdbcType=JdbcType.INTEGER)
+	private Long departmentId;
+	
+	@Column(name="department_name")
+	private String departmentName;
 
 	public Long getId() {
 		return id;
@@ -187,5 +193,21 @@ public class Sale {
 
 	public void setLevelName(String levelName) {
 		this.levelName = levelName;
+	}
+
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 }

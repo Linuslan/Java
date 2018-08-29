@@ -18,10 +18,14 @@ import java.util.Set;
 
 import com.saleoa.common.annotation.Column;
 import com.saleoa.common.constant.JdbcType;
+import com.saleoa.model.Department;
 import com.saleoa.model.Employee;
+import com.saleoa.model.EmployeeRole;
 import com.saleoa.model.Level;
+import com.saleoa.model.ManagerLevel;
 import com.saleoa.model.Salary;
 import com.saleoa.model.Sale;
+import com.saleoa.model.SaleSalary;
 
 public class JdbcHelper {
 	private static Connection conn = null;
@@ -611,6 +615,10 @@ public class JdbcHelper {
 		Class<Level> levelCls = Level.class;
 		Class<Salary> salaryCls = Salary.class;
 		Class<Sale> saleCls = Sale.class;
+		Class<SaleSalary> saleLogCls = SaleSalary.class;
+		Class<EmployeeRole> employeeRoleCls = EmployeeRole.class;
+		Class<Department> departmentCls = Department.class;
+		Class<ManagerLevel> managerLevelCls = ManagerLevel.class;
 		String sql = tableSql(employeeCls);
 		executeSql(sql);
 		System.out.println(sql);
@@ -623,6 +631,18 @@ public class JdbcHelper {
 		sql = tableSql(saleCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableSql(saleLogCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableSql(employeeRoleCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableSql(departmentCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableSql(managerLevelCls);
+		executeSql(sql);
+		System.out.println(sql);
 		return isSuccess;
 	}
 	
@@ -632,19 +652,21 @@ public class JdbcHelper {
 			employee.setId(0L);
 			employee.setCreateDate(new Date());
 			employee.setIsDelete(0);
-			employee.setLevelId(50L);
-			employee.setLevelName("最高级");
 			employee.setName("无");
 			employee.setNameEn("wu");
 			employee.setRegisterDate(new Date());
-			employee.setRewardPoints(10000L);
-			employee.setSalary(0L);
 			employee.setStatus(0);
 			employee.setUpdateDate(new Date());
-			employee.setIntroducerId(0L);
-			employee.setIntroducerName("");
 			employee.setLeaderId(0L);
 			employee.setLeaderName("");
+			employee.setAddress("");
+			employee.setDepartmentId(null);
+			employee.setDepartmentName("");
+			employee.setEmployeeRoleId(null);
+			employee.setEmployeeRoleName("");
+			employee.setIdNumber("");
+			employee.setInheritor("");
+			employee.setInheritorPhone("");
 			employee.setFireDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
 			String insertSql = JdbcHelper.insertSql(employee);
 			JdbcHelper.executeSql(insertSql);
@@ -682,7 +704,7 @@ public class JdbcHelper {
 	
 	public static void main(String[] args) {
 		try {
-			//initTable();
+			initTable();
 			//initEmployee();
 			//initSale();
 			/*Level level = new Level();

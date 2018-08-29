@@ -151,7 +151,7 @@ public class ManagerLevelDialog {
 				if(null != level) {
 					BeanUtil.copyBean(level, temp);
 				} else {
-					level.setCreateDate(new Date());
+					temp.setCreateDate(new Date());
 				}
 				temp.setBasicSalary(basicSalary);
 				temp.setCommission(commission);

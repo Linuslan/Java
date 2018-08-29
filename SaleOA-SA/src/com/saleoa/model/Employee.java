@@ -18,21 +18,6 @@ public class Employee {
 	@Column(name="name_en")
 	private String nameEn;
 	
-	//当前等级
-	@Column(name="level", jdbcType=JdbcType.INTEGER)
-	private Long levelId;
-	
-	@Column(name="level_name")
-	private String levelName;
-	
-	//积分
-	@Column(name="reward_points", jdbcType=JdbcType.INTEGER, length=4000)
-	private Long rewardPoints;
-	
-	//工资，以分为单位，精确到小数点后两位
-	@Column(name="salary", jdbcType=JdbcType.INTEGER, length=4000)
-	private Long salary;
-	
 	@Column(name="register_date")
 	private Date registerDate;
 	
@@ -56,19 +41,36 @@ public class Employee {
 	@Column(name="is_delete", jdbcType=JdbcType.INTEGER, defaultValue="0")
 	private Integer isDelete;
 	
-	//介绍人id
-	@Column(name="introducer_id", jdbcType=JdbcType.INTEGER)
-	private Long introducerId;
-	
-	@Column(name="introducer_name")
-	private String introducerName;
-	
 	//上级id
 	@Column(name="leader_id", jdbcType=JdbcType.INTEGER)
 	private Long leaderId;
 	
 	@Column(name="leader_name")
 	private String leaderName;
+	
+	@Column(name="employee_role_id", jdbcType=JdbcType.INTEGER)
+	private Long employeeRoleId;
+	
+	@Column(name="employee_role_name", jdbcType=JdbcType.TEXT)
+	private String employeeRoleName;
+	
+	@Column(name="id_number")
+	private String idNumber;
+	
+	@Column(name="address")
+	private String address;
+	
+	@Column(name="inheritor")
+	private String inheritor;
+	
+	@Column(name="inheritor_phone")
+	private String inheritorPhone;
+	
+	@Column(name="department_id", jdbcType=JdbcType.INTEGER)
+	private Long departmentId;
+	
+	@Column(name="department_name")
+	private String departmentName;
 	public Long getId() {
 		return id;
 	}
@@ -83,30 +85,6 @@ public class Employee {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Long getLevelId() {
-		return levelId;
-	}
-
-	public void setLevelId(Long levelId) {
-		this.levelId = levelId;
-	}
-
-	public Long getRewardPoints() {
-		return rewardPoints;
-	}
-
-	public void setRewardPoints(Long rewardPoints) {
-		this.rewardPoints = rewardPoints;
-	}
-
-	public Long getSalary() {
-		return salary;
-	}
-
-	public void setSalary(Long salary) {
-		this.salary = salary;
 	}
 
 	public Date getCreateDate() {
@@ -141,36 +119,12 @@ public class Employee {
 		this.isDelete = isDelete;
 	}
 
-	public Long getIntroducerId() {
-		return introducerId;
-	}
-
-	public void setIntroducerId(Long introducerId) {
-		this.introducerId = introducerId;
-	}
-
 	public Long getLeaderId() {
 		return leaderId;
 	}
 
 	public void setLeaderId(Long leaderId) {
 		this.leaderId = leaderId;
-	}
-
-	public String getLevelName() {
-		return levelName;
-	}
-
-	public void setLevelName(String levelName) {
-		this.levelName = levelName;
-	}
-
-	public String getIntroducerName() {
-		return introducerName;
-	}
-
-	public void setIntroducerName(String introducerName) {
-		this.introducerName = introducerName;
 	}
 
 	public String getLeaderName() {
@@ -207,5 +161,69 @@ public class Employee {
 
 	public void setFireDate(Date fireDate) {
 		this.fireDate = fireDate;
+	}
+
+	public Long getEmployeeRoleId() {
+		return employeeRoleId;
+	}
+
+	public void setEmployeeRoleId(Long employeeRoleId) {
+		this.employeeRoleId = employeeRoleId;
+	}
+
+	public String getEmployeeRoleName() {
+		return employeeRoleName;
+	}
+
+	public void setEmployeeRoleName(String employeeRoleName) {
+		this.employeeRoleName = employeeRoleName;
+	}
+
+	public String getIdNumber() {
+		return idNumber;
+	}
+
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getInheritor() {
+		return inheritor;
+	}
+
+	public void setInheritor(String inheritor) {
+		this.inheritor = inheritor;
+	}
+
+	public String getInheritorPhone() {
+		return inheritorPhone;
+	}
+
+	public void setInheritorPhone(String inheritorPhone) {
+		this.inheritorPhone = inheritorPhone;
+	}
+
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 }

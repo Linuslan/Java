@@ -31,6 +31,7 @@ public class Salary {
 	@Column(name="money", jdbcType=JdbcType.INTEGER)
 	private Long money;
 	
+	//扣款
 	@Column(name="deduct_money", jdbcType=JdbcType.INTEGER)
 	private Long deductMoney;
 	
@@ -56,6 +57,38 @@ public class Salary {
 	//最终工资
 	@Column(name="total_money", jdbcType=JdbcType.INTEGER)
 	private Long totalMoney;
+	
+	//3500以上扣税20%
+	@Column(name="tax", jdbcType=JdbcType.INTEGER)
+	private Long tax=0l;
+	
+	//达标奖
+	@Column(name="reach_goal_bonus", jdbcType=JdbcType.INTEGER)
+	private Long reachGoalBonus;
+	
+	//达标超额奖
+	@Column(name="over_goal_bonus", jdbcType=JdbcType.INTEGER)
+	private Long overGoalBonus;
+	
+	//内勤管理奖
+	@Column(name="office_manage_bonus", jdbcType=JdbcType.INTEGER)
+	private Long officeManageBonus;
+	
+	//满勤奖
+	@Column(name="full_duty_bonus", jdbcType=JdbcType.INTEGER)
+	private Long fullDutyBonus;
+	
+	//总达标奖
+	@Column(name="total_reach_goal_bonus", jdbcType=JdbcType.INTEGER)
+	private Long totalReachGoalBonus;
+	
+	//罚款
+	@Column(name="amercement", jdbcType=JdbcType.INTEGER)
+	private Long amercement;
+	
+	//公司借款
+	@Column(name="company_lend", jdbcType=JdbcType.INTEGER)
+	private Long companyLend;
 
 	public Long getId() {
 		return id;
@@ -159,5 +192,69 @@ public class Salary {
 
 	public void setTotalMoney(Long totalMoney) {
 		this.totalMoney = totalMoney;
+	}
+
+	public Long getTax() {
+		return tax;
+	}
+
+	public void setTax(Long tax) {
+		this.tax = tax;
+	}
+
+	public Long getReachGoalBonus() {
+		return reachGoalBonus;
+	}
+
+	public void setReachGoalBonus(Long reachGoalBonus) {
+		this.reachGoalBonus = reachGoalBonus;
+	}
+
+	public Long getOverGoalBonus() {
+		return overGoalBonus;
+	}
+
+	public void setOverGoalBonus(Long overGoalBonus) {
+		this.overGoalBonus = overGoalBonus;
+	}
+
+	public Long getOfficeManageBonus() {
+		return officeManageBonus;
+	}
+
+	public void setOfficeManageBonus(Long officeManageBonus) {
+		this.officeManageBonus = officeManageBonus;
+	}
+
+	public Long getFullDutyBonus() {
+		return fullDutyBonus;
+	}
+
+	public void setFullDutyBonus(Long fullDutyBonus) {
+		this.fullDutyBonus = fullDutyBonus;
+	}
+
+	public Long getTotalReachGoalBonus() {
+		return totalReachGoalBonus;
+	}
+
+	public void setTotalReachGoalBonus(Long totalReachGoalBonus) {
+		this.totalReachGoalBonus = totalReachGoalBonus;
+	}
+
+	public Long getAmercement() {
+		return amercement;
+	}
+
+	public void setAmercement(Long amercement) {
+		this.amercement = amercement;
+	}
+
+	public Long getCompanyLend() {
+		return companyLend;
+	}
+
+	public void setCompanyLend(Long companyLend) {
+		this.companyLend = companyLend;
 	}
 }

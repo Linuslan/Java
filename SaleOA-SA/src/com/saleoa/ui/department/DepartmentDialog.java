@@ -100,6 +100,8 @@ public class DepartmentDialog {
 				temp.setName(name);
 				if(!StringUtil.isEmpty(memo)) {
 					temp.setMemo(memo);
+				} else {
+					temp.setMemo("");
 				}
 				boolean success = false;
 				if(null == temp.getId()) {

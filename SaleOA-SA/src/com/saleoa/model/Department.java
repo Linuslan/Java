@@ -52,4 +52,8 @@ public class Department {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+	
+	public String toString() {
+		return this.name;
+	}
 }

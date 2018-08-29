@@ -14,26 +14,21 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.imageio.ImageIO;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
-
-import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
-import org.pushingpixels.substance.api.SubstanceLookAndFeel;
-import org.pushingpixels.substance.api.painter.border.StandardBorderPainter;
-import org.pushingpixels.substance.api.shaper.ClassicButtonShaper;
-import org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel;
 
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.ui.department.DepartmentPanel;
 import com.saleoa.ui.employee.EmployeePanel;
+import com.saleoa.ui.employeeRole.EmployeeRolePanel;
 import com.saleoa.ui.level.LevelPanel;
+import com.saleoa.ui.managerLevel.ManagerLevelPanel;
 import com.saleoa.ui.salary.SalaryPanel;
 import com.saleoa.ui.sale.SalePanel;
+import com.saleoa.ui.saleSalary.SaleSalaryPanel;
 
 public class MainEntry {
 	private JTabbedPane tabPanel = null;
@@ -75,6 +70,21 @@ public class MainEntry {
 		departmentItem.setName(ModuleName.DEPARTMENT);
 		departmentItem.addActionListener(menuItemListener());
 		menu.add(departmentItem);
+		
+		JMenuItem saleSalaryItem = new JMenuItem(ModuleName.SALESALARY);
+		saleSalaryItem.setName(ModuleName.SALESALARY);
+		saleSalaryItem.addActionListener(menuItemListener());
+		menu.add(saleSalaryItem);
+		
+		JMenuItem managerLevelItem = new JMenuItem(ModuleName.MANAGERLEVEL);
+		managerLevelItem.setName(ModuleName.MANAGERLEVEL);
+		managerLevelItem.addActionListener(menuItemListener());
+		menu.add(managerLevelItem);
+		
+		JMenuItem employeeRoleItem = new JMenuItem(ModuleName.EMPLOYEEROLE);
+		employeeRoleItem.setName(ModuleName.EMPLOYEEROLE);
+		employeeRoleItem.addActionListener(menuItemListener());
+		menu.add(employeeRoleItem);
 		//JPanel panel = new JPanel();
 		
 		//获得系统托盘实例
@@ -163,6 +173,15 @@ public class MainEntry {
 				} else if(ModuleName.DEPARTMENT.equals(item.getName())) {
 					DepartmentPanel departmentPanel = new DepartmentPanel();
 					tabPanel.add(departmentPanel);
+				} else if(ModuleName.SALESALARY.equals(item.getName())) {
+					SaleSalaryPanel saleSalaryPanel = new SaleSalaryPanel();
+					tabPanel.add(saleSalaryPanel);
+				} else if(ModuleName.MANAGERLEVEL.equals(item.getName())) {
+					ManagerLevelPanel managerLevelPanel = new ManagerLevelPanel();
+					tabPanel.add(managerLevelPanel);
+				} else if(ModuleName.EMPLOYEEROLE.equals(item.getName())) {
+					EmployeeRolePanel employeeRolePanel = new EmployeeRolePanel();
+					tabPanel.add(employeeRolePanel);
 				}
 			}
 		};

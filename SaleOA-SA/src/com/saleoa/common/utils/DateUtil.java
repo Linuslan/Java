@@ -13,6 +13,10 @@ public class DateUtil {
 		return sdf.format(date);
 	}
 	
+	public static String formatMonthDate(Date date) {
+		return monthSdf.format(date);
+	}
+	
 	public static Date parseFullDate(String dateStr) {
 		Date date = null;
 		try {

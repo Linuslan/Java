@@ -55,4 +55,8 @@ public class EmployeeRole {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+	
+	public String toString() {
+		return name;
+	}
 }
