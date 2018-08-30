@@ -25,9 +25,13 @@ public class ManagerLevel {
 	@Column(name="max_sale")
 	private Integer maxSale;
 	
-	//抽成
+	//抽成/套
 	@Column(name="commission")
 	private Long commission;
+	
+	//超额达标奖
+	@Column(name="over_reach_goal_bonus")
+	private Long overGoalBonus;
 	
 	@Column(name="memo")
 	private String memo;
@@ -97,5 +101,13 @@ public class ManagerLevel {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public Long getOverGoalBonus() {
+		return overGoalBonus;
+	}
+
+	public void setOverGoalBonus(Long overGoalBonus) {
+		this.overGoalBonus = overGoalBonus;
 	}
 }

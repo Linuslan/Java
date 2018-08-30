@@ -64,11 +64,21 @@ public class SalaryPanel extends JGridPanel<Salary> {
 		cols.add("年");
 		cols.add("月");
 		cols.add("姓名");
-		cols.add("应得工资");
+		cols.add("归属部门");
+		cols.add("基本工资");
+		cols.add("达标奖金");
+		cols.add("达标超额奖");
+		cols.add("内勤管理补助");
+		cols.add("全勤奖");
 		cols.add("应扣款");
+		cols.add("总达标奖");
+		cols.add("应发工资");
+		cols.add("税额");
+		cols.add("本月罚款");
+		cols.add("公司借款");
 		cols.add("最终工资");
 		cols.add("状态");
-		cols.add("备注");
+		//cols.add("备注");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		table.setAlignmentX(CENTER_ALIGNMENT);
@@ -179,7 +189,7 @@ public class SalaryPanel extends JGridPanel<Salary> {
 					String[] options = {"确定", "取消"};
 					int result = JOptionPane.showOptionDialog(null, "您确定创建"+year+"-"+(month > 9 ? month : "0"+month)+"的工资吗？", "温馨提醒",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
 					if(result == 0) {
-						boolean success = true;//salaryService.createSalary(year, month);
+						boolean success = salaryService.createSalary(year, month);
 						if(success) {
 							JOptionPane.showMessageDialog( null,"创建成功","消息", JOptionPane.PLAIN_MESSAGE );
 							initGrid();
@@ -295,11 +305,21 @@ public class SalaryPanel extends JGridPanel<Salary> {
 				newRow.add(String.valueOf(salary.getYear()));
 				newRow.add(String.valueOf(salary.getMonth()));
 				newRow.add(salary.getUserName());
+				newRow.add(salary.getDepartmentName());
 				newRow.add(String.valueOf(salary.getMoney()/100.0));
+				newRow.add(String.valueOf(salary.getReachGoalBonus()/100.0));
+				newRow.add(String.valueOf(salary.getOverGoalBonus()/100.0));
+				newRow.add(String.valueOf(salary.getOfficeManageBonus()/100.0));
+				newRow.add(String.valueOf(salary.getFullDutyBonus()/100.0));
 				newRow.add(String.valueOf(salary.getDeductMoney()/100.0));
+				newRow.add(String.valueOf(salary.getTotalReachGoalBonus()/100.0));
+				newRow.add(String.valueOf(salary.getSupposedMoney()/100.0));
+				newRow.add(String.valueOf(salary.getTax()/100.0));
+				newRow.add(String.valueOf(salary.getAmercement()/100.0));
+				newRow.add(String.valueOf(salary.getCompanyLend()/100.0));
 				newRow.add(String.valueOf(salary.getTotalMoney()/100.0));
 				newRow.add(salary.getStatus()==0?"待审核":"已生效");
-				newRow.add(salary.getMemo());
+				//newRow.add(salary.getMemo());
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

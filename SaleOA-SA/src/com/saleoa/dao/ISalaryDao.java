@@ -13,6 +13,6 @@ public interface ISalaryDao extends IBaseDao<Salary> {
 	 * @param month
 	 * @return
 	 */
-	public List<Salary> createSalary(int year, int month);
+	public List<Salary> createSalary(int year, int month) throws Exception;
 	
 }

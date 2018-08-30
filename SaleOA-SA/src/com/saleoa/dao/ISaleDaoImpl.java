@@ -22,8 +22,8 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 	 */
 	public int getSaleCountByDepartment(Long departmentId, Date saleDate) {
 		int count = 0;
-		String startDate = DateUtil.getFirstDateStrOfMonthByDate(saleDate);
-		String endDate = DateUtil.getEndDateStrOfMonthByDate(saleDate);
+		String startDate = DateUtil.getCustomFirstDateStrOfMonthByDate(saleDate);
+		String endDate = DateUtil.getCustomEndDateStrOfMonthByDate(saleDate);
 		String sql = "SELECT COUNT(*) FROM tbl_oa_sale WHERE sale_date >= '"+startDate+"'" +
 				" AND sale_date <= '"+endDate+"' AND department_id="+departmentId;
 		try {

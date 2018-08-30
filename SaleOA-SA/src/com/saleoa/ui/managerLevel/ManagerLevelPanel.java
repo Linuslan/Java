@@ -46,7 +46,7 @@ public class ManagerLevelPanel extends JPanel {
 	DefaultTableModel model = null;
 	JTable table = null;
 	public ManagerLevelPanel() {
-		this.setName(ModuleName.LEVEL);
+		this.setName(ModuleName.MANAGERLEVEL);
 		init();
 	}
 	

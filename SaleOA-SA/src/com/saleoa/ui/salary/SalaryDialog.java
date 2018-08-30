@@ -22,25 +22,28 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
+import com.saleoa.common.constant.EmployeeRoleConst;
 import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.StringUtil;
-import com.saleoa.dao.ISalaryDao;
-import com.saleoa.dao.ISalaryDaoImpl;
 import com.saleoa.model.Employee;
 import com.saleoa.model.Salary;
+import com.saleoa.service.IEmployeeRoleService;
+import com.saleoa.service.IEmployeeRoleServiceImpl;
 import com.saleoa.service.IEmployeeService;
 import com.saleoa.service.IEmployeeServiceImpl;
+import com.saleoa.service.ISalaryService;
+import com.saleoa.service.ISalaryServiceImpl;
 import com.saleoa.ui.MainEntry;
 import com.saleoa.ui.plugin.JAutoCompleteComboBox;
 
 public class SalaryDialog {
 	private static Dimension screenSize = MainEntry.getScreanSize();
-	ISalaryDao salaryDao = new ISalaryDaoImpl();
+	ISalaryService salaryService = new ISalaryServiceImpl();
 	IEmployeeService employeeService = new IEmployeeServiceImpl();
+	IEmployeeRoleService employeeRoleService = new IEmployeeRoleServiceImpl();
 	private Long id;
 	private int year;
 	private int month;
@@ -50,8 +53,27 @@ public class SalaryDialog {
 	private String memo="";
 	private Long totalMoney = 0L;	//最终工资
 	private Integer status = 0;
+	private Long reachGoalBonus = 0L;
+	private Long overGoalBonus = 0L;
+	private Long officeManageBonus = 0L;
+	private Long fullDutyBonus = 0L;
+	private Long totalReachGoalBonus = 0L;
+	private Long amercement = 0L;
+	private Long companyLend = 0L;
+	private Long tax = 0L;
+	private Long supposedMoney = 0L;
 	final JFormattedTextField salaryIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
 	final JFormattedTextField deductMoneyIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField reachGoalBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField overGoalBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField officeManageBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField fullDutyBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField totalReachGoalBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField amercementIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField companyLendIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JLabel supposedMoneyIpt = new JLabel();
+	final JLabel taxIpt = new JLabel();
+	final JAutoCompleteComboBox<Employee> employeeComb = new JAutoCompleteComboBox<Employee>();
 	final JDialog dialog = new JDialog();
 	final JLabel totalMoneyIpt = new JLabel(String.valueOf(totalMoney/100.0));
 	
@@ -66,11 +88,20 @@ public class SalaryDialog {
 			this.memo = salary.getMemo();
 			this.totalMoney = salary.getTotalMoney();
 			status = salary.getStatus();
+			this.reachGoalBonus = salary.getReachGoalBonus();
+			this.overGoalBonus = salary.getOverGoalBonus();
+			this.officeManageBonus = salary.getOfficeManageBonus();
+			this.fullDutyBonus = salary.getFullDutyBonus();
+			this.totalReachGoalBonus = salary.getTotalReachGoalBonus();
+			this.amercement = salary.getAmercement();
+			this.companyLend = salary.getCompanyLend();
+			this.tax = salary.getTax();
+			this.supposedMoney = salary.getSupposedMoney();
 		}
 		
 		dialog.setBackground(Color.WHITE);
 		int dialogWidth = 400;
-		int dialogHeight = 500;
+		int dialogHeight = 800;
 		dialog.setSize(dialogWidth, dialogHeight);
 		dialog.setLocation((screenSize.width-dialogWidth)/2, (screenSize.height-dialogHeight)/2);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -129,7 +160,7 @@ public class SalaryDialog {
 		nameLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(nameLbl);
 		nameLbl.setLocation(FormCss.getLocation(null, monthLbl));
-		final JAutoCompleteComboBox<Employee> employeeComb = new JAutoCompleteComboBox<Employee>();
+		
 		List<Employee> employeeList = null;
 		try {
 			employeeList = this.employeeService.select(null);
@@ -155,7 +186,7 @@ public class SalaryDialog {
 			employeeComb.setEnabled(false);
 		}
 		
-		JLabel salaryLbl = new JLabel("应得工资：");
+		JLabel salaryLbl = new JLabel("基础工资：");
 		salaryLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(salaryLbl);
 		salaryLbl.setLocation(FormCss.getLocation(null, nameLbl));
@@ -165,26 +196,245 @@ public class SalaryDialog {
 		salaryIpt.setLocation(FormCss.getLocation(salaryLbl, employeeComb));
 		salaryIpt.setText(String.valueOf(this.money/100.0));
 		
+		JLabel reachGoalBonusLbl = new JLabel("达标奖：");
+		reachGoalBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(reachGoalBonusLbl);
+		reachGoalBonusLbl.setLocation(FormCss.getLocation(null, salaryLbl));
+		
+		reachGoalBonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(reachGoalBonusIpt);
+		reachGoalBonusIpt.setLocation(FormCss.getLocation(reachGoalBonusLbl, salaryIpt));
+		reachGoalBonusIpt.setText(String.valueOf(this.reachGoalBonus/100.0));
+		reachGoalBonusIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel overGoalBonusLbl = new JLabel("达标超额奖：");
+		overGoalBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(overGoalBonusLbl);
+		overGoalBonusLbl.setLocation(FormCss.getLocation(null, reachGoalBonusLbl));
+		
+		overGoalBonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(overGoalBonusIpt);
+		overGoalBonusIpt.setLocation(FormCss.getLocation(overGoalBonusLbl, reachGoalBonusIpt));
+		overGoalBonusIpt.setText(String.valueOf(this.overGoalBonus/100.0));
+		overGoalBonusIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel officeManageBonusLbl = new JLabel("内勤管理奖：");
+		officeManageBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(officeManageBonusLbl);
+		officeManageBonusLbl.setLocation(FormCss.getLocation(null, overGoalBonusLbl));
+		
+		officeManageBonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(officeManageBonusIpt);
+		officeManageBonusIpt.setLocation(FormCss.getLocation(officeManageBonusLbl, overGoalBonusIpt));
+		officeManageBonusIpt.setText(String.valueOf(this.officeManageBonus/100.0));
+		officeManageBonusIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel totalReachGoalBonusLbl = new JLabel("总达标奖：");
+		totalReachGoalBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(totalReachGoalBonusLbl);
+		totalReachGoalBonusLbl.setLocation(FormCss.getLocation(null, officeManageBonusLbl));
+		
+		totalReachGoalBonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(totalReachGoalBonusIpt);
+		totalReachGoalBonusIpt.setLocation(FormCss.getLocation(totalReachGoalBonusLbl, officeManageBonusIpt));
+		totalReachGoalBonusIpt.setText(String.valueOf(this.totalReachGoalBonus/100.0));
+		totalReachGoalBonusIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel fullDutyBonusLbl = new JLabel("满勤奖：");
+		fullDutyBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(fullDutyBonusLbl);
+		fullDutyBonusLbl.setLocation(FormCss.getLocation(null, totalReachGoalBonusLbl));
+		
+		fullDutyBonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(fullDutyBonusIpt);
+		fullDutyBonusIpt.setLocation(FormCss.getLocation(fullDutyBonusLbl, totalReachGoalBonusIpt));
+		fullDutyBonusIpt.setText(String.valueOf(this.fullDutyBonus/100.0));
+		fullDutyBonusIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
 		
 		JLabel deductMoneyLbl = new JLabel("应扣款：");
 		deductMoneyLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(deductMoneyLbl);
-		deductMoneyLbl.setLocation(FormCss.getLocation(null, salaryLbl));
+		deductMoneyLbl.setLocation(FormCss.getLocation(null, fullDutyBonusLbl));
 		
 		deductMoneyIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		deductMoneyIpt.setLocation(FormCss.getLocation(deductMoneyLbl, salaryIpt));
+		deductMoneyIpt.setLocation(FormCss.getLocation(deductMoneyLbl, fullDutyBonusIpt));
 		panel.add(deductMoneyIpt);
 		deductMoneyIpt.setText(String.valueOf(deductMoney/100.0));
+		deductMoneyIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel supposedMoneyLbl = new JLabel("应发工资：");
+		supposedMoneyLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(supposedMoneyLbl);
+		supposedMoneyLbl.setLocation(FormCss.getLocation(null, deductMoneyLbl));
+		
+		supposedMoneyIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		supposedMoneyIpt.setLocation(FormCss.getLocation(supposedMoneyLbl, deductMoneyIpt));
+		panel.add(supposedMoneyIpt);
+		supposedMoneyIpt.setText(String.valueOf(supposedMoney/100.0));
+		supposedMoneyIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel taxLbl = new JLabel("个税：");
+		taxLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(taxLbl);
+		taxLbl.setLocation(FormCss.getLocation(null, supposedMoneyLbl));
+		
+		taxIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		taxIpt.setLocation(FormCss.getLocation(taxLbl, supposedMoneyIpt));
+		panel.add(taxIpt);
+		taxIpt.setText(String.valueOf(tax/100.0));
+		taxIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel amercementLbl = new JLabel("本月罚款：");
+		amercementLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(amercementLbl);
+		amercementLbl.setLocation(FormCss.getLocation(null, taxLbl));
+		
+		amercementIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		amercementIpt.setLocation(FormCss.getLocation(amercementLbl, taxIpt));
+		panel.add(amercementIpt);
+		amercementIpt.setText(String.valueOf(amercement/100.0));
+		amercementIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel companyLendLbl = new JLabel("公司借款：");
+		companyLendLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(companyLendLbl);
+		companyLendLbl.setLocation(FormCss.getLocation(null, amercementLbl));
+		
+		companyLendIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		companyLendIpt.setLocation(FormCss.getLocation(companyLendLbl, amercementIpt));
+		panel.add(companyLendIpt);
+		companyLendIpt.setText(String.valueOf(companyLend/100.0));
+		companyLendIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
 		
 		JLabel totalMoneyLbl = new JLabel("最终工资：");
 		totalMoneyLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(totalMoneyLbl);
-		totalMoneyLbl.setLocation(FormCss.getLocation(null, deductMoneyLbl));
+		totalMoneyLbl.setLocation(FormCss.getLocation(null, companyLendLbl));
 		
 		calculateTotalMoney();
 		
 		totalMoneyIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		totalMoneyIpt.setLocation(FormCss.getLocation(totalMoneyLbl, deductMoneyIpt));
+		totalMoneyIpt.setLocation(FormCss.getLocation(totalMoneyLbl, companyLendIpt));
 		panel.add(totalMoneyIpt);
 		
 		salaryIpt.addFocusListener(new FocusListener() {
@@ -311,10 +561,15 @@ public class SalaryDialog {
 				temp.setStatus(status);
 				temp.setMemo(memoTxt.getText());
 				boolean success = false;
-				if(null == temp.getId()) {
-					success = salaryDao.add(temp);
-				} else {
-					success = salaryDao.update(temp);
+				try {
+					if(null == temp.getId()) {
+						success = salaryService.add(temp);
+					} else {
+						success = salaryService.update(temp);
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				if(success) {
 					dialog.dispose();
@@ -327,6 +582,15 @@ public class SalaryDialog {
 	}
 	
 	public void calculateTotalMoney() {
+		
+		if(null == employeeComb.getSelectedItem()) {
+			JOptionPane.showMessageDialog(dialog, "请选择人员", "温馨提示",JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
+		Employee employee = (Employee) employeeComb.getSelectedItem();
+		Long employeeRoleId = employee.getEmployeeRoleId();
+		
 		String moneyStr = salaryIpt.getText();
 		if(StringUtil.isEmpty(moneyStr)) {
 			moneyStr = "0";
@@ -345,7 +609,52 @@ public class SalaryDialog {
 			}
 			deductMoney = (long) (deductMoneyDl*100);
 		}
-		Long totalMoney = money-deductMoney;
+		
+		String reachGoalBonusStr = reachGoalBonusIpt.getText();
+		reachGoalBonusStr = reachGoalBonusStr.replaceAll(",", "");
+		Double reachGoalBonusDl = Double.parseDouble(reachGoalBonusStr);
+		Long reachGoalBonus = (long) (reachGoalBonusDl*100);
+		
+		String overGoalBonusStr = overGoalBonusIpt.getText();
+		overGoalBonusStr = overGoalBonusStr.replaceAll(",", "");
+		Double overGoalBonusDl = Double.parseDouble(overGoalBonusStr);
+		Long overGoalBonus = (long) (overGoalBonusDl*100);
+		
+		String officeManageBonusStr = overGoalBonusIpt.getText();
+		officeManageBonusStr = officeManageBonusStr.replaceAll(",", "");
+		Double officeManageBonusDl = Double.parseDouble(officeManageBonusStr);
+		Long officeManageBonus = (long) (officeManageBonusDl*100);
+		
+		String fullDutyBonusStr = fullDutyBonusIpt.getText();
+		fullDutyBonusStr = fullDutyBonusStr.replaceAll(",", "");
+		Double fullDutyBonusDl = Double.parseDouble(fullDutyBonusStr);
+		Long fullDutyBonus = (long) (fullDutyBonusDl*100);
+		
+		String totalReachGoalBonusStr = totalReachGoalBonusIpt.getText();
+		totalReachGoalBonusStr = totalReachGoalBonusStr.replaceAll(",", "");
+		Double totalReachGoalBonusDl = Double.parseDouble(totalReachGoalBonusStr);
+		Long totalReachGoalBonus = (long) (totalReachGoalBonusDl*100);
+		
+		String amercementStr = amercementIpt.getText();
+		amercementStr = amercementStr.replaceAll(",", "");
+		Double amercementDl = Double.parseDouble(amercementStr);
+		Long amercement = (long) (amercementDl*100);
+		
+		String companyLendStr = companyLendIpt.getText();
+		companyLendStr = companyLendStr.replaceAll(",", "");
+		Double companyLendDl = Double.parseDouble(companyLendStr);
+		Long companyLend = (long) (companyLendDl*100);
+		
+		Long supposedMoney = reachGoalBonus + overGoalBonus + officeManageBonus
+				+ fullDutyBonus + totalReachGoalBonus + money - deductMoney;
+		supposedMoneyIpt.setText(String.valueOf(supposedMoney/100.0));
+		Long tax = 0L;
+		if(employeeRoleId.longValue() == EmployeeRoleConst.MANAGER) {	//经理级别需要扣税
+			tax = salaryService.getTax(supposedMoney);
+			taxIpt.setText(String.valueOf(tax/100.0));
+		}
+		
+		Long totalMoney = supposedMoney - tax - amercement - companyLend;
 		totalMoneyIpt.setText(String.valueOf(totalMoney/100.0));
 	}
 }

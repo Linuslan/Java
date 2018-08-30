@@ -9,4 +9,5 @@ public class ModuleName {
 	public final static String SALESALARY = "月度奖金管理";
 	public final static String MANAGERLEVEL = "经理等级管理";
 	public final static String EMPLOYEEROLE = "员工角色管理";
+	public final static String SALARYCONFIG = "工资配置管理";
 }

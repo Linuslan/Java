@@ -46,7 +46,7 @@ public class EmployeeRolePanel extends JPanel {
 	DefaultTableModel model = null;
 	JTable table = null;
 	public EmployeeRolePanel() {
-		this.setName(ModuleName.DEPARTMENT);
+		this.setName(ModuleName.EMPLOYEEROLE);
 		init();
 	}
 	

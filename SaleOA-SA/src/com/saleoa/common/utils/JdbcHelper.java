@@ -24,6 +24,7 @@ import com.saleoa.model.EmployeeRole;
 import com.saleoa.model.Level;
 import com.saleoa.model.ManagerLevel;
 import com.saleoa.model.Salary;
+import com.saleoa.model.SalaryConfig;
 import com.saleoa.model.Sale;
 import com.saleoa.model.SaleSalary;
 
@@ -619,6 +620,7 @@ public class JdbcHelper {
 		Class<EmployeeRole> employeeRoleCls = EmployeeRole.class;
 		Class<Department> departmentCls = Department.class;
 		Class<ManagerLevel> managerLevelCls = ManagerLevel.class;
+		Class<SalaryConfig> salaryConfigCls = SalaryConfig.class;
 		String sql = tableSql(employeeCls);
 		executeSql(sql);
 		System.out.println(sql);
@@ -641,6 +643,9 @@ public class JdbcHelper {
 		executeSql(sql);
 		System.out.println(sql);
 		sql = tableSql(managerLevelCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableSql(salaryConfigCls);
 		executeSql(sql);
 		System.out.println(sql);
 		return isSuccess;

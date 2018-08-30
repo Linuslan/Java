@@ -95,6 +95,9 @@ public class Salary {
 	//¹«Ë¾½è¿î
 	@Column(name="company_lend", jdbcType=JdbcType.INTEGER)
 	private Long companyLend;
+	
+	@Column(name="supposed_money", jdbcType=JdbcType.INTEGER)
+	private Long supposedMoney;
 
 	public Long getId() {
 		return id;
@@ -278,5 +281,13 @@ public class Salary {
 
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
+	}
+
+	public Long getSupposedMoney() {
+		return supposedMoney;
+	}
+
+	public void setSupposedMoney(Long supposedMoney) {
+		this.supposedMoney = supposedMoney;
 	}
 }

@@ -33,10 +33,10 @@ public class ISaleSalaryDaoImpl extends IBaseDaoImpl<SaleSalary> implements ISal
 	public Page<SaleSalary> selectPage(Map<String, Object> paramMap, long pageNo, int limit) {
 		Page<SaleSalary> pageObj = null;
 		if(null == paramMap.get("createDate>=")) {
-			paramMap.put("createDate>=", "'"+DateUtil.getFirstDateStrOfMonthByDate(new Date())+"'");
+			paramMap.put("createDate>=", "'"+DateUtil.getCustomFirstDateStrOfMonthByDate(new Date())+"'");
 		}
 		if(null == paramMap.get("createDate<=")) {
-			paramMap.put("createDate<=", "'"+DateUtil.getEndDateStrOfMonthByDate(new Date())+"'");
+			paramMap.put("createDate<=", "'"+DateUtil.getCustomEndDateStrOfMonthByDate(new Date())+"'");
 		}
 		try {
 			String sql = "SELECT employee_id, employee_name, SUM(salary) salary FROM tbl_oa_sale_salary";
@@ -98,8 +98,8 @@ public class ISaleSalaryDaoImpl extends IBaseDaoImpl<SaleSalary> implements ISal
 		SaleSalary log = null;
 		Map<String, Object> paramMap = new HashMap<String, Object> ();
 		paramMap.put("employeeId", employeeId);
-		paramMap.put("createDate>=", DateUtil.getFirstDateStrOfMonthByDate(saleDate));
-		paramMap.put("createDate<=", DateUtil.getEndDateStrOfMonthByDate(saleDate));
+		paramMap.put("createDate>=", DateUtil.getCustomFirstDateStrOfMonthByDate(saleDate));
+		paramMap.put("createDate<=", DateUtil.getCustomEndDateStrOfMonthByDate(saleDate));
 		List<SaleSalary> logs = this.select(paramMap);
 		if(logs.size() > 0) {
 			log = logs.get(0);

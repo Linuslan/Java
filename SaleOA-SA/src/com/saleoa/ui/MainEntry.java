@@ -27,6 +27,7 @@ import com.saleoa.ui.employeeRole.EmployeeRolePanel;
 import com.saleoa.ui.level.LevelPanel;
 import com.saleoa.ui.managerLevel.ManagerLevelPanel;
 import com.saleoa.ui.salary.SalaryPanel;
+import com.saleoa.ui.salaryConfig.SalaryConfigPanel;
 import com.saleoa.ui.sale.SalePanel;
 import com.saleoa.ui.saleSalary.SaleSalaryPanel;
 
@@ -85,6 +86,11 @@ public class MainEntry {
 		employeeRoleItem.setName(ModuleName.EMPLOYEEROLE);
 		employeeRoleItem.addActionListener(menuItemListener());
 		menu.add(employeeRoleItem);
+		
+		JMenuItem salaryConfigItem = new JMenuItem(ModuleName.SALARYCONFIG);
+		salaryConfigItem.setName(ModuleName.SALARYCONFIG);
+		salaryConfigItem.addActionListener(menuItemListener());
+		menu.add(salaryConfigItem);
 		//JPanel panel = new JPanel();
 		
 		//获得系统托盘实例
@@ -182,6 +188,9 @@ public class MainEntry {
 				} else if(ModuleName.EMPLOYEEROLE.equals(item.getName())) {
 					EmployeeRolePanel employeeRolePanel = new EmployeeRolePanel();
 					tabPanel.add(employeeRolePanel);
+				} else if(ModuleName.SALARYCONFIG.equals(item.getName())) {
+					SalaryConfigPanel salaryConfigPanel = new SalaryConfigPanel();
+					tabPanel.add(salaryConfigPanel);
 				}
 			}
 		};

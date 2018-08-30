@@ -5,6 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.saleoa.model.SalaryConfig;
+import com.saleoa.service.ISalaryConfigService;
+import com.saleoa.service.ISalaryConfigServiceImpl;
+
 public class DateUtil {
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	private static SimpleDateFormat datesdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -73,35 +77,55 @@ public class DateUtil {
 	 * @param date
 	 * @return
 	 */
-	public static Date getFirstDateOfMonthByDate(Date date) {
-		String monthDate = monthSdf.format(date);
-		String firstDateStr = monthDate+"-01";
+	public static Date getCustomFirstDateOfMonthByDate(Date date) {
+		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
 		Date firstDate = null;
 		try {
-			firstDate = datesdf.parse(firstDateStr);
-		} catch (ParseException e) {
+			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
+			int startDay = salaryConfig.getSalaryStartDay();
+			String monthDate = monthSdf.format(date);
+			String firstDateStr = monthDate+"-"+(startDay > 9 ? startDay : "0"+startDay);
+			try {
+				firstDate = datesdf.parse(firstDateStr);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 		return firstDate;
 	}
 	
-	public static String getFirstDateStrOfMonthByDate(Date date) {
-		String monthDate = monthSdf.format(date);
-		String firstDateStr = monthDate+"-01";
-		return firstDateStr+" 00:00:00";
+	public static String getCustomFirstDateStrOfMonthByDate(Date date) {
+		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
+		String firstDateStr = "";
+		try {
+			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
+			int startDay = salaryConfig.getSalaryStartDay();
+			String monthDate = monthSdf.format(date);
+			firstDateStr = monthDate+"-"+(startDay > 9 ? startDay : "0"+startDay)+" 00:00:00";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return firstDateStr;
 	}
 	
-	public static Date getEndDateOfMonthByDate(Date date) {
+	public static Date getCustomEndDateOfMonthByDate(Date date) {
+		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
 		String monthDate = monthSdf.format(date);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		monthDate += "-"+endDay;
 		Date endDate = null;
 		try {
-			endDate = datesdf.parse(monthDate);
-		} catch (ParseException e) {
+			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
+			//int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+			int endDay = salaryConfig.getSalaryEndDay();
+			monthDate += "-"+(endDay > 9 ? endDay : "0"+endDay);
+			endDate = sdf.parse(monthDate);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -111,12 +135,23 @@ public class DateUtil {
 		return endDate;
 	}
 	
-	public static String getEndDateStrOfMonthByDate(Date date) {
+	public static String getCustomEndDateStrOfMonthByDate(Date date) {
+		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
 		String monthDate = monthSdf.format(date);
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
-		int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		monthDate += "-"+endDay +" 23:59:59";
+		//int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		//monthDate += "-"+endDay +" 23:59:59";
+		try {
+			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
+			//int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+			int endDay = salaryConfig.getSalaryEndDay();
+			monthDate += "-"+(endDay > 9 ? endDay : "0"+endDay);
+			monthDate += "-"+endDay +" 23:59:59";
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return monthDate;
 	}
 	
@@ -125,6 +160,6 @@ public class DateUtil {
 		Date date = parseFullDate(dateStr);
 		System.out.println(date);*/
 		
-		System.out.println(DateUtil.getEndDateOfMonthByDate(new Date()));
+		System.out.println(DateUtil.getCustomEndDateOfMonthByDate(new Date()));
 	}
 }

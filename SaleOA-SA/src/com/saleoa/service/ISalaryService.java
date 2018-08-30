@@ -13,6 +13,8 @@ public interface ISalaryService extends IBaseService<Salary> {
 	 * @param month
 	 * @return
 	 */
-	public List<Salary> createSalary(int year, int month);
+	public boolean createSalary(int year, int month) throws Exception;
+	
+	public Long getTax(Long supposedMoney);
 	
 }
