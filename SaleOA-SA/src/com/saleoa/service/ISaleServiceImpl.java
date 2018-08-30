@@ -18,6 +18,7 @@ import com.saleoa.dao.IManagerLevelDaoImpl;
 import com.saleoa.dao.ISaleDao;
 import com.saleoa.dao.ISaleDaoImpl;
 import com.saleoa.dao.ISaleSalaryDao;
+import com.saleoa.dao.ISaleSalaryDaoImpl;
 import com.saleoa.model.Employee;
 import com.saleoa.model.Level;
 import com.saleoa.model.ManagerLevel;
@@ -28,7 +29,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		ISaleService {
 	private ILevelDao levelDao;
 	private ISaleDao saleDao;
-	private ISaleSalaryDao saleLogDao;
+	private ISaleSalaryDao saleSalaryDao;
 	private IEmployeeDao employeeDao;
 	private IDepartmentDao departmentDao;
 	private IManagerLevelDao managerLevelDao;
@@ -39,6 +40,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		employeeDao = new IEmployeeDaoImpl();
 		departmentDao = new IDepartmentDaoImpl();
 		managerLevelDao = new IManagerLevelDaoImpl();
+		saleSalaryDao = new ISaleSalaryDaoImpl();
 	}
 	
 	/**
@@ -73,9 +75,9 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		sale.setDepartmentName(employee.getDepartmentName());
 		if(0l < lastSaleId) {
 			Sale lastSale = this.dao.selectById(lastSaleId);
-			SaleSalary lastSaleLog = this.saleLogDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
+			SaleSalary lastSaleLog = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
 			if(null == lastSaleLog) {
-				lastSaleLog = this.saleLogDao.getInstance(lastSale);
+				lastSaleLog = this.saleSalaryDao.getInstance(lastSale);
 				addSaleLogs.add(lastSaleLog);
 			} else {
 				updateSaleLogs.add(lastSaleLog);
@@ -101,17 +103,18 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		Long departmentId = employee.getDepartmentId();
 		List<Employee> managers = this.employeeDao.selectManagerByDepartment(departmentId);
 		int saleCount = this.saleDao.getSaleCountByDepartment(departmentId, sale.getSaleDate());
+		saleCount ++;	//本次也算一次销售数
 		ManagerLevel managerLevel = this.managerLevelDao.selectBySale(saleCount);
 		Employee manager = null;
 		for(int i = 0; i < managers.size(); i ++) {
 			manager = managers.get(i);
-			SaleSalary saleLog = this.saleLogDao.selectByEmployeeOnSaleDate(manager.getId(), sale.getSaleDate());
+			SaleSalary saleLog = this.saleSalaryDao.selectByEmployeeOnSaleDate(manager.getId(), sale.getSaleDate());
 			if(null == saleLog) {
 				Sale managerSale = new Sale();
 				BeanUtil.copyBean(sale, managerSale);
 				managerSale.setEmployeeId(manager.getId());
 				managerSale.setEmployeeName(manager.getName());
-				saleLog = this.saleLogDao.getInstance(managerSale);
+				saleLog = this.saleSalaryDao.getInstance(managerSale);
 				saleLog.setSaleId(null);
 				addSaleLogs.add(saleLog);
 			} else {
@@ -127,10 +130,10 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 			this.dao.updateBatch(updates);
 		}
 		if(!addSaleLogs.isEmpty()) {
-			this.saleLogDao.addBatch(addSaleLogs);
+			this.saleSalaryDao.addBatch(addSaleLogs);
 		}
 		if(!updateSaleLogs.isEmpty()) {
-			this.saleLogDao.updateBatch(updateSaleLogs);
+			this.saleSalaryDao.updateBatch(updateSaleLogs);
 		}
 		success = true;
 		return success;
@@ -157,9 +160,9 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 			long lastSaleSalary = lastSale.getSalary()+lastSaleBonus;
 			lastSale.setSalary(lastSaleSalary);
 			bonus = bonus - lastSaleBonus;
-			SaleSalary lastSaleLog = this.saleLogDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
+			SaleSalary lastSaleLog = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
 			if(null == lastSaleLog) {
-				lastSaleLog = this.saleLogDao.getInstance(lastSale);
+				lastSaleLog = this.saleSalaryDao.getInstance(lastSale);
 				addSaleLogs.add(lastSaleLog);
 			} else {
 				updateSaleLogs.add(lastSaleLog);

@@ -33,6 +33,7 @@ public class ManagerLevelDialog {
 	private Integer minSale=0;
 	private Integer maxSale=0;
 	private Long basicSalary = 0L;
+	private Long reachGoalBonus = 0L;
 
 	public void initDialog(final ManagerLevel level, final ManagerLevelPanel parent) {
 		if(null != level) {
@@ -41,11 +42,12 @@ public class ManagerLevelDialog {
 			this.minSale = level.getMinSale();
 			this.maxSale = level.getMaxSale();
 			this.basicSalary = level.getBasicSalary();
+			reachGoalBonus = level.getReachGoalBonus();
 		}
 		final JDialog dialog = new JDialog();
 		dialog.setBackground(Color.WHITE);
 		int dialogWidth = 400;
-		int dialogHeight = 300;
+		int dialogHeight = 350;
 		dialog.setSize(dialogWidth, dialogHeight);
 		dialog.setLocation((screenSize.width-dialogWidth)/2, (screenSize.height-dialogHeight)/2);
 		dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -104,10 +106,20 @@ public class ManagerLevelDialog {
 		panel.add(commissionIpt);
 		commissionIpt.setText(String.valueOf(basicSalary/100.0));
 		
+		JLabel reachGoalBonusLbl = new JLabel("达标奖：");
+		reachGoalBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(reachGoalBonusLbl);
+		reachGoalBonusLbl.setLocation(FormCss.getLocation(null, commissionLbl));
+		final JFormattedTextField reachGoalBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance());
+		reachGoalBonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		reachGoalBonusIpt.setLocation(FormCss.getLocation(reachGoalBonusLbl, commissionIpt));
+		panel.add(reachGoalBonusIpt);
+		reachGoalBonusIpt.setText(String.valueOf(reachGoalBonus/100.0));
+		
 		JButton saveBtn = new JButton("保存");
 		saveBtn.setSize(60, 30);
 		panel.add(saveBtn);
-		Point p = FormCss.getLocation(null, commissionIpt);
+		Point p = FormCss.getLocation(null, reachGoalBonusIpt);
 		p.x = (dialogWidth-saveBtn.getSize().width)/2;
 		System.out.println("saveBtn position: x="+p.x+", y="+p.y);
 		saveBtn.setLocation(p);
@@ -130,6 +142,9 @@ public class ManagerLevelDialog {
 				Double baiscSalaryDl = Double.parseDouble(basicSalaryStr);
 				Long basicSalary = (long) (baiscSalaryDl*100);
 				Long commission = (long) (commissionDl*100);
+				String reachGoalBonusStr = reachGoalBonusIpt.getText();
+				reachGoalBonusStr = reachGoalBonusStr.replaceAll(",", "");
+				Long reachGoalBonus = (long)(Double.parseDouble(reachGoalBonusStr)*100);
 				if(StringUtil.isEmpty(name)) {
 					JOptionPane.showMessageDialog(dialog, "请输入等级名称", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
@@ -158,6 +173,7 @@ public class ManagerLevelDialog {
 				temp.setMaxSale(maxSale);
 				temp.setMinSale(minSale);
 				temp.setName(name);
+				temp.setReachGoalBonus(reachGoalBonus);
 				boolean success = false;
 				try {
 					if(null == temp.getId()) {

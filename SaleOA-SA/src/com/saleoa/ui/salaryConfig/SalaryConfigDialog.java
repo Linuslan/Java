@@ -10,6 +10,7 @@ import java.text.NumberFormat;
 import java.util.Date;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -105,9 +106,23 @@ public class SalaryConfigDialog {
 		salaryEndDayLbl.setLocation(FormCss.getLocation(null, salaryStartDayLbl));
 		final JFormattedTextField salaryEndDayIpt = new JFormattedTextField(NumberFormat.getNumberInstance());
 		salaryEndDayIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		salaryEndDayIpt.setLocation(FormCss.getLocation(salaryEndDayLbl, salaryStartDayLbl));
+		salaryEndDayIpt.setLocation(FormCss.getLocation(salaryEndDayLbl, salaryStartDayIpt));
 		panel.add(salaryEndDayIpt);
 		salaryEndDayIpt.setText(String.valueOf(salaryEndDay));
+		
+		JLabel monthStepLbl = new JLabel("是否跨月：");
+		monthStepLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(monthStepLbl);
+		monthStepLbl.setLocation(FormCss.getLocation(null, salaryStartDayLbl));
+		final JComboBox<String> monthStepComb = new JComboBox<String> ();
+		monthStepComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		monthStepComb.setLocation(FormCss.getLocation(monthStepLbl, salaryEndDayIpt));
+		panel.add(monthStepComb);
+		monthStepComb.addItem("不跨月");
+		monthStepComb.addItem("跨月");
+		if(null != salaryConfig) {
+			monthStepComb.setSelectedIndex(salaryConfig.getMonthStep());
+		}
 		
 		JButton saveBtn = new JButton("保存");
 		saveBtn.setSize(60, 30);
@@ -143,6 +158,7 @@ public class SalaryConfigDialog {
 				temp.setTaxRate(taxRate);
 				temp.setTaxThreshold(taxThreshold);
 				temp.setTotalReachGoalBonus(totalReachGoalBonus);
+				temp.setMonthStep(monthStepComb.getSelectedIndex());
 				boolean success = false;
 				try {
 					if(null == temp.getId()) {

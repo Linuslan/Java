@@ -23,6 +23,10 @@ public class SalaryConfig {
 	
 	@Column(name="salary_end_day", jdbcType=JdbcType.INTEGER)
 	private Integer salaryEndDay = 1;
+	
+	//月份跨度，0代表不夸月，本月内查询，1代表跨越，跨1个月，结束日期在下月
+	@Column(name="month_step", jdbcType=JdbcType.INTEGER)
+	private Integer monthStep=0;
 
 	public Long getId() {
 		return id;
@@ -70,5 +74,13 @@ public class SalaryConfig {
 
 	public void setTaxRate(Integer taxRate) {
 		this.taxRate = taxRate;
+	}
+
+	public Integer getMonthStep() {
+		return monthStep;
+	}
+
+	public void setMonthStep(Integer monthStep) {
+		this.monthStep = monthStep;
 	}
 }

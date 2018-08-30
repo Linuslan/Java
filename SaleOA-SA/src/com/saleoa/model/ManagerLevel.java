@@ -30,8 +30,8 @@ public class ManagerLevel {
 	private Long commission;
 	
 	//³¬¶î´ï±ê½±
-	@Column(name="over_reach_goal_bonus")
-	private Long overGoalBonus;
+	@Column(name="reach_goal_bonus")
+	private Long reachGoalBonus;
 	
 	@Column(name="memo")
 	private String memo;
@@ -103,11 +103,11 @@ public class ManagerLevel {
 		this.createDate = createDate;
 	}
 
-	public Long getOverGoalBonus() {
-		return overGoalBonus;
+	public Long getReachGoalBonus() {
+		return reachGoalBonus;
 	}
 
-	public void setOverGoalBonus(Long overGoalBonus) {
-		this.overGoalBonus = overGoalBonus;
+	public void setReachGoalBonus(Long reachGoalBonus) {
+		this.reachGoalBonus = reachGoalBonus;
 	}
 }

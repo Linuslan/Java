@@ -73,7 +73,7 @@ public class SalePanel extends JGridPanel<Sale> {
 		cols.add("售出时间");
 		cols.add("积分");
 		cols.add("等级");
-		cols.add("奖金");
+		//cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
@@ -264,7 +264,7 @@ public class SalePanel extends JGridPanel<Sale> {
 				newRow.add(DateUtil.formatFullDate(sale.getSaleDate()));
 				newRow.add(String.valueOf(sale.getRewardPoints()));
 				newRow.add(String.valueOf(sale.getLevelName()));
-				newRow.add(String.valueOf(sale.getSalary()/100.0));
+				//newRow.add(String.valueOf(sale.getSalary()/100.0));
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

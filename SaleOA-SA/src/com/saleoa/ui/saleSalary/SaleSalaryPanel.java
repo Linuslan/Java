@@ -52,7 +52,7 @@ public class SaleSalaryPanel extends JGridPanel<SaleSalary> {
 	long totalPage=20;
 	private PagePanel<SaleSalary> pagePanel = new PagePanel<SaleSalary>(this, saleService);
 	public SaleSalaryPanel() {
-		this.setName(ModuleName.SALE);
+		this.setName(ModuleName.SALESALARY);
 		init();
 	}
 	

@@ -103,9 +103,9 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 				mngSalary.setMoney(managerLevel.getBasicSalary());
 				//销售数大于最大的销售数，则有超额达标奖
 				if(saleCount > managerLevel.getMaxSale()) {
-					mngSalary.setOverGoalBonus(managerLevel.getOverGoalBonus());
+					mngSalary.setReachGoalBonus(managerLevel.getReachGoalBonus());
 					overGoalCount ++;
-					mngSalary.setReachGoalBonus(managerLevel.getCommission()*saleCount);
+					mngSalary.setOverGoalBonus(managerLevel.getCommission()*saleCount);
 				}
 				mngSalary.setOfficeManageBonus(30000l);
 				List<Salary> mngSalarys = mngSalaryMap.get(departmentId.longValue());

@@ -58,6 +58,7 @@ public class ManagerLevelPanel extends JPanel {
 		cols.add("最大售出");
 		cols.add("基础工资");
 		cols.add("奖金/套");
+		cols.add("达标奖");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
@@ -156,6 +157,7 @@ public class ManagerLevelPanel extends JPanel {
 				newRow.add(String.valueOf(managerLevel.getMaxSale()));
 				newRow.add(String.valueOf(managerLevel.getBasicSalary()/100.0));
 				newRow.add(String.valueOf(managerLevel.getCommission()/100.0));
+				newRow.add(String.valueOf(managerLevel.getReachGoalBonus()/100.0));
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

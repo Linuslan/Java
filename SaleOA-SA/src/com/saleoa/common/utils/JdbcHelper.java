@@ -699,6 +699,8 @@ public class JdbcHelper {
 			sale.setLastSaleName("");
 			sale.setEmployeeId(0L);
 			sale.setEmployeeName("");
+			sale.setDepartmentId(0L);
+			sale.setDepartmentName("");
 			sale.setSaleDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
 			String insertSql = JdbcHelper.insertSql(sale);
 			JdbcHelper.executeSql(insertSql);
@@ -709,7 +711,7 @@ public class JdbcHelper {
 	
 	public static void main(String[] args) {
 		try {
-			initTable();
+			//initTable();
 			//initEmployee();
 			//initSale();
 			/*Level level = new Level();

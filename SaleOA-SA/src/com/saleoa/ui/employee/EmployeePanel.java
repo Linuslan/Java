@@ -63,6 +63,8 @@ public class EmployeePanel extends JGridPanel<Employee> {
 		cols.add("姓名");
 		cols.add("入职时间");
 		cols.add("在职状态");
+		cols.add("职务");
+		cols.add("班级");
 		/*cols.add("等级");
 		cols.add("当前积分");
 		cols.add("本月工资");
@@ -259,6 +261,8 @@ public class EmployeePanel extends JGridPanel<Employee> {
 				newRow.add(employee.getName());
 				newRow.add(DateUtil.formatFullDate(employee.getRegisterDate()));
 				newRow.add(employee.getStatus() == 0 ? "在职":"离职");
+				newRow.add(employee.getEmployeeRoleName());
+				newRow.add(employee.getDepartmentName());
 				/*newRow.add(employee.getLevelName());
 				newRow.add(String.valueOf(employee.getRewardPoints()));
 				newRow.add(String.valueOf(employee.getSalary()/100.0));
