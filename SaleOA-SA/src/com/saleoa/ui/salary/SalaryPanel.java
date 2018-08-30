@@ -179,7 +179,7 @@ public class SalaryPanel extends JGridPanel<Salary> {
 					String[] options = {"确定", "取消"};
 					int result = JOptionPane.showOptionDialog(null, "您确定创建"+year+"-"+(month > 9 ? month : "0"+month)+"的工资吗？", "温馨提醒",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
 					if(result == 0) {
-						boolean success = salaryService.createSalary(year, month);
+						boolean success = true;//salaryService.createSalary(year, month);
 						if(success) {
 							JOptionPane.showMessageDialog( null,"创建成功","消息", JOptionPane.PLAIN_MESSAGE );
 							initGrid();

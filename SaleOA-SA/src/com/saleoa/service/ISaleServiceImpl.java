@@ -118,8 +118,9 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 				updateSaleLogs.add(saleLog);
 			}
 			long basicSalary = managerLevel.getBasicSalary();
-			long commission = managerLevel.getCommission()*saleCount;
-			saleLog.setSalary(basicSalary+commission);
+			//long commission = managerLevel.getCommission()*saleCount;
+			//saleLog.setSalary(basicSalary+commission);
+			saleLog.setSalary(basicSalary);
 		}
 		this.dao.add(sale);
 		if(!updates.isEmpty()) {

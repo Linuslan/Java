@@ -18,7 +18,7 @@ public class ISalaryDaoImpl extends IBaseDaoImpl<Salary> implements ISalaryDao {
 	 * @param month
 	 * @return
 	 */
-	public boolean createSalary(int year, int month) {
+	public List<Salary> createSalary(int year, int month) {
 		String monthStr = month>9?month+"":"0"+month;
 		String startTime = year+"-"+monthStr+"-01 00:00:00";
 		String endTime = year+"-"+monthStr+"-31 23:59:59";
@@ -52,13 +52,11 @@ public class ISalaryDaoImpl extends IBaseDaoImpl<Salary> implements ISalaryDao {
 				salaryList.add(salaryObj);
 				id++;
 			}
-			JdbcHelper.insertBatch(salaryList);
-			success = true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return success;
+		return salaryList;
 	}
 	
 }
