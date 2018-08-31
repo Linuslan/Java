@@ -17,4 +17,12 @@ public interface ISalaryService extends IBaseService<Salary> {
 	
 	public Long getTax(Long supposedMoney);
 	
+	/**
+	 * ≈˙¡ø…Û∫À
+	 * @param idList
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean auditBatch(List<Long> idList) throws Exception;
+	
 }

@@ -17,12 +17,15 @@ import com.saleoa.dao.IManagerLevelDao;
 import com.saleoa.dao.IManagerLevelDaoImpl;
 import com.saleoa.dao.ISaleDao;
 import com.saleoa.dao.ISaleDaoImpl;
+import com.saleoa.dao.ISaleLogDao;
+import com.saleoa.dao.ISaleLogDaoImpl;
 import com.saleoa.dao.ISaleSalaryDao;
 import com.saleoa.dao.ISaleSalaryDaoImpl;
 import com.saleoa.model.Employee;
 import com.saleoa.model.Level;
 import com.saleoa.model.ManagerLevel;
 import com.saleoa.model.Sale;
+import com.saleoa.model.SaleLog;
 import com.saleoa.model.SaleSalary;
 
 public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
@@ -33,6 +36,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 	private IEmployeeDao employeeDao;
 	private IDepartmentDao departmentDao;
 	private IManagerLevelDao managerLevelDao;
+	private ISaleLogDao saleLogDao;
 	public ISaleServiceImpl() {
 		saleDao = new ISaleDaoImpl();
 		levelDao = new ILevelDaoImpl();
@@ -41,6 +45,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		departmentDao = new IDepartmentDaoImpl();
 		managerLevelDao = new IManagerLevelDaoImpl();
 		saleSalaryDao = new ISaleSalaryDaoImpl();
+		saleLogDao = new ISaleLogDaoImpl();
 	}
 	
 	/**
@@ -67,30 +72,34 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		long bonus = maxLevel.getBonus();
 		Long lastSaleId = sale.getLastSaleId();
 		List<Sale> updates = new ArrayList<Sale> ();
-		List<SaleSalary> addSaleLogs = new ArrayList<SaleSalary> ();
-		List<SaleSalary> updateSaleLogs = new ArrayList<SaleSalary> ();
+		List<SaleSalary> addSaleSalarys = new ArrayList<SaleSalary> ();
+		List<SaleSalary> updateSaleSalarys = new ArrayList<SaleSalary> ();
+		List<SaleLog> addSaleLogs = new ArrayList<SaleLog> ();
 		Long employeeId = sale.getEmployeeId();
 		Employee employee = this.employeeDao.selectById(employeeId);
 		sale.setDepartmentId(employee.getDepartmentId());
 		sale.setDepartmentName(employee.getDepartmentName());
 		if(0l < lastSaleId) {
 			Sale lastSale = this.dao.selectById(lastSaleId);
-			SaleSalary lastSaleLog = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
-			if(null == lastSaleLog) {
-				lastSaleLog = this.saleSalaryDao.getInstance(lastSale);
-				addSaleLogs.add(lastSaleLog);
+			SaleLog saleLog = this.saleLogDao.getInstance(lastSale);
+			addSaleLogs.add(saleLog);
+			SaleSalary lastSaleSalary = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
+			if(null == lastSaleSalary) {
+				lastSaleSalary = this.saleSalaryDao.getInstance(lastSale);
+				addSaleSalarys.add(lastSaleSalary);
 			} else {
-				updateSaleLogs.add(lastSaleLog);
+				updateSaleSalarys.add(lastSaleSalary);
 			}
 			lastSale.setRewardPoints(lastSale.getRewardPoints()+1);
 			Long lastSaleLevelId = lastSale.getLevelId();
 			Level lastSaleLevel = this.levelDao.selectById(lastSaleLevelId);
-			long lastSaleSalary = lastSaleLog.getSalary()+lastSaleLevel.getBonus();
-			lastSaleLog.setSalary(lastSaleSalary);
+			long lastSaleSalaryBonus = lastSaleSalary.getSalary()+lastSaleLevel.getBonus();
+			saleLog.setBonus(lastSaleLevel.getBonus());
+			lastSaleSalary.setSalary(lastSaleSalaryBonus);
 			bonus = bonus-lastSaleLevel.getBonus();
 			//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
 			if(bonus > 0 && 0l < lastSale.getId()) {
-				upgradeSale(lastSale, bonus, updates, addSaleLogs, updateSaleLogs);
+				upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs);
 			}
 			Level nextLevel = this.levelDao.selectByPoint(lastSale.getRewardPoints());
 			if(null == nextLevel) {
@@ -115,10 +124,10 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 				managerSale.setEmployeeId(manager.getId());
 				managerSale.setEmployeeName(manager.getName());
 				saleLog = this.saleSalaryDao.getInstance(managerSale);
-				saleLog.setSaleId(null);
-				addSaleLogs.add(saleLog);
+				saleLog.setSaleId(0L);
+				addSaleSalarys.add(saleLog);
 			} else {
-				updateSaleLogs.add(saleLog);
+				updateSaleSalarys.add(saleLog);
 			}
 			long basicSalary = managerLevel.getBasicSalary();
 			//long commission = managerLevel.getCommission()*saleCount;
@@ -129,17 +138,20 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		if(!updates.isEmpty()) {
 			this.dao.updateBatch(updates);
 		}
-		if(!addSaleLogs.isEmpty()) {
-			this.saleSalaryDao.addBatch(addSaleLogs);
+		if(!addSaleSalarys.isEmpty()) {
+			this.saleSalaryDao.addBatch(addSaleSalarys);
 		}
-		if(!updateSaleLogs.isEmpty()) {
-			this.saleSalaryDao.updateBatch(updateSaleLogs);
+		if(!updateSaleSalarys.isEmpty()) {
+			this.saleSalaryDao.updateBatch(updateSaleSalarys);
+		}
+		if(!addSaleLogs.isEmpty()) {
+			this.saleLogDao.addBatch(addSaleLogs);
 		}
 		success = true;
 		return success;
 	}
 	
-	public boolean upgradeSale(Sale sale, long bonus, List<Sale> updates, List<SaleSalary> addSaleLogs, List<SaleSalary> updateSaleLogs) throws Exception {
+	public boolean upgradeSale(Sale sale, long bonus, List<Sale> updates, List<SaleSalary> addSaleSalarys, List<SaleSalary> updateSaleSalarys, List<SaleLog> addSaleLogs) throws Exception {
 		boolean success = false;
 		Long lastSaleId = sale.getLastSaleId();
 		if(0l >= lastSaleId) {
@@ -156,21 +168,24 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		Level lastSaleLevel = this.levelDao.selectById(lastSaleLevelId);
 		//有等级差才有奖金，且奖金有剩余
 		if(lastSaleLevel.getLevel() > level.getLevel() && bonus > 0) {
-			long lastSaleBonus = lastSaleLevel.getBonus() - level.getBonus();
-			long lastSaleSalary = lastSale.getSalary()+lastSaleBonus;
-			lastSale.setSalary(lastSaleSalary);
-			bonus = bonus - lastSaleBonus;
-			SaleSalary lastSaleLog = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
-			if(null == lastSaleLog) {
-				lastSaleLog = this.saleSalaryDao.getInstance(lastSale);
-				addSaleLogs.add(lastSaleLog);
+			SaleLog saleLog = this.saleLogDao.getInstance(lastSale);
+			addSaleLogs.add(saleLog);
+			SaleSalary lastSaleSalary = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
+			if(null == lastSaleSalary) {
+				lastSaleSalary = this.saleSalaryDao.getInstance(lastSale);
+				addSaleSalarys.add(lastSaleSalary);
 			} else {
-				updateSaleLogs.add(lastSaleLog);
+				updateSaleSalarys.add(lastSaleSalary);
 			}
+			long lastSaleSalaryBonus = lastSaleLevel.getBonus() - level.getBonus();
+			saleLog.setBonus(lastSaleSalaryBonus);
+			long lastSaleBonus = lastSaleSalary.getSalary()+lastSaleSalaryBonus;
+			lastSaleSalary.setSalary(lastSaleBonus);
+			bonus = bonus - lastSaleSalaryBonus;
 		}
 		//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
 		if(bonus > 0) {
-			upgradeSale(lastSale, bonus, updates, addSaleLogs, updateSaleLogs);
+			upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs);
 		}
 		Level nextLevel = this.levelDao.selectByPoint(lastSale.getRewardPoints());
 		if(null == nextLevel) {

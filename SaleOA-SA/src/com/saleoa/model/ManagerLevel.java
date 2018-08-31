@@ -16,21 +16,21 @@ public class ManagerLevel {
 	private String name;
 	
 	//基础工资
-	@Column(name="basic_salary")
+	@Column(name="basic_salary", jdbcType=JdbcType.INTEGER)
 	private Long basicSalary;
 	
-	@Column(name="min_sale")
+	@Column(name="min_sale", jdbcType=JdbcType.INTEGER)
 	private Integer minSale;
 	
-	@Column(name="max_sale")
+	@Column(name="max_sale", jdbcType=JdbcType.INTEGER)
 	private Integer maxSale;
 	
 	//抽成/套
-	@Column(name="commission")
+	@Column(name="commission", jdbcType=JdbcType.INTEGER)
 	private Long commission;
 	
 	//超额达标奖
-	@Column(name="reach_goal_bonus")
+	@Column(name="reach_goal_bonus", jdbcType=JdbcType.INTEGER)
 	private Long reachGoalBonus;
 	
 	@Column(name="memo")

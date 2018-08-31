@@ -620,7 +620,7 @@ public class SalaryDialog {
 		Double overGoalBonusDl = Double.parseDouble(overGoalBonusStr);
 		Long overGoalBonus = (long) (overGoalBonusDl*100);
 		
-		String officeManageBonusStr = overGoalBonusIpt.getText();
+		String officeManageBonusStr = officeManageBonusIpt.getText();
 		officeManageBonusStr = officeManageBonusStr.replaceAll(",", "");
 		Double officeManageBonusDl = Double.parseDouble(officeManageBonusStr);
 		Long officeManageBonus = (long) (officeManageBonusDl*100);

@@ -32,6 +32,7 @@ import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
+import com.saleoa.common.utils.StringUtil;
 import com.saleoa.model.Employee;
 import com.saleoa.model.Sale;
 import com.saleoa.service.IEmployeeService;
@@ -73,7 +74,7 @@ public class SalePanel extends JGridPanel<Sale> {
 		cols.add("售出时间");
 		cols.add("积分");
 		cols.add("等级");
-		//cols.add("奖金");
+		cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
@@ -96,6 +97,10 @@ public class SalePanel extends JGridPanel<Sale> {
 		searchPanel.add(employeeLbl);
 		final JAutoCompleteComboBox<Employee> employeeSearchComb = new JAutoCompleteComboBox<Employee>();
 		employeeSearchComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		Employee nullItem = new Employee();
+		nullItem.setId(0L);
+		nullItem.setName("无");
+		employeeSearchComb.addItem(nullItem);
 		searchPanel.add(employeeSearchComb);
 		try {
 			List<Employee> employeeList = employeeService.select(null);
@@ -142,11 +147,11 @@ public class SalePanel extends JGridPanel<Sale> {
 				}
 				if(null != saleDateStartPicker.getValue()) {
 					Date saleDateStart = (Date) saleDateStartPicker.getValue();
-					paramMap.put("saleDate>=", DateUtil.formatFullDate(saleDateStart));
+					paramMap.put("saleDate>=", "'"+DateUtil.formatFullDate(saleDateStart)+"'");
 				}
 				if(null != saleDateEndPicker.getValue()) {
 					Date saleDateEnd = (Date) saleDateEndPicker.getValue();
-					paramMap.put("saleDate<=", DateUtil.formatFullDate(saleDateEnd));
+					paramMap.put("saleDate<=", "'"+DateUtil.formatFullDate(saleDateEnd)+"'");
 				}
 				refresh();
 			}
@@ -256,15 +261,18 @@ public class SalePanel extends JGridPanel<Sale> {
 			row.clear();
         	for(int i = 0; i < data.size(); i ++) {
         		Sale sale = data.get(i);
+        		if(null != sale.getId() && 0 == sale.getId()) {
+        			continue;
+        		}
         		Vector<String> newRow = new Vector<String> ();
-				newRow.add(String.valueOf(sale.getId()));
+				newRow.add(null == sale.getId() ? "" : String.valueOf(sale.getId()));
 				newRow.add(sale.getName());
-				newRow.add(sale.getEmployeeName());
-				newRow.add(sale.getLastSaleName());
-				newRow.add(DateUtil.formatFullDate(sale.getSaleDate()));
-				newRow.add(String.valueOf(sale.getRewardPoints()));
-				newRow.add(String.valueOf(sale.getLevelName()));
-				//newRow.add(String.valueOf(sale.getSalary()/100.0));
+				newRow.add(StringUtil.isEmpty(sale.getEmployeeName()) ? "" : sale.getEmployeeName());
+				newRow.add(StringUtil.isEmpty(sale.getLastSaleName()) ? "" : sale.getLastSaleName());
+				newRow.add(null == sale.getSaleDate() ? "" : DateUtil.formatFullDate(sale.getSaleDate()));
+				newRow.add(null == sale.getRewardPoints() ? "" : String.valueOf(sale.getRewardPoints()));
+				newRow.add(StringUtil.isEmpty(sale.getLevelName()) ? "" : sale.getLevelName());
+				newRow.add(String.valueOf(sale.getSalary()/100.0));
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

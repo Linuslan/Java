@@ -78,88 +78,91 @@ public class DateUtil {
 	 * @return
 	 */
 	public static Date getCustomFirstDateOfMonthByDate(Date date) {
-		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
 		Date firstDate = null;
-		try {
-			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
-			int startDay = salaryConfig.getSalaryStartDay();
-			String monthDate = monthSdf.format(date);
-			String firstDateStr = monthDate+"-"+(startDay > 9 ? startDay : "0"+startDay);
-			try {
-				firstDate = datesdf.parse(firstDateStr);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		firstDate = DateUtil.parseFullDate(DateUtil.getCustomFirstDateStrOfMonthByDate(date));
 		return firstDate;
 	}
 	
 	public static String getCustomFirstDateStrOfMonthByDate(Date date) {
-		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
 		String firstDateStr = "";
 		try {
-			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
-			int startDay = salaryConfig.getSalaryStartDay();
-			String monthDate = monthSdf.format(date);
-			firstDateStr = monthDate+"-"+(startDay > 9 ? startDay : "0"+startDay)+" 00:00:00";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			int year = DateUtil.getYear(date);
+			int month = DateUtil.getMonth(date);
+			String endSplitDateStr = DateUtil.getCustomEndDateStr(year, month);
+			Date endSplitDate = DateUtil.parseFullDate(endSplitDateStr);
+			if(date.before(endSplitDate) || date.equals(endSplitDate)) {
+				firstDateStr = DateUtil.getCustomStartDateStr(year, month);
+			} else {
+				month ++;
+				if(month > 12) {
+					month = 1;
+					year ++;
+				}
+				firstDateStr = DateUtil.getCustomStartDateStr(year, month);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
 		}
 		return firstDateStr;
 	}
 	
 	public static Date getCustomEndDateOfMonthByDate(Date date) {
-		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
-		String monthDate = monthSdf.format(date);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		Date endDate = null;
+		Date splitDate = null;
 		try {
-			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
-			//int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-			int endDay = salaryConfig.getSalaryEndDay();
-			monthDate += "-"+(endDay > 9 ? endDay : "0"+endDay);
-			endDate = sdf.parse(monthDate);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			int year = DateUtil.getYear(date);
+			int month = DateUtil.getMonth(date);
+			String splitDateStr = DateUtil.getCustomEndDateStr(year, month);
+			splitDate = DateUtil.parseFullDate(splitDateStr);
+			if(date.after(splitDate)) {
+				month ++;
+				if(month > 12) {
+					month = 1;
+					year ++;
+				}
+				splitDateStr = DateUtil.getCustomEndDateStr(year, month);
+				splitDate = DateUtil.parseFullDate(splitDateStr);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
 		}
-		if(null != endDate) {
-			endDate = DateUtil.getEndDateTime(endDate);
-		}
-		return endDate;
+		return splitDate;
 	}
 	
 	public static String getCustomEndDateStrOfMonthByDate(Date date) {
-		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
-		String monthDate = monthSdf.format(date);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(date);
-		//int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		//monthDate += "-"+endDay +" 23:59:59";
-		try {
-			SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
-			//int endDay = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-			int endDay = salaryConfig.getSalaryEndDay();
-			monthDate += "-"+(endDay > 9 ? endDay : "0"+endDay);
-			monthDate += "-"+endDay +" 23:59:59";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String monthDate = "";
+		monthDate = DateUtil.formatFullDate(DateUtil.getCustomEndDateOfMonthByDate(date));
 		return monthDate;
 	}
 	
+	public static String getCustomStartDateStr(int year, int month) throws Exception {
+		String startDate = "";
+		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
+		SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
+		int startDay = salaryConfig.getSalaryStartDay();
+		month = month - 1;
+		if(month <= 0) {
+			month = 12;
+			year --;
+		}
+		startDate = year + "-" + (month > 9 ? month : "0"+month) + "-" + (startDay > 9 ? startDay : "0" + startDay) + " 00:00:00";
+		return startDate;
+	}
+	
+	public static String getCustomEndDateStr(int year, int month) throws Exception {
+		String startDate = "";
+		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
+		SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
+		int endDay = salaryConfig.getSalaryEndDay();
+		startDate = year + "-" + (month > 9 ? month : "0"+month) + "-" + (endDay > 9 ? endDay : "0" + endDay) + " 23:59:59";
+		return startDate;
+	}
+	
 	public static void main(String[] args) {
-		/*String dateStr = "1000-01-01 00:00:00";
+		String dateStr = "2018-08-25 23:59:59";
 		Date date = parseFullDate(dateStr);
-		System.out.println(date);*/
+		//System.out.println(date);
 		
-		System.out.println(DateUtil.getCustomEndDateOfMonthByDate(new Date()));
+		System.out.println(DateUtil.getCustomFirstDateStrOfMonthByDate(date));
+		System.out.println(DateUtil.getCustomEndDateStrOfMonthByDate(date));
 	}
 }

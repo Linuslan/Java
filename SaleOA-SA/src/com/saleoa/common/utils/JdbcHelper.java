@@ -26,6 +26,7 @@ import com.saleoa.model.ManagerLevel;
 import com.saleoa.model.Salary;
 import com.saleoa.model.SalaryConfig;
 import com.saleoa.model.Sale;
+import com.saleoa.model.SaleLog;
 import com.saleoa.model.SaleSalary;
 
 public class JdbcHelper {
@@ -77,7 +78,7 @@ public class JdbcHelper {
 	
 	public static boolean executeSql(String sql) throws Exception {
 		PreparedStatement ps = getConnection().prepareStatement(sql);
-		return ps.execute();
+		return ps.executeUpdate() > 0 ? true : false;
 	}
 	
 	public static String tableSql(Class cls) throws Exception {
@@ -616,11 +617,12 @@ public class JdbcHelper {
 		Class<Level> levelCls = Level.class;
 		Class<Salary> salaryCls = Salary.class;
 		Class<Sale> saleCls = Sale.class;
-		Class<SaleSalary> saleLogCls = SaleSalary.class;
+		Class<SaleSalary> saleSalaryCls = SaleSalary.class;
 		Class<EmployeeRole> employeeRoleCls = EmployeeRole.class;
 		Class<Department> departmentCls = Department.class;
 		Class<ManagerLevel> managerLevelCls = ManagerLevel.class;
 		Class<SalaryConfig> salaryConfigCls = SalaryConfig.class;
+		Class<SaleLog> saleLogCls = SaleLog.class;
 		String sql = tableSql(employeeCls);
 		executeSql(sql);
 		System.out.println(sql);
@@ -633,7 +635,7 @@ public class JdbcHelper {
 		sql = tableSql(saleCls);
 		executeSql(sql);
 		System.out.println(sql);
-		sql = tableSql(saleLogCls);
+		sql = tableSql(saleSalaryCls);
 		executeSql(sql);
 		System.out.println(sql);
 		sql = tableSql(employeeRoleCls);
@@ -646,6 +648,9 @@ public class JdbcHelper {
 		executeSql(sql);
 		System.out.println(sql);
 		sql = tableSql(salaryConfigCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableSql(saleLogCls);
 		executeSql(sql);
 		System.out.println(sql);
 		return isSuccess;
@@ -711,7 +716,7 @@ public class JdbcHelper {
 	
 	public static void main(String[] args) {
 		try {
-			//initTable();
+			initTable();
 			//initEmployee();
 			//initSale();
 			/*Level level = new Level();

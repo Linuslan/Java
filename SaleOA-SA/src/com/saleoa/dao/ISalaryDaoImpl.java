@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 import com.saleoa.base.IBaseDaoImpl;
+import com.saleoa.common.utils.BeanUtil;
+import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.JdbcHelper;
 import com.saleoa.model.Salary;
 import com.saleoa.model.SalaryConfig;
@@ -22,16 +24,11 @@ public class ISalaryDaoImpl extends IBaseDaoImpl<Salary> implements ISalaryDao {
 	 * @return
 	 */
 	public List<Salary> createSalary(int year, int month) throws Exception {
-		ISalaryConfigService salaryConfigService = new ISalaryConfigServiceImpl();
-		SalaryConfig salaryConfig = salaryConfigService.selectById(1L);
-		int startDay = salaryConfig.getSalaryStartDay();
-		int endDay = salaryConfig.getSalaryEndDay();
-		String monthStr = month>9?month+"":"0"+month;
-		String startTime = year+"-"+monthStr+"-"+(startDay>9 ? startDay : "0"+startDay)+" 00:00:00";
-		String endTime = year+"-"+monthStr+"-"+(endDay>9 ? endDay : "0"+endDay)+" 23:59:59";
+		String startTime = DateUtil.getCustomStartDateStr(year, month);
+		String endTime = DateUtil.getCustomEndDateStr(year, month);
 		boolean success = false;
-		String sql = "SELECT t.employee_id, t.employee_name, SUM(salary) salary FROM tbl_oa_sale_salary t WHERE t.create_date >='"+startTime+"'" +
-				" AND t.create_date <= '"+endTime+"' GROUP BY t.employee_id, t.employee_name";
+		String sql = "SELECT t.employee_id, t.employee_name, SUM(bonus) salary FROM tbl_oa_sale_log t WHERE t.sale_date >='"+startTime+"'" +
+				" AND t.sale_date <= '"+endTime+"' GROUP BY t.employee_id, t.employee_name";
 		List<Salary> salaryList = new ArrayList<Salary>();
 		PreparedStatement ps = null;
 		try {
@@ -69,6 +66,31 @@ public class ISalaryDaoImpl extends IBaseDaoImpl<Salary> implements ISalaryDao {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return salaryList;
+	}
+	
+	/**
+	 * 批量审核
+	 * @param idList
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean auditBatch(List<Long> idList) throws Exception {
+		String ids = BeanUtil.parseLongListToString(idList, ",");
+		String sql = "UPDATE tbl_oa_salary SET status = 1 WHERE id IN ("+ids+")";
+		return JdbcHelper.executeSql(sql);
+	}
+	
+	/**
+	 * 通过年月查询工资
+	 * @param year
+	 * @param month
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Salary> queryByYearAndMonth(int year, int month) throws Exception {
+		String sql = "SELECT * FROM tbl_oa_salary WHERE year="+year+" AND month="+month;
+		List<Salary> salaryList = JdbcHelper.select(sql, Salary.class);
 		return salaryList;
 	}
 	

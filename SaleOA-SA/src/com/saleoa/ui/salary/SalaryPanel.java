@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,16 +21,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import com.eltima.components.ui.DatePicker;
 import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
+import com.saleoa.common.utils.ExceptionUtil;
 import com.saleoa.model.Employee;
 import com.saleoa.model.Salary;
 import com.saleoa.service.IEmployeeService;
@@ -87,6 +89,7 @@ public class SalaryPanel extends JGridPanel<Salary> {
 		table.setDefaultRenderer(Object.class, tcr);
 		table.setRowHeight(TableCss.ROW_HEIGHT);
 		table.getTableHeader().setSize(0, TableCss.ROW_HEIGHT);
+		//table.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		this.setLayout(new BorderLayout(3, 3));
 		
 		//查询框
@@ -102,6 +105,10 @@ public class SalaryPanel extends JGridPanel<Salary> {
 		final JAutoCompleteComboBox<Employee> employeeSearchComb = new JAutoCompleteComboBox<Employee>();
 		employeeSearchComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		searchPanel.add(employeeSearchComb);
+		Employee nullItem = new Employee();
+		nullItem.setId(0L);
+		nullItem.setName("无");
+		employeeSearchComb.addItem(nullItem);
 		try {
 			List<Employee> employeeList = employeeService.select(null);
 			for(int i = 0; i < employeeList.size(); i ++) {
@@ -192,7 +199,7 @@ public class SalaryPanel extends JGridPanel<Salary> {
 						boolean success = salaryService.createSalary(year, month);
 						if(success) {
 							JOptionPane.showMessageDialog( null,"创建成功","消息", JOptionPane.PLAIN_MESSAGE );
-							initGrid();
+							refresh();
 						}
 					}
 				} catch(Exception ex)  {
@@ -233,12 +240,108 @@ public class SalaryPanel extends JGridPanel<Salary> {
 					e.printStackTrace();
 				}
 				Salary salary = list.get(0);
+				if(salary.getStatus() == 1) {
+					JOptionPane.showMessageDialog(lp, "工资已生效，无法修改", "温馨提示",JOptionPane.ERROR_MESSAGE);
+					return;
+				}
 				SalaryDialog dialog = new SalaryDialog();
 				dialog.initDialog(salary, lp);
 			}
 			
 		});
         
+		JButton auditBtn = new JButton("工资生效");
+		toolBar.add(auditBtn);
+		auditBtn.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				int value = JOptionPane.showConfirmDialog(lp, "您确定生效所选工资吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				if(value == JOptionPane.YES_OPTION) {
+					// TODO Auto-generated method stub
+					int[] rowArr = table.getSelectedRows();
+					List<Long> list = new ArrayList<Long> ();
+					for(int i = 0; i < rowArr.length; i ++) {
+						int row = rowArr[i];
+						Long id = BeanUtil.parseLong(table.getValueAt(row, 0));
+						list.add(id);
+					}
+					boolean success = false;
+					try {
+						success = salaryService.auditBatch(list);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String msg = "批量生效失败";
+					if(success) {
+						msg = "批量生效成功";
+					}
+					JOptionPane.showMessageDialog(lp, msg, "温馨提示",JOptionPane.INFORMATION_MESSAGE);
+					if(success) {
+						refresh();
+					}
+					return;
+				}
+				
+			}
+			
+		});
+		
+		JButton exportBtn = new JButton("导出");
+		toolBar.add(auditBtn);
+		auditBtn.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				String dateStr = JOptionPane.showInputDialog("请输入年-月，例如：2018-07");
+				String[] dateStrArr = dateStr.split("-");
+				int year = 0;
+				int month = 0;
+				try {
+					year = Integer.parseInt(dateStrArr[0]);
+					month = Integer.parseInt(dateStrArr[1]);
+					if(0 >= year) {
+						ExceptionUtil.throwExcep("请输入正确的年份");
+					}
+					if(0 >= month) {
+						ExceptionUtil.throwExcep("请输入正确的月份");
+					}
+				} catch(Exception ex) {
+					JOptionPane.showMessageDialog(lp, "请输入正确的格式，例如：2018-07", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
+					return ;
+				}
+				
+				int value = JOptionPane.showConfirmDialog(lp, "您确定导出"+year+"年"+month+"月的工资吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+				if(value == JOptionPane.YES_OPTION) {
+					// TODO Auto-generated method stub
+					int[] rowArr = table.getSelectedRows();
+					List<Long> list = new ArrayList<Long> ();
+					for(int i = 0; i < rowArr.length; i ++) {
+						int row = rowArr[i];
+						Long id = BeanUtil.parseLong(table.getValueAt(row, 0));
+						list.add(id);
+					}
+					boolean success = false;
+					try {
+						success = salaryService.auditBatch(list);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String msg = "批量生效失败";
+					if(success) {
+						msg = "批量生效成功";
+					}
+					JOptionPane.showMessageDialog(lp, msg, "温馨提示",JOptionPane.INFORMATION_MESSAGE);
+					if(success) {
+						refresh();
+					}
+					return;
+				}
+				
+			}
+			
+		});
+		
 		JButton delBtn = new JButton("删除");
 		toolBar.add(delBtn);
 		delBtn.addActionListener(new ActionListener() {
@@ -271,9 +374,15 @@ public class SalaryPanel extends JGridPanel<Salary> {
 				}
 				int value = JOptionPane.showConfirmDialog(lp, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
-					//boolean success = salaryDao.delete(salary);
-					if(true/*success*/) {
-						lp.initGrid();
+					boolean success = false;
+					try {
+						success = salaryService.delete(salary);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(success) {
+						refresh();
 						JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
@@ -282,6 +391,7 @@ public class SalaryPanel extends JGridPanel<Salary> {
 			}
 			
 		});
+		
         // 创建显示表格的滚动面板
         JScrollPane scrollPane = new JScrollPane(table);
         // 将滚动面板添加到边界布局的中间
