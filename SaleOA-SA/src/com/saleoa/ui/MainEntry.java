@@ -35,6 +35,7 @@ public class MainEntry {
 	private JTabbedPane tabPanel = null;
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final private static String miniIcon = System.getProperty("user.dir").replace("\\", "/")+"/img/comments.png";
+	public final static JFrame main = new JFrame();
 	
 	//系统托盘图标
 	private static TrayIcon trayIcon;
@@ -45,11 +46,14 @@ public class MainEntry {
 		int width = (int) (screenSize.width*0.8);
 		int height = (int) (screenSize.height*0.8);
 				
-		final JFrame main = new JFrame();
+		
 		JMenuBar menuBar = new JMenuBar();
 		main.setJMenuBar(menuBar);
 		JMenu menu = new JMenu("模块菜单");
 		menuBar.add(menu);
+		
+		JMenu sysMenu = new JMenu("系统菜单");
+		menuBar.add(sysMenu);
 		JMenuItem employeeItem = new JMenuItem(ModuleName.EMPLOYEE);
 		employeeItem.setName(ModuleName.EMPLOYEE);
 		employeeItem.addActionListener(menuItemListener());
@@ -57,7 +61,7 @@ public class MainEntry {
 		JMenuItem levelItem = new JMenuItem(ModuleName.LEVEL);
 		levelItem.setName(ModuleName.LEVEL);
 		levelItem.addActionListener(menuItemListener());
-		menu.add(levelItem);
+		sysMenu.add(levelItem);
 		JMenuItem salaryItem = new JMenuItem(ModuleName.SALARY);
 		salaryItem.setName(ModuleName.SALARY);
 		salaryItem.addActionListener(menuItemListener());
@@ -70,7 +74,7 @@ public class MainEntry {
 		JMenuItem departmentItem = new JMenuItem(ModuleName.DEPARTMENT);
 		departmentItem.setName(ModuleName.DEPARTMENT);
 		departmentItem.addActionListener(menuItemListener());
-		menu.add(departmentItem);
+		sysMenu.add(departmentItem);
 		
 		JMenuItem saleSalaryItem = new JMenuItem(ModuleName.SALESALARY);
 		saleSalaryItem.setName(ModuleName.SALESALARY);
@@ -80,17 +84,17 @@ public class MainEntry {
 		JMenuItem managerLevelItem = new JMenuItem(ModuleName.MANAGERLEVEL);
 		managerLevelItem.setName(ModuleName.MANAGERLEVEL);
 		managerLevelItem.addActionListener(menuItemListener());
-		menu.add(managerLevelItem);
+		sysMenu.add(managerLevelItem);
 		
 		JMenuItem employeeRoleItem = new JMenuItem(ModuleName.EMPLOYEEROLE);
 		employeeRoleItem.setName(ModuleName.EMPLOYEEROLE);
 		employeeRoleItem.addActionListener(menuItemListener());
-		menu.add(employeeRoleItem);
+		sysMenu.add(employeeRoleItem);
 		
 		JMenuItem salaryConfigItem = new JMenuItem(ModuleName.SALARYCONFIG);
 		salaryConfigItem.setName(ModuleName.SALARYCONFIG);
 		salaryConfigItem.addActionListener(menuItemListener());
-		menu.add(salaryConfigItem);
+		sysMenu.add(salaryConfigItem);
 		//JPanel panel = new JPanel();
 		
 		//获得系统托盘实例
@@ -213,7 +217,9 @@ public class MainEntry {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		MainEntry entry = new MainEntry();
-		entry.createMain();
+		//MainEntry entry = new MainEntry();
+		//entry.createMain();
+		Login login = new Login();
+		login.init();
 	}
 }

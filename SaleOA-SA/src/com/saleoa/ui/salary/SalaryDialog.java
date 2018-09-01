@@ -74,7 +74,7 @@ public class SalaryDialog {
 	final JLabel supposedMoneyIpt = new JLabel();
 	final JLabel taxIpt = new JLabel();
 	final JAutoCompleteComboBox<Employee> employeeComb = new JAutoCompleteComboBox<Employee>();
-	final JDialog dialog = new JDialog();
+	final JDialog dialog = new JDialog(MainEntry.main);
 	final JLabel totalMoneyIpt = new JLabel(String.valueOf(totalMoney/100.0));
 	
 	public void initDialog(final Salary salary, final SalaryPanel parent) {

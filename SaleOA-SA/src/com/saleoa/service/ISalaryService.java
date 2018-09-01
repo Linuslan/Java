@@ -25,4 +25,11 @@ public interface ISalaryService extends IBaseService<Salary> {
 	 */
 	public boolean auditBatch(List<Long> idList) throws Exception;
 	
+	/**
+	 * 导出工资
+	 * @param year
+	 * @param month
+	 */
+	public void export(int year, int month);
+	
 }

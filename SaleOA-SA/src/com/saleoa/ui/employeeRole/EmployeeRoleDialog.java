@@ -38,7 +38,7 @@ public class EmployeeRoleDialog {
 			id = employeeRole.getId();
 			name = employeeRole.getName();
 		}
-		final JDialog dialog = new JDialog();
+		final JDialog dialog = new JDialog(MainEntry.main);
 		dialog.setBackground(Color.WHITE);
 		int dialogWidth = 400;
 		int dialogHeight = 300;

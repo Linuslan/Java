@@ -1,5 +1,7 @@
 package com.saleoa.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -11,6 +13,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -222,507 +228,395 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 		return this.salaryDao.auditBatch(idList);
 	}
 	
+	/**
+	 * 导出工资
+	 * @param year
+	 * @param month
+	 */
 	public void export(int year, int month) {
 		try {
-//			HSSFWorkbook wb = this.salaryService.createExcel(list);
-//			fileName = URLEncoder.encode(year+"年"+month+"月员工薪资.xls", "UTF-8");
+			String fileName = System.getProperty("user.dir").replace("\\", "/")+"/export/"+year+"年"+month+"月员工薪资.xls";
+			String fileName2 = System.getProperty("user.dir").replace("\\", "/")+"/export/"+year+"年"+month+"月B级别员工薪资.xls";
 			List<Salary> salaryList = this.salaryDao.queryByYearAndMonth(year, month);
-			Map<Long, List<Salary>> deptMap = new HashMap<Long, List<Salary>> ();
+			Map<String, List<Salary>> deptMap = new HashMap<String, List<Salary>> ();
 			List<Salary> mngList = new ArrayList<Salary> ();
 			Salary salary = null;
 			for(int i = 0; i < salaryList.size(); i ++) {
 				salary = salaryList.get(i);
 				Long departmentId = salary.getDepartmentId();
+				String departmentName = salary.getDepartmentName();
 				Long employeeId = salary.getUserId();
 				Employee employee = this.employeeDao.selectById(employeeId);
-				List<Salary> deptList = deptMap.get(departmentId.longValue());
+				List<Salary> deptList = deptMap.get(departmentName);
 				if(null == deptList) {
 					deptList = new ArrayList<Salary> ();
-					deptMap.put(departmentId.longValue(), deptList);
+					deptMap.put(departmentName, deptList);
 				}
-				deptList.add(salary);
 				if(employee.getEmployeeRoleId().longValue() == EmployeeRoleConst.MANAGER.longValue()) {
 					mngList.add(salary);
+				} else {
+					deptList.add(salary);
 				}
 			}
+			HSSFWorkbook wb = this.createEmployeeExcel(month+"", deptMap);
+			FileOutputStream fos = new FileOutputStream(new File(fileName));
+			wb.write(fos);
+			fos.flush();
+			fos.close();
 			
+			wb = this.createManagerSalaryExcel(month+"", mngList);
+			fos = new FileOutputStream(new File(fileName2));
+			wb.write(fos);
+			fos.flush();
+			fos.close();
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 	
-	public HSSFWorkbook createExcel(Map<Long, List<Salary>> deptMap) {
+	public HSSFWorkbook createEmployeeExcel(String month, Map<String, List<Salary>> deptMap) {
 		HSSFWorkbook wb = new HSSFWorkbook();
+		CellStyle cs = wb.createCellStyle();
+		Font font = wb.createFont();
+		font.setFontHeightInPoints((short) 12);
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		cs.setFont(font);
+		cs.setAlignment(CellStyle.ALIGN_CENTER);
+		cs.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		cs.setBorderBottom((short)1);
+		cs.setBorderLeft((short)1);
+		cs.setBorderRight((short)1);
+		cs.setBorderTop((short)1);
+		cs.setWrapText(true);
+		
+		Font font2 = wb.createFont();
+		font2.setFontHeightInPoints((short) 20);
+		font2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		
+		CellStyle csNoBorder = wb.createCellStyle();
+		csNoBorder.setFont(font);
+		csNoBorder.setAlignment(CellStyle.ALIGN_CENTER);
+		csNoBorder.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		csNoBorder.setWrapText(true);
+		
+		CellStyle csNoBorderBigFont = wb.createCellStyle();
+		csNoBorderBigFont.setFont(font2);
+		csNoBorderBigFont.setAlignment(CellStyle.ALIGN_CENTER);
+		csNoBorderBigFont.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		csNoBorderBigFont.setWrapText(true);
 		if(null != deptMap) {
-			Set<Entry<Long, List<Salary>>> entrySet = deptMap.entrySet();
-			Iterator<Entry<Long, List<Salary>>> iter = entrySet.iterator();
-			Entry<Long, List<Salary>> entry = null;
+			Set<Entry<String, List<Salary>>> entrySet = deptMap.entrySet();
+			Iterator<Entry<String, List<Salary>>> iter = entrySet.iterator();
+			Entry<String, List<Salary>> entry = null;
 			while(iter.hasNext()) {
 				entry = iter.next();
-				Long deptId = entry.getKey();
+				String departmentName = entry.getKey();
 				List<Salary> deptList = entry.getValue();
-				
+				HSSFSheet sheet = wb.createSheet(departmentName);
+				sheet.setColumnWidth(0, 18*256);
+				sheet.setColumnWidth(1, 18*256);
+				sheet.setColumnWidth(2, 15*256);
+				sheet.setColumnWidth(3, 18*256);
+				sheet.setColumnWidth(4, 25*256);
+				sheet.setColumnWidth(5, 20*256);
+				int count = deptList.size() % 25 == 0 ? deptList.size() / 25 : deptList.size() / 25 + 1;
+				int i = 0;
+				int rowIndex = 0;
+				int rowHeight = 24;
+				for(int k = 0; k < count; k ++) {
+					sheet.setDefaultRowHeightInPoints(rowHeight);
+					HSSFRow titleRow = sheet.createRow(rowIndex ++);
+					titleRow.setHeightInPoints(rowHeight);
+					sheet.addMergedRegion(new CellRangeAddress(rowIndex-1, rowIndex-1, 0, 5));
+					HSSFCell cell = titleRow.createCell(0);
+					cell.setCellStyle(csNoBorderBigFont);
+					cell.setCellValue("香港新时空（国际）集团化妆品有限公司");
+					HSSFRow titleRow2 = sheet.createRow(rowIndex ++);
+					titleRow2.setHeightInPoints(rowHeight);
+					sheet.addMergedRegion(new CellRangeAddress(rowIndex-1, rowIndex-1, 0, 5));
+					cell = titleRow2.createCell(0);
+					cell.setCellValue(month+"月工资表");
+					cell.setCellStyle(csNoBorder);
+					HSSFRow headerRow = sheet.createRow(rowIndex++);
+					headerRow.setHeightInPoints(40);
+					int headerCell = 0;
+					cell = headerRow.createCell(headerCell++);
+					cell.setCellValue("姓名");
+					cell.setCellStyle(cs);
+					cell = headerRow.createCell(headerCell++);
+					cell.setCellValue(new HSSFRichTextString("应发工资\r\n（元）"));
+					cell.setCellStyle(cs);
+					cell = headerRow.createCell(headerCell++);
+					cell.setCellValue("税收");
+					cell.setCellStyle(cs);
+					cell = headerRow.createCell(headerCell++);
+					cell.setCellValue("实发工资\r\n（元）");
+					cell.setCellStyle(cs);
+					cell = headerRow.createCell(headerCell++);
+					cell.setCellValue("签收");
+					cell.setCellStyle(cs);
+					cell = headerRow.createCell(headerCell++);
+					cell.setCellValue("备注");
+					cell.setCellStyle(cs);
+					int end = i + 25 > deptList.size() ? deptList.size() : i + 25;
+					Long supposedMoneySum = 0L;
+					Long totalMoneySum = 0L;
+					for(; i < 25; i ++) {
+						int cellIndex = 0;
+						Row row = sheet.createRow(rowIndex ++);
+						row.setHeightInPoints(rowHeight);
+						Cell nameCell = row.createCell(cellIndex++);
+						Cell supposedMoneyCell = row.createCell(cellIndex ++);
+						Cell taxCell = row.createCell(cellIndex ++);
+						Cell totalMoneyCell = row.createCell(cellIndex++);
+						Cell signCell = row.createCell(cellIndex ++);
+						Cell memoCell = row.createCell(cellIndex ++);
+						String userName = "";
+						String supposedMoney = "";
+						String tax = "";
+						String totalMoney = "";
+						if(deptList.size()>i) {
+							Salary salary = deptList.get(i);
+							userName = salary.getUserName();
+							supposedMoney = String.valueOf(salary.getSupposedMoney()/100.0);
+							supposedMoneySum += salary.getSupposedMoney();
+							tax = String.valueOf(salary.getTax()/100.0);
+							totalMoney = String.valueOf(salary.getTotalMoney()/100.0);
+							totalMoneySum += salary.getTotalMoney();
+						}
+						row.setHeightInPoints(rowHeight);
+						nameCell.setCellStyle(cs);
+						nameCell.setCellValue(userName);
+						supposedMoneyCell.setCellValue(supposedMoney);
+						supposedMoneyCell.setCellStyle(cs);
+						taxCell.setCellValue(tax);
+						taxCell.setCellStyle(cs);
+						totalMoneyCell.setCellValue(totalMoney);
+						totalMoneyCell.setCellStyle(cs);
+						signCell.setCellValue("");
+						signCell.setCellStyle(cs);
+						memoCell.setCellValue("");
+						memoCell.setCellStyle(cs);
+					}
+					HSSFRow sumRow = sheet.createRow(rowIndex++);
+					sumRow.setHeightInPoints(rowHeight);
+					cell = sumRow.createCell(0);
+					cell.setCellStyle(cs);
+					cell.setCellValue("本页小计");
+					cell = sumRow.createCell(1);
+					cell.setCellStyle(cs);
+					cell.setCellValue(String.valueOf(supposedMoneySum/100.0));
+					cell = sumRow.createCell(2);
+					cell.setCellStyle(cs);
+					cell.setCellValue(0);
+					cell = sumRow.createCell(3);
+					cell.setCellStyle(cs);
+					cell.setCellValue(String.valueOf(totalMoneySum/100.0));
+					cell = sumRow.createCell(4);
+					cell.setCellStyle(cs);
+					cell.setCellValue("");
+					cell = sumRow.createCell(5);
+					cell.setCellStyle(cs);
+					cell.setCellValue("");
+					
+					HSSFRow tailRow = sheet.createRow(rowIndex);
+					tailRow.setHeightInPoints(rowHeight);
+					cell = tailRow.createCell(4);
+					cell.setCellStyle(csNoBorder);
+					cell.setCellValue("公司盖章");
+				}
 			}
-//			Iterator<DepartmentSalary> iter = list.iterator();
-//			DepartmentSalary ds = null;
-//			Sheet sheet = null;
-//			while(iter.hasNext()) {
-//				ds = iter.next();
-//				sheet = wb.createSheet(ds.getName());
-//				sheet.setDefaultRowHeightInPoints(30);
-//				sheet.setColumnWidth(0, 200*10);
-//				sheet.setColumnWidth(1, 300*15);
-//				
-//				CellStyle cs = wb.createCellStyle();
-//				Font font = wb.createFont();
-//				font.setFontHeightInPoints((short) 12);
-//				font.setBoldweight(Font.BOLDWEIGHT_BOLD);
-//				cs.setFont(font);
-//				cs.setAlignment(CellStyle.ALIGN_CENTER);
-//				
-//				int rowIndex = 0;
-//				
-//				Row titleRow = sheet.createRow(rowIndex ++);
-//				titleRow.setHeightInPoints(30);
-//				Cell titleCell = titleRow.createCell(0);
-//				titleCell.setCellValue(ds.getName()+"员工薪资列表");
-//				titleCell.setCellStyle(cs);
-//				
-//				Row infoRow = sheet.createRow(rowIndex ++);
-//				
-//				Row infoRow2 = sheet.createRow(rowIndex ++);
-//				
-//				infoRow.setHeightInPoints(30);
-//				CellStyle cs2 = wb.createCellStyle();
-//				Font font2 = wb.createFont();
-//				font2.setBoldweight(Font.BOLDWEIGHT_BOLD);
-//				cs2.setFont(font2);
-//				cs2.setAlignment(CellStyle.ALIGN_CENTER);
-//				int cellIndex = 0;
-//				
-//				//姓名列占两行
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				Cell cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("姓名");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("应出勤");
-//				cell.setCellStyle(cs2);
-//				
-//				//实出勤占一行两列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 2, cellIndex, cellIndex + 1));
-//				cell = infoRow.createCell(cellIndex);
-//				cell.setCellValue("实出勤");
-//				cell.setCellStyle(cs2);
-//				
-//				Cell subCell1 = infoRow2.createCell(cellIndex ++);
-//				subCell1.setCellValue("天");
-//				subCell1.setCellStyle(cs2);
-//				Cell subCell2 = infoRow2.createCell(cellIndex ++);
-//				subCell2.setCellValue("时");
-//				subCell2.setCellStyle(cs2);
-//				
-//				//基本工资占两行
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("基本工资");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("岗位工资");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("绩效标准");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("绩效分数");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("实发绩效");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("抽成");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("满勤奖");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("加班费");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("工龄工资");
-//				cell.setCellStyle(cs2);
-//				
-//				//实出勤占一行三列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 2, cellIndex, cellIndex + 2));
-//				cell = infoRow.createCell(cellIndex);
-//				cell.setCellValue("出勤扣款");
-//				cell.setCellStyle(cs2);
-//				
-//				subCell1 = infoRow2.createCell(cellIndex ++);
-//				subCell1.setCellValue("病假");
-//				subCell1.setCellStyle(cs2);
-//				subCell2 = infoRow2.createCell(cellIndex ++);
-//				subCell2.setCellValue("事假");
-//				subCell2.setCellStyle(cs2);
-//				Cell subCell3 = infoRow2.createCell(cellIndex ++);
-//				subCell3.setCellValue("迟到");
-//				subCell3.setCellStyle(cs2);
-//				
-//				//处罚金占两行一列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("处罚金");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("应发合计");
-//				cell.setCellStyle(cs2);
-//				
-//				//个人应扣款占一行三列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 2, cellIndex, cellIndex + 2));
-//				cell = infoRow.createCell(cellIndex);
-//				cell.setCellValue("个人应扣款");
-//				cell.setCellStyle(cs2);
-//				
-//				subCell1 = infoRow2.createCell(cellIndex ++);
-//				subCell1.setCellValue("社保");
-//				subCell1.setCellStyle(cs2);
-//				subCell2 = infoRow2.createCell(cellIndex ++);
-//				subCell2.setCellValue("医保");
-//				subCell2.setCellStyle(cs2);
-//				subCell3 = infoRow2.createCell(cellIndex ++);
-//				subCell3.setCellValue("总计");
-//				subCell3.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("实发工资");
-//				cell.setCellStyle(cs2);
-//				
-//				//补贴占一行四列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 2, cellIndex, cellIndex + 3));
-//				cell = infoRow.createCell(cellIndex);
-//				cell.setCellValue("补贴");
-//				cell.setCellStyle(cs2);
-//				
-//				subCell1 = infoRow2.createCell(cellIndex ++);
-//				subCell1.setCellValue("话补");
-//				subCell1.setCellStyle(cs2);
-//				subCell2 = infoRow2.createCell(cellIndex ++);
-//				subCell2.setCellValue("餐补");
-//				subCell2.setCellStyle(cs2);
-//				subCell3 = infoRow2.createCell(cellIndex ++);
-//				subCell3.setCellValue("车补");
-//				subCell3.setCellStyle(cs2);
-//				Cell subCell4 = infoRow2.createCell(cellIndex ++);
-//				subCell4.setCellValue("住房补贴");
-//				subCell4.setCellStyle(cs2);
-//				
-//				//其他占两行一列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("其他");
-//				cell.setCellStyle(cs2);
-//				
-//				//其他占两行一列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("税前工资");
-//				cell.setCellStyle(cs2);
-//				
-//				//其他占两行一列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("个税");
-//				cell.setCellStyle(cs2);
-//				
-//				//公司投保占一行两列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 2, cellIndex, cellIndex + 1));
-//				cell = infoRow.createCell(cellIndex);
-//				cell.setCellValue("公司投保");
-//				cell.setCellStyle(cs2);
-//				
-//				subCell1 = infoRow2.createCell(cellIndex ++);
-//				subCell1.setCellValue("社保");
-//				subCell1.setCellStyle(cs2);
-//				subCell2 = infoRow2.createCell(cellIndex ++);
-//				subCell2.setCellValue("医保");
-//				subCell2.setCellStyle(cs2);
-//				
-//				//备注占两行一列
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 2, rowIndex - 1, cellIndex, cellIndex));
-//				cell = infoRow.createCell(cellIndex ++);
-//				cell.setCellValue("备注");
-//				cell.setCellStyle(cs2);
-//				
-//				//首行标题的合并
-//				sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, cellIndex - 1));
-//				
-//				//List<Map<String, Object>> salaries = ds.getMapList();
-//				List<Salary> salaries = ds.getList();
-//				//Iterator<Map<String, Object>> iter2 = salaries.iterator();
-//				Iterator<Salary> iter2 = salaries.iterator();
-//				//Map<String, Object> map = null;
-//				Salary map = null;
-//				Row row = null;
-//				BigDecimal supposedTotal = new BigDecimal(0);
-//				BigDecimal actualTotal = new BigDecimal(0);
-//				BigDecimal telChargeTotal = new BigDecimal(0);
-//				BigDecimal mealSubsidyTotal = new BigDecimal(0);
-//				BigDecimal travelAllowanceTotal = new BigDecimal(0);
-//				BigDecimal housingSubsidyTotal = new BigDecimal(0);
-//				BigDecimal companySocialInsuranceTotal = new BigDecimal(0);
-//				BigDecimal companyHealthInsuranceTotal = new BigDecimal(0);
-//				BigDecimal benefitTotal = new BigDecimal(0);
-//				BigDecimal companyInsuranceTotal = new BigDecimal(0);
-//				BigDecimal totalSalary = new BigDecimal(0);
-//				while(iter2.hasNext()) {
-//					map = iter2.next();
-//					cellIndex = 0;
-//					row = sheet.createRow(rowIndex ++);
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("USER_NAME")));
-//					cell.setCellValue(map.getUserName());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("SUPPOSED_DUTY_DAY")));
-//					cell.setCellValue(map.getSupposedDutyDay());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("ACTUAL_DUTY_DAY")));
-//					cell.setCellValue(map.getActualDutyDay());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("ACTUAL_DUTY_HOUR")));
-//					cell.setCellValue(map.getActualDutyHour());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("BASIC_SALARY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getBasicSalary()));
-//					
-//					cell = row.createCell(cellIndex++);
-//					cell.setCellValue(CodeUtil.parseString(map.getPostSalary()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("ACHIEVEMENT_SALARY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getAchievementSalary()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("ACHIEVEMENT_SCORE")));
-//					cell.setCellValue(map.getAchievementScore());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("ACTUAL_ACHIEVEMENT_SALARY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getActualAchievementSalary()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("COMMISSION")));
-//					cell.setCellValue(CodeUtil.parseString(map.getCommission()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("FULL_ATTENDANCE_AWARD")));
-//					cell.setCellValue(CodeUtil.parseString(map.getFullAttendanceAward()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("OVERTIME_PAY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getOvertimePay()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("SENIORITY_PAY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getSeniorityPay()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("SICK_LEAVE_DEDUCT")));
-//					cell.setCellValue(CodeUtil.parseString(map.getSickLeaveDeduct()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("AFFAIR_LEAVE_DEDUCT")));
-//					cell.setCellValue(CodeUtil.parseString(map.getAffairLeaveDeduct()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("LATE_DEDUCT")));
-//					cell.setCellValue(CodeUtil.parseString(map.getLateDeduct()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("PUNISH_DEDUCT")));
-//					cell.setCellValue(CodeUtil.parseString(map.getPunishDeduct()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("SUPPOSED_TOTAL_SALARY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getSupposedTotalSalary()));
-//					
-//					//supposedTotal = supposedTotal.add(CodeUtil.parseBigDecimal(map.get("SUPPOSED_TOTAL_SALARY")));
-//					supposedTotal = supposedTotal.add(map.getSupposedTotalSalary());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("SOCIAL_INSURANCE")));
-//					cell.setCellValue(CodeUtil.parseString(map.getSocialInsurance()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("HEALTH_INSURANCE")));
-//					cell.setCellValue(CodeUtil.parseString(map.getHealthInsurance()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("TOTAL_INSURANCE")));
-//					cell.setCellValue(CodeUtil.parseString(map.getTotalInsurance()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("ACTUAL_TOTAL_SALARY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getActualTotalSalary()));
-//					
-//					//actualTotal = actualTotal.add(CodeUtil.parseBigDecimal(map.get("ACTUAL_TOTAL_SALARY")));
-//					actualTotal = actualTotal.add(map.getActualTotalSalary());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("TEL_CHARGE")));
-//					cell.setCellValue(CodeUtil.parseString(map.getTelCharge()));
-//					
-//					//telChargeTotal = telChargeTotal.add(CodeUtil.parseBigDecimal(map.get("TEL_CHARGE")));
-//					telChargeTotal = telChargeTotal.add(map.getTelCharge());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("MEAL_SUBSIDY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getMealSubsidy()));
-//					
-//					//mealSubsidyTotal = mealSubsidyTotal.add(CodeUtil.parseBigDecimal(map.get("MEAL_SUBSIDY")));
-//					mealSubsidyTotal = mealSubsidyTotal.add(map.getMealSubsidy());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("TRAVEL_ALLOWANCE")));
-//					cell.setCellValue(CodeUtil.parseString(map.getTravelAllowance()));
-//					
-//					//travelAllowanceTotal = travelAllowanceTotal.add(CodeUtil.parseBigDecimal(map.get("TRAVEL_ALLOWANCE")));
-//					travelAllowanceTotal = travelAllowanceTotal.add(map.getTravelAllowance());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("HOUSING_SUBSIDY")));
-//					cell.setCellValue(CodeUtil.parseString(map.getHousingSubsidy()));
-//					
-//					//housingSubsidyTotal = housingSubsidyTotal.add(CodeUtil.parseBigDecimal(map.get("HOUSING_SUBSIDY")));
-//					housingSubsidyTotal = housingSubsidyTotal.add(map.getHousingSubsidy());
-//
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("OTHER")));
-//					cell.setCellValue(CodeUtil.parseString(map.getOther()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("OTHER")));
-//					cell.setCellValue(CodeUtil.parseString(map.getPretaxSalary()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("OTHER")));
-//					cell.setCellValue(CodeUtil.parseString(map.getTax()));
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("COMPANY_SOCIAL_INSURANCE")));
-//					cell.setCellValue(CodeUtil.parseString(map.getCompanySocialInsurance()));
-//					
-//					//companySocialInsuranceTotal = companySocialInsuranceTotal.add(CodeUtil.parseBigDecimal(map.get("COMPANY_SOCIAL_INSURANCE")));
-//					companySocialInsuranceTotal = companySocialInsuranceTotal.add(map.getCompanySocialInsurance());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("COMPANY_HEALTH_INSURANCE")));
-//					cell.setCellValue(CodeUtil.parseString(map.getCompanyHealthInsurance()));
-//					
-//					//companyHealthInsuranceTotal = companyHealthInsuranceTotal.add(CodeUtil.parseBigDecimal(map.get("COMPANY_HEALTH_INSURANCE")));
-//					companyHealthInsuranceTotal = companyHealthInsuranceTotal.add(map.getCompanyHealthInsurance());
-//					
-//					cell = row.createCell(cellIndex ++);
-//					//cell.setCellValue(CodeUtil.parseString(map.get("INFO")));
-//					cell.setCellValue(map.getInfo());
-//				}
-//				benefitTotal = benefitTotal.add(telChargeTotal).add(mealSubsidyTotal).add(travelAllowanceTotal).add(housingSubsidyTotal);
-//				companyInsuranceTotal = companyInsuranceTotal.add(companySocialInsuranceTotal).add(companyHealthInsuranceTotal);
-//				totalSalary = totalSalary.add(supposedTotal).add(benefitTotal).add(companyInsuranceTotal);
-//				
-//				Row sumRow = sheet.createRow(rowIndex ++);
-//				
-//				cell = sumRow.createCell(16);
-//				cell.setCellValue("合计");
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(17);
-//				cell.setCellValue(CodeUtil.parseString(supposedTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(21);
-//				cell.setCellValue(CodeUtil.parseString(actualTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(22);
-//				cell.setCellValue(CodeUtil.parseString(telChargeTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(23);
-//				cell.setCellValue(CodeUtil.parseString(mealSubsidyTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(24);
-//				cell.setCellValue(CodeUtil.parseString(travelAllowanceTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(25);
-//				cell.setCellValue(CodeUtil.parseString(housingSubsidyTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(29);
-//				cell.setCellValue(CodeUtil.parseString(companySocialInsuranceTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				cell = sumRow.createCell(30);
-//				cell.setCellValue(CodeUtil.parseString(companyHealthInsuranceTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				Row benefitSumRow = sheet.createRow(rowIndex ++);
-//				cell = benefitSumRow.createCell(16);
-//				cell.setCellValue("福利合计");
-//				cell.setCellStyle(cs2);
-//				
-//				cell = benefitSumRow.createCell(17);
-//				cell.setCellValue(CodeUtil.parseString(supposedTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 22, 25));
-//				cell = benefitSumRow.createCell(22);
-//				cell.setCellValue(CodeUtil.parseString(benefitTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 29, 30));
-//				cell = benefitSumRow.createCell(29);
-//				cell.setCellValue(CodeUtil.parseString(companyInsuranceTotal));
-//				cell.setCellStyle(cs2);
-//				
-//				Row totalSalaryRow = sheet.createRow(rowIndex ++);
-//				
-//				cell = totalSalaryRow.createCell(16);
-//				cell.setCellValue("工资总计");
-//				cell.setCellStyle(cs2);
-//				
-//				sheet.addMergedRegion(new CellRangeAddress(rowIndex - 1, rowIndex - 1, 17, 30));
-//				cell = totalSalaryRow.createCell(17);
-//				cell.setCellValue(CodeUtil.parseString(totalSalary));
-//				cell.setCellStyle(cs2);
-//			}
 		}
+		return wb;
+	}
+	
+	public HSSFWorkbook createManagerSalaryExcel(String month, List<Salary> list) {
+		HSSFWorkbook wb = new HSSFWorkbook();
+		CellStyle cs = wb.createCellStyle();
+		Font font = wb.createFont();
+		font.setFontHeightInPoints((short) 12);
+		font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		cs.setFont(font);
+		cs.setAlignment(CellStyle.ALIGN_CENTER);
+		cs.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		cs.setBorderBottom((short)1);
+		cs.setBorderLeft((short)1);
+		cs.setBorderRight((short)1);
+		cs.setBorderTop((short)1);
+		cs.setWrapText(true);
+		
+		Font font2 = wb.createFont();
+		font2.setFontHeightInPoints((short) 20);
+		font2.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		
+		CellStyle csNoBorder = wb.createCellStyle();
+		csNoBorder.setFont(font);
+		csNoBorder.setAlignment(CellStyle.ALIGN_CENTER);
+		csNoBorder.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		csNoBorder.setWrapText(true);
+		
+		CellStyle csNoBorderBigFont = wb.createCellStyle();
+		csNoBorderBigFont.setFont(font2);
+		csNoBorderBigFont.setAlignment(CellStyle.ALIGN_CENTER);
+		csNoBorderBigFont.setVerticalAlignment(CellStyle.VERTICAL_CENTER);
+		csNoBorderBigFont.setWrapText(true);
+		int rowIndex = 0;
+		HSSFSheet sheet = wb.createSheet();
+		sheet.setDefaultColumnWidth(10);
+		HSSFRow companyInfoRow = sheet.createRow(rowIndex ++);
+		companyInfoRow.setHeightInPoints(40);
+		HSSFCell cell = companyInfoRow.createCell(0);
+		cell.setCellStyle(csNoBorderBigFont);
+		cell.setCellValue("香港新时空（国际）集团化妆品有限公司Ｂ级别销售工资明细表");
+		sheet.addMergedRegion(new CellRangeAddress(rowIndex-1, rowIndex-1, 0, 15));
+		HSSFRow titleRow = sheet.createRow(rowIndex++);
+		sheet.addMergedRegion(new CellRangeAddress(rowIndex-1, rowIndex-1, 0, 15));
+		titleRow.setHeightInPoints(25);
+		cell = titleRow.createCell(0);
+		cell.setCellValue(month+"月工资");
+		cell.setCellStyle(csNoBorder);
+		int rowHeight = 20;
+		HSSFRow headerRow = sheet.createRow(rowIndex++);
+		headerRow.setHeightInPoints(45);
+		int cellIndex = 0;
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("姓名");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("保底工资");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex++);
+		cell.setCellValue("达标奖金");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("直销奖");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("差额");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("达标超额奖");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("内勤管理补助");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex++);
+		cell.setCellValue("全勤奖");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex++);
+		cell.setCellValue("应扣其他");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("总达标奖");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("应发工资");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("3500以上纳税20%");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("本月罚款");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("扣借公司款");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("实发工资");
+		cell.setCellStyle(cs);
+		cell = headerRow.createCell(cellIndex ++);
+		cell.setCellValue("签名");
+		cell.setCellStyle(cs);
+		
+		cellIndex = 0;
+		for(int i = 0; i < list.size(); i ++) {
+			Salary salary = list.get(i);
+			HSSFRow row = sheet.createRow(rowIndex++);
+			row.setHeightInPoints(rowHeight);
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(salary.getUserName());
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getMoney()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getReachGoalBonus()/100.0));
+			cell.setCellStyle(cs);
+			
+			//直销奖
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue("");
+			cell.setCellStyle(cs);
+			
+			//差额
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue("");
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getOverGoalBonus()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getOfficeManageBonus()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getFullDutyBonus()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getDeductMoney()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getTotalReachGoalBonus()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getSupposedMoney()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getTax()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getAmercement()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getCompanyLend()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue(String.valueOf(salary.getTotalMoney()/100.0));
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(cellIndex++);
+			cell.setCellValue("");
+			cell.setCellStyle(cs);
+			
+		}
+		
+		HSSFRow tailRow = sheet.createRow(rowIndex++);
+		cell = tailRow.createCell(0);
+		cell.setCellStyle(csNoBorder);
+		cell.setCellValue("董事会：");
+		sheet.addMergedRegion(new CellRangeAddress(rowIndex-1, rowIndex-1, 0, 1));
+		
+		cell = tailRow.createCell(6);
+		cell.setCellStyle(csNoBorder);
+		cell.setCellValue("总经理：");
+		sheet.addMergedRegion(new CellRangeAddress(rowIndex-1, rowIndex-1, 6, 7));
+		
+		cell = tailRow.createCell(12);
+		cell.setCellStyle(csNoBorder);
+		cell.setCellValue("财务：");
+		sheet.addMergedRegion(new CellRangeAddress(rowIndex-1, rowIndex-1, 12, 13));
+		
 		return wb;
 	}
 }

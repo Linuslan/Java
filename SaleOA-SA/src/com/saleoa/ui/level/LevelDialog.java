@@ -44,7 +44,7 @@ public class LevelDialog {
 			this.level = level.getLevel();
 			bonus = level.getBonus();
 		}
-		final JDialog dialog = new JDialog();
+		final JDialog dialog = new JDialog(MainEntry.main);
 		dialog.setBackground(Color.WHITE);
 		int dialogWidth = 400;
 		int dialogHeight = 300;

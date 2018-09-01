@@ -288,8 +288,8 @@ public class SalaryPanel extends JGridPanel<Salary> {
 		});
 		
 		JButton exportBtn = new JButton("导出");
-		toolBar.add(auditBtn);
-		auditBtn.addActionListener(new ActionListener() {
+		toolBar.add(exportBtn);
+		exportBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent paramActionEvent) {
 				String dateStr = JOptionPane.showInputDialog("请输入年-月，例如：2018-07");
@@ -313,28 +313,7 @@ public class SalaryPanel extends JGridPanel<Salary> {
 				int value = JOptionPane.showConfirmDialog(lp, "您确定导出"+year+"年"+month+"月的工资吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
 					// TODO Auto-generated method stub
-					int[] rowArr = table.getSelectedRows();
-					List<Long> list = new ArrayList<Long> ();
-					for(int i = 0; i < rowArr.length; i ++) {
-						int row = rowArr[i];
-						Long id = BeanUtil.parseLong(table.getValueAt(row, 0));
-						list.add(id);
-					}
-					boolean success = false;
-					try {
-						success = salaryService.auditBatch(list);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					String msg = "批量生效失败";
-					if(success) {
-						msg = "批量生效成功";
-					}
-					JOptionPane.showMessageDialog(lp, msg, "温馨提示",JOptionPane.INFORMATION_MESSAGE);
-					if(success) {
-						refresh();
-					}
+					salaryService.export(year, month);
 					return;
 				}
 				

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.saleoa.common.cache.DataCache;
 import com.saleoa.common.plugin.Page;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.JdbcHelper;
@@ -13,6 +14,12 @@ import com.saleoa.common.utils.JdbcHelper;
 
 public class IBaseDaoImpl<T> implements IBaseDao<T> {
 	private Class<T> entityClass;
+	
+	public String getKey() {
+		Class<T> cls = getTClass();
+		String key = cls.getSimpleName()+"_";
+		return key;
+	}
 	
 	public Class<T> getTClass() {
         Class<T> tClass = (Class<T>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -26,6 +33,8 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 			BeanUtil.setValue(t, "id", id);
 			String sql = JdbcHelper.insertSql(t);
 			JdbcHelper.executeSql(sql);
+			String key = getKey()+id.longValue();
+			DataCache.push(key, t);
 			success = true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -44,6 +53,12 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				BeanUtil.setValue(list.get(i), "id", id);
 			}
 			JdbcHelper.insertBatch(list);
+			for(int i = 0; i < list.size(); i ++) {
+				T t = list.get(i);
+				Long objId = (Long) BeanUtil.getValue(t, "id");
+				String key = getKey()+objId.longValue();
+				DataCache.push(key, t);
+			}
 			success = true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -57,6 +72,9 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		boolean success = false;
 		try {
 			success = JdbcHelper.update(t);
+			Long id = (Long) BeanUtil.getValue(t, "id");
+			String key = getKey()+id.longValue();
+			DataCache.push(key, t);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -67,6 +85,12 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		boolean success = false;
 		try {
 			success = JdbcHelper.updateBatch(list);
+			for(int i = 0; i < list.size(); i ++) {
+				T t = list.get(i);
+				Long objId = (Long) BeanUtil.getValue(t, "id");
+				String key = getKey()+objId.longValue();
+				DataCache.push(key, t);
+			}
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -77,6 +101,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		// TODO Auto-generated method stub
 		boolean success = false;
 		try {
+			String key = getKey()+((Long)BeanUtil.getValue(t, "id")).longValue();
 			try {
 				Field field = t.getClass().getDeclaredField("isDelete");
 				BeanUtil.setValue(t, "isDelete", 1);
@@ -85,6 +110,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				String sql = JdbcHelper.deleteSql(t);
 				JdbcHelper.executeSql(sql);
 			}
+			DataCache.remove(key);
 			success = true;
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -100,7 +126,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				getTClass().getField("isDelete");
 				paramMap.put("isDelete", 0);
 			} catch(Exception ex) {
-				
+				ex.printStackTrace();
 			}
 			
 			String sql = JdbcHelper.selectSql(getTClass(), paramMap, false, null, null);
@@ -114,10 +140,17 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 	}
 
 	public T selectById(Long id) {
+		String key = getKey()+id.longValue();
+		Object obj = DataCache.get(key);
+		if(null != obj) {
+			return (T) obj;
+		}
 		Map<String, Object> paramMap = new HashMap<String, Object> ();
 		paramMap.put("id", id);
 		List<T> list = this.select(paramMap);
-		return list.get(0);
+		T t = list.get(0);
+		DataCache.push(key, t);
+		return t;
 	}
 	
 	public T selectOne(Map<String, Object> paramMap) {

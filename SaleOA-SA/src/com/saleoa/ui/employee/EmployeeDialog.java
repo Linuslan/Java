@@ -63,7 +63,7 @@ public class EmployeeDialog {
 			inheritorPhone = employee.getInheritorPhone();
 			departmentId = employee.getDepartmentId();
 		}
-		final JDialog dialog = new JDialog();
+		final JDialog dialog = new JDialog(MainEntry.main);
 		dialog.setBackground(Color.WHITE);
 		int dialogWidth = 480;
 		int dialogHeight = 450;
