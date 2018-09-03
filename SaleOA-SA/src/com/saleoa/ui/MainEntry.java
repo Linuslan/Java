@@ -21,6 +21,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
 import com.saleoa.common.constant.ModuleName;
+import com.saleoa.service.IEmployeeService;
+import com.saleoa.service.IEmployeeServiceImpl;
+import com.saleoa.service.ISaleLogService;
+import com.saleoa.service.ISaleLogServiceImpl;
+import com.saleoa.service.ISaleService;
+import com.saleoa.service.ISaleServiceImpl;
 import com.saleoa.ui.department.DepartmentPanel;
 import com.saleoa.ui.employee.EmployeePanel;
 import com.saleoa.ui.employeeRole.EmployeeRolePanel;
@@ -36,6 +42,9 @@ public class MainEntry {
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final private static String miniIcon = System.getProperty("user.dir").replace("\\", "/")+"/img/comments.png";
 	public final static JFrame main = new JFrame();
+	private ISaleService saleService = new ISaleServiceImpl();
+	private ISaleLogService saleLogService = new ISaleLogServiceImpl();
+	private IEmployeeService employeeService = new IEmployeeServiceImpl();
 	
 	//系统托盘图标
 	private static TrayIcon trayIcon;
@@ -45,7 +54,15 @@ public class MainEntry {
 	public void createMain() {
 		int width = (int) (screenSize.width*0.8);
 		int height = (int) (screenSize.height*0.8);
-				
+		
+		try {
+			this.employeeService.select(null);
+			this.saleService.select(null);
+			this.saleLogService.select(null);
+		} catch(Exception ex) {
+			System.out.println("初始化数据异常");
+			ex.printStackTrace();
+		}
 		
 		JMenuBar menuBar = new JMenuBar();
 		main.setJMenuBar(menuBar);

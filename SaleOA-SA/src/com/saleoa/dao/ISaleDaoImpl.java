@@ -164,4 +164,15 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 		return number;
 	}
 	
+	public boolean add(Sale sale) {
+		boolean success = false;
+		try {
+			super.add(sale);
+			
+		} catch(Exception ex) {
+			
+		}
+		return success;
+	}
+	
 }

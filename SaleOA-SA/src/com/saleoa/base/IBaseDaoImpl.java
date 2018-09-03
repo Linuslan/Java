@@ -132,6 +132,12 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 			String sql = JdbcHelper.selectSql(getTClass(), paramMap, false, null, null);
 			System.out.println(sql);
 			List<T> list = JdbcHelper.select(sql, getTClass());
+			for(int i = 0; i < list.size(); i ++) {
+				T t = list.get(i);
+				Long objId = (Long) BeanUtil.getValue(t, "id");
+				String key = getKey()+objId.longValue();
+				DataCache.push(key, t);
+			}
 			return list;
 		} catch(Exception ex) {
 			ex.printStackTrace();
