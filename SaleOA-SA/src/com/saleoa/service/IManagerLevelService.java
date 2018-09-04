@@ -11,5 +11,5 @@ public interface IManagerLevelService extends IBaseService<ManagerLevel> {
 	 * @param point
 	 * @return
 	 */
-	public ManagerLevel selectBySale(long sale);
+	public ManagerLevel selectBySale(long sale, Long departmentId);
 }

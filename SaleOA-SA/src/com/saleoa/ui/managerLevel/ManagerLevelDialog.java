@@ -7,7 +7,9 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,20 +22,27 @@ import javax.swing.JTextField;
 import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.StringUtil;
+import com.saleoa.model.Department;
+import com.saleoa.model.Employee;
 import com.saleoa.model.ManagerLevel;
+import com.saleoa.service.IDepartmentService;
+import com.saleoa.service.IDepartmentServiceImpl;
 import com.saleoa.service.IManagerLevelService;
 import com.saleoa.service.IManagerLevelServiceImpl;
 import com.saleoa.ui.MainEntry;
+import com.saleoa.ui.plugin.JAutoCompleteComboBox;
 
 public class ManagerLevelDialog {
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	IManagerLevelService managerLevelService = new IManagerLevelServiceImpl();
+	IDepartmentService departmentService = new IDepartmentServiceImpl();
 	private Long id;
 	private String name = "";
 	private Integer minSale=0;
 	private Integer maxSale=0;
 	private Long basicSalary = 0L;
 	private Long reachGoalBonus = 0L;
+	private Long departmentId = null;
 
 	public void initDialog(final ManagerLevel level, final ManagerLevelPanel parent) {
 		if(null != level) {
@@ -43,6 +52,7 @@ public class ManagerLevelDialog {
 			this.maxSale = level.getMaxSale();
 			this.basicSalary = level.getBasicSalary();
 			reachGoalBonus = level.getReachGoalBonus();
+			departmentId = level.getDepartmentId();
 		}
 		final JDialog dialog = new JDialog(MainEntry.main);
 		dialog.setBackground(Color.WHITE);
@@ -66,13 +76,39 @@ public class ManagerLevelDialog {
 		nameIpt.setLocation(FormCss.getLocation(nameLbl, null));
 		nameIpt.setText(name);
 		
+		JLabel departmentLbl = new JLabel("归属部门：");
+		departmentLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(departmentLbl);
+		departmentLbl.setLocation(FormCss.getLocation(null, nameLbl));
+		final JAutoCompleteComboBox<Department> departmentComb = new JAutoCompleteComboBox<Department>();
+		List<Department> departmentList = null;
+		try {
+			departmentList = this.departmentService.select(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			departmentList = new ArrayList<Department>();
+		}
+		int selectedIdx = 0;
+		for(int i = 0; i < departmentList.size(); i ++) {
+			departmentComb.addItem(departmentList.get(i));
+			if(null != level && null != departmentId &&
+					departmentId.longValue() == departmentList.get(i).getId().longValue()) {
+				selectedIdx = i;
+			}
+		}
+		departmentComb.setSelectedIndex(selectedIdx);
+		departmentComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		departmentComb.setLocation(FormCss.getLocation(departmentLbl, nameIpt));
+		panel.add(departmentComb);
+		
 		JLabel minSaleLbl = new JLabel("最低售出：");
 		minSaleLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(minSaleLbl);
-		minSaleLbl.setLocation(FormCss.getLocation(null, nameLbl));
+		minSaleLbl.setLocation(FormCss.getLocation(null, departmentLbl));
 		final JFormattedTextField minSaleIpt = new JFormattedTextField(NumberFormat.INTEGER_FIELD);
 		minSaleIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		minSaleIpt.setLocation(FormCss.getLocation(minSaleLbl, nameIpt));
+		minSaleIpt.setLocation(FormCss.getLocation(minSaleLbl, departmentComb));
 		panel.add(minSaleIpt);
 		minSaleIpt.setText(String.valueOf(minSale));
 		
@@ -149,6 +185,11 @@ public class ManagerLevelDialog {
 					JOptionPane.showMessageDialog(dialog, "请输入等级名称", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+				if(null == departmentComb.getSelectedItem()) {
+					JOptionPane.showMessageDialog(dialog, "请选择归属的班级", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				Department department = (Department) departmentComb.getSelectedItem();
 				if(null == minSale || 0 >= minSale) {
 					JOptionPane.showMessageDialog(dialog, "请输入有效的最小售出", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
@@ -173,6 +214,8 @@ public class ManagerLevelDialog {
 				temp.setMaxSale(maxSale);
 				temp.setMinSale(minSale);
 				temp.setName(name);
+				temp.setDepartmentId(department.getId());
+				temp.setDepartmentName(department.getName());
 				temp.setReachGoalBonus(reachGoalBonus);
 				boolean success = false;
 				try {

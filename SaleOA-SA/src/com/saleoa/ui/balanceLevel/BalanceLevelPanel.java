@@ -1,65 +1,50 @@
-package com.saleoa.ui.managerLevel;
+package com.saleoa.ui.balanceLevel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
-import com.saleoa.common.utils.StringUtil;
-import com.saleoa.dao.IManagerLevelDao;
-import com.saleoa.dao.IManagerLevelDaoImpl;
-import com.saleoa.model.ManagerLevel;
+import com.saleoa.dao.IBalanceLevelDao;
+import com.saleoa.dao.IBalanceLevelDaoImpl;
+import com.saleoa.model.BalanceLevel;
 import com.saleoa.ui.MainEntry;
 
 
-public class ManagerLevelPanel extends JPanel {
-	IManagerLevelDao managerLevelDao = new IManagerLevelDaoImpl();
+public class BalanceLevelPanel extends JPanel {
+	IBalanceLevelDao balanceLevelDao = new IBalanceLevelDaoImpl();
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final Vector<Vector<String>> row = new Vector<Vector<String>> ();
 	final Vector<String> cols = new Vector<String>();
 	DefaultTableModel model = null;
 	JTable table = null;
-	public ManagerLevelPanel() {
-		this.setName(ModuleName.MANAGERLEVEL);
+	public BalanceLevelPanel() {
+		this.setName(ModuleName.BALANCELEVEL);
 		init();
 	}
 	
 	public void init() {
-		final ManagerLevelPanel lp = this;
+		final BalanceLevelPanel lp = this;
 		cols.add("编号");
-		cols.add("等级");
-		cols.add("归属班级");
-		cols.add("最小售出");
-		cols.add("最大售出");
-		cols.add("基础工资");
-		cols.add("奖金/套");
-		cols.add("达标奖");
+		cols.add("经理数");
+		cols.add("奖金");
 		model = new DefaultTableModel(row, cols);
 		table = new JTable(model);
 		DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();// 设置table内容居中
@@ -75,7 +60,7 @@ public class ManagerLevelPanel extends JPanel {
 		addBtn.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				ManagerLevelDialog dialog = new ManagerLevelDialog();
+				BalanceLevelDialog dialog = new BalanceLevelDialog();
 				dialog.initDialog(null, lp);
 			}
 			
@@ -93,10 +78,10 @@ public class ManagerLevelPanel extends JPanel {
 				System.out.println("获取到的id为"+id);
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<ManagerLevel> list = managerLevelDao.select(paramMap);
-				ManagerLevel managerLevel = list.get(0);
-				ManagerLevelDialog dialog = new ManagerLevelDialog();
-				dialog.initDialog(managerLevel, lp);
+				List<BalanceLevel> list = balanceLevelDao.select(paramMap);
+				BalanceLevel balanceLevel = list.get(0);
+				BalanceLevelDialog dialog = new BalanceLevelDialog();
+				dialog.initDialog(balanceLevel, lp);
 			}
 			
 		});
@@ -119,15 +104,15 @@ public class ManagerLevelPanel extends JPanel {
 				}
 				Map<String, Object> paramMap = new HashMap<String, Object> ();
 				paramMap.put("id", id);
-				List<ManagerLevel> list = managerLevelDao.select(paramMap);
-				ManagerLevel managerLevel = list.get(0);
-				if(null == managerLevel) {
+				List<BalanceLevel> list = balanceLevelDao.select(paramMap);
+				BalanceLevel balanceBalanceLevel = list.get(0);
+				if(null == balanceBalanceLevel) {
 					JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
 				int value = JOptionPane.showConfirmDialog(lp, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
-					boolean success = managerLevelDao.delete(managerLevel);
+					boolean success = balanceLevelDao.delete(balanceBalanceLevel);
 					if(success) {
 						lp.initGrid();
 						JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
@@ -148,18 +133,13 @@ public class ManagerLevelPanel extends JPanel {
 	public void initGrid() {
 		try {
 			row.clear();
-        	List<ManagerLevel> managerLevels = managerLevelDao.select(null);
-        	for(int i = 0; i < managerLevels.size(); i ++) {
-        		ManagerLevel managerLevel = managerLevels.get(i);
+        	List<BalanceLevel> balanceBalanceLevels = balanceLevelDao.select(null);
+        	for(int i = 0; i < balanceBalanceLevels.size(); i ++) {
+        		BalanceLevel balanceLevel = balanceBalanceLevels.get(i);
         		Vector<String> newRow = new Vector<String> ();
-				newRow.add(String.valueOf(managerLevel.getId()));
-				newRow.add(managerLevel.getName());
-				newRow.add(managerLevel.getDepartmentName());
-				newRow.add(String.valueOf(managerLevel.getMinSale()));
-				newRow.add(String.valueOf(managerLevel.getMaxSale()));
-				newRow.add(String.valueOf(managerLevel.getBasicSalary()/100.0));
-				newRow.add(String.valueOf(managerLevel.getCommission()/100.0));
-				newRow.add(String.valueOf(managerLevel.getReachGoalBonus()/100.0));
+				newRow.add(String.valueOf(balanceLevel.getId()));
+				newRow.add(String.valueOf(balanceLevel.getManagerCount()));
+				newRow.add(String.valueOf(balanceLevel.getBonus()/100.0));
 				row.add(newRow);
         	}
         	model = new DefaultTableModel(row, cols);

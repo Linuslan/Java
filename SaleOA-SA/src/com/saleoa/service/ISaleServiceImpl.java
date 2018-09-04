@@ -10,6 +10,7 @@ import java.util.Map;
 import com.saleoa.base.IBaseServiceImpl;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.ExceptionUtil;
+import com.saleoa.common.utils.JdbcHelper;
 import com.saleoa.dao.IBalanceLevelDao;
 import com.saleoa.dao.IBalanceLevelDaoImpl;
 import com.saleoa.dao.IDepartmentDao;
@@ -121,7 +122,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		List<Employee> managers = this.employeeDao.selectManagerByDepartment(departmentId);
 		int saleCount = this.saleDao.getSaleCountByDepartment(departmentId, sale.getSaleDate());
 		saleCount ++;	//本次也算一次销售数
-		ManagerLevel managerLevel = this.managerLevelDao.selectBySale(saleCount);
+		ManagerLevel managerLevel = this.managerLevelDao.selectBySale(saleCount, departmentId);
 		Employee manager = null;
 		for(int i = 0; i < managers.size(); i ++) {
 			manager = managers.get(i);
@@ -142,6 +143,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 			//saleLog.setSalary(basicSalary+commission);
 			saleLog.setSalary(basicSalary);
 		}
+		JdbcHelper.openTransaction();
 		this.dao.add(sale);
 		if(!updates.isEmpty()) {
 			this.dao.updateBatch(updates);
@@ -155,6 +157,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		if(!addSaleLogs.isEmpty()) {
 			this.saleLogDao.addBatch(addSaleLogs);
 		}
+		JdbcHelper.commitTransaction();
 		success = true;
 		return success;
 	}

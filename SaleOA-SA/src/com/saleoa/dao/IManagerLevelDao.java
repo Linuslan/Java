@@ -11,5 +11,5 @@ public interface IManagerLevelDao extends IBaseDao<ManagerLevel> {
 	 * @param point
 	 * @return
 	 */
-	public ManagerLevel selectBySale(long sale);
+	public ManagerLevel selectBySale(long sale, Long departmentId);
 }

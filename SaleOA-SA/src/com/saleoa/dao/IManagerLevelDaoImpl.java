@@ -17,12 +17,13 @@ public class IManagerLevelDaoImpl extends IBaseDaoImpl<ManagerLevel> implements 
 	 * @param point
 	 * @return
 	 */
-	public ManagerLevel selectBySale(long sale) {
+	public ManagerLevel selectBySale(long sale, Long departmentId) {
 		ManagerLevel level = null;
 		try {
 			Map<String, Object> paramMap = new HashMap<String, Object> ();
 			paramMap.put("minSale<=", sale);
 			paramMap.put("maxSale>=", sale);
+			paramMap.put("departmentId", departmentId);
 			String sql = JdbcHelper.selectSql(ManagerLevel.class, paramMap, false, null, null);
 			List<ManagerLevel> levels = JdbcHelper.select(sql, ManagerLevel.class);
 			if(null == levels || 0 >= levels.size()) {

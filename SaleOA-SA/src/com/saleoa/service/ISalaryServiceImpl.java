@@ -2,8 +2,6 @@ package com.saleoa.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,7 +20,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.saleoa.base.IBaseServiceImpl;
@@ -41,6 +38,7 @@ import com.saleoa.dao.ISalaryDaoImpl;
 import com.saleoa.dao.ISaleDao;
 import com.saleoa.dao.ISaleDaoImpl;
 import com.saleoa.model.BalanceLevel;
+import com.saleoa.model.Department;
 import com.saleoa.model.Employee;
 import com.saleoa.model.ManagerLevel;
 import com.saleoa.model.Salary;
@@ -81,8 +79,9 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 				salary = salaryList.get(i);
 				Employee employee = this.employeeDao.selectById(salary.getUserId());
 				Long departmentId = employee.getDepartmentId();
+				Department department = this.departmentDao.selectById(departmentId);
 				salary.setDepartmentId(departmentId);
-				salary.setDepartmentName(employee.getDepartmentName());
+				salary.setDepartmentName(department.getName());
 				List<Salary> deptSalarys = departmentSalaryMap.get(departmentId.longValue());
 				if(null == deptSalarys) {
 					deptSalarys = new ArrayList<Salary> ();
@@ -111,7 +110,6 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 				for(int i = 0; i < managers.size(); i ++) {
 					Employee employee = managers.get(i);
 					Salary mngSalary = new Salary();
-					ManagerLevel managerLevel = this.managerLevelDao.selectBySale(saleCount);
 					mngSalary.setCreateDate(new Date());
 					mngSalary.setYear(year);
 					mngSalary.setMonth(month);
@@ -123,7 +121,18 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 					mngSalary.setFullDutyBonus(0l);
 					mngSalary.setIsDelete(0);
 					mngSalary.setMemo("");
-					mngSalary.setMoney(managerLevel.getBasicSalary());
+					try {
+						ManagerLevel managerLevel = this.managerLevelDao.selectBySale(saleCount, employee.getDepartmentId());
+						mngSalary.setMoney(managerLevel.getBasicSalary());
+						mngSalary.setReachGoalBonus(managerLevel.getReachGoalBonus());
+						mngSalary.setOverGoalBonus(managerLevel.getCommission()*(saleCount-(managerLevel.getMinSale()-1)));
+						//销售数大于最大的销售数，则有超额达标奖
+						if(0 < managerLevel.getReachGoalBonus() && saleCount >= managerLevel.getMinSale()) {
+							overGoalCount ++;
+						}
+					} catch(Exception ex) {
+						ex.printStackTrace();
+					}
 					mngSalary.setOverGoalBonus(0L);
 					mngSalary.setReachGoalBonus(0L);
 					mngSalary.setStatus(0);
@@ -134,12 +143,6 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 					mngSalary.setUpdateDate(new Date());
 					mngSalary.setUserId(employee.getId());
 					mngSalary.setUserName(employee.getName());
-					//销售数大于最大的销售数，则有超额达标奖
-					if(saleCount > managerLevel.getMaxSale()) {
-						mngSalary.setReachGoalBonus(managerLevel.getReachGoalBonus());
-						overGoalCount ++;
-						mngSalary.setOverGoalBonus(managerLevel.getCommission()*saleCount);
-					}
 					mngSalary.setOfficeManageBonus(30000l);
 					List<Salary> mngSalarys = mngSalaryMap.get(departmentId.longValue());
 					if(null == mngSalarys) {
@@ -204,7 +207,7 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 	}
 	
 	private Long getSupposedMoney(Salary salary) {
-		return salary.getMoney() + salary.getReachGoalBonus() + salary.getOverGoalBonus() + salary.getOfficeManageBonus() + salary.getFullDutyBonus() + salary.getTotalReachGoalBonus()
+		return salary.getMoney() + salary.getDirectSellMoney() + salary.getBalanceMoney() + salary.getReachGoalBonus() + salary.getOverGoalBonus() + salary.getOfficeManageBonus() + salary.getFullDutyBonus() + salary.getTotalReachGoalBonus()
 				-salary.getDeductMoney();
 	}
 	
@@ -556,12 +559,12 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 			
 			//直销奖
 			cell = row.createCell(cellIndex++);
-			cell.setCellValue("");
+			cell.setCellValue(String.valueOf(salary.getDirectSellMoney()/100.0));
 			cell.setCellStyle(cs);
 			
 			//差额
 			cell = row.createCell(cellIndex++);
-			cell.setCellValue("");
+			cell.setCellValue(String.valueOf(salary.getBalanceMoney()/100.0));
 			cell.setCellStyle(cs);
 			
 			cell = row.createCell(cellIndex++);

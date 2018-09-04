@@ -28,7 +28,7 @@ public class IManagerLevelServiceImpl extends IBaseServiceImpl<ManagerLevel> imp
 	 * @param id
 	 * @return
 	 */
-	public ManagerLevel selectBySale(long sale) {
-		return this.managerLevelDao.selectBySale(sale);
+	public ManagerLevel selectBySale(long sale, Long departmentId) {
+		return this.managerLevelDao.selectBySale(sale, departmentId);
 	}
 }

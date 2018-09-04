@@ -70,8 +70,8 @@ public class SalePanel extends JGridPanel<Sale> {
 		cols.add("编号");
 		cols.add("产品");
 		cols.add("归属人");
-		cols.add("推荐人");
 		cols.add("售出时间");
+		cols.add("推荐人");
 		cols.add("积分");
 		cols.add("等级");
 		cols.add("奖金");
@@ -91,6 +91,17 @@ public class SalePanel extends JGridPanel<Sale> {
 		this.add(searchPanel, BorderLayout.NORTH);
 		searchPanel.setPreferredSize(new Dimension(0, 50));
 		searchPanel.setBackground(Color.WHITE);
+		
+		JLabel searchTypeLbl = new JLabel("查询维度：");
+		searchTypeLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		//employeeLbl.setLocation(FormCss.getLocation(null, null));
+		searchPanel.add(searchTypeLbl);
+		final JAutoCompleteComboBox<String> searchTypeComb = new JAutoCompleteComboBox<String>();
+		searchTypeComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		searchPanel.add(searchTypeComb);
+		searchTypeComb.addItem("个人业绩");
+		searchTypeComb.addItem("总业绩");
+		
 		JLabel employeeLbl = new JLabel("归属人：");
 		employeeLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		//employeeLbl.setLocation(FormCss.getLocation(null, null));
@@ -139,6 +150,7 @@ public class SalePanel extends JGridPanel<Sale> {
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				paramMap.clear();
+				paramMap.put("searchType", searchTypeComb.getSelectedIndex());
 				if(null != employeeSearchComb.getSelectedItem()) {
 					Employee employee = (Employee) employeeSearchComb.getSelectedItem();
 					if(employee.getId() > 0) {
@@ -268,8 +280,9 @@ public class SalePanel extends JGridPanel<Sale> {
 				newRow.add(null == sale.getId() ? "" : String.valueOf(sale.getId()));
 				newRow.add(sale.getName());
 				newRow.add(StringUtil.isEmpty(sale.getEmployeeName()) ? "" : sale.getEmployeeName());
-				newRow.add(StringUtil.isEmpty(sale.getLastSaleName()) ? "" : sale.getLastSaleName());
 				newRow.add(null == sale.getSaleDate() ? "" : DateUtil.formatFullDate(sale.getSaleDate()));
+				newRow.add(StringUtil.isEmpty(sale.getLastSaleName()) ? "" : sale.getLastSaleName());
+				
 				newRow.add(null == sale.getRewardPoints() ? "" : String.valueOf(sale.getRewardPoints()));
 				newRow.add(StringUtil.isEmpty(sale.getLevelName()) ? "" : sale.getLevelName());
 				newRow.add(String.valueOf(sale.getSalary()/100.0));
