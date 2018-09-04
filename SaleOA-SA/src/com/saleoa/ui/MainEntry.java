@@ -27,6 +27,7 @@ import com.saleoa.service.ISaleLogService;
 import com.saleoa.service.ISaleLogServiceImpl;
 import com.saleoa.service.ISaleService;
 import com.saleoa.service.ISaleServiceImpl;
+import com.saleoa.ui.balanceLevel.BalanceLevelPanel;
 import com.saleoa.ui.department.DepartmentPanel;
 import com.saleoa.ui.employee.EmployeePanel;
 import com.saleoa.ui.employeeRole.EmployeeRolePanel;
@@ -112,6 +113,11 @@ public class MainEntry {
 		salaryConfigItem.setName(ModuleName.SALARYCONFIG);
 		salaryConfigItem.addActionListener(menuItemListener());
 		sysMenu.add(salaryConfigItem);
+		
+		JMenuItem balanceLevelItem = new JMenuItem(ModuleName.BALANCELEVEL);
+		balanceLevelItem.setName(ModuleName.BALANCELEVEL);
+		balanceLevelItem.addActionListener(menuItemListener());
+		sysMenu.add(balanceLevelItem);
 		//JPanel panel = new JPanel();
 		
 		//获得系统托盘实例
@@ -212,6 +218,9 @@ public class MainEntry {
 				} else if(ModuleName.SALARYCONFIG.equals(item.getName())) {
 					SalaryConfigPanel salaryConfigPanel = new SalaryConfigPanel();
 					tabPanel.add(salaryConfigPanel);
+				} else if(ModuleName.BALANCELEVEL.equals(item.getName())) {
+					BalanceLevelPanel balanceLevelPanel = new BalanceLevelPanel();
+					tabPanel.add(balanceLevelPanel);
 				}
 			}
 		};

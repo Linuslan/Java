@@ -33,9 +33,13 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 		if(null == paramMap.get("saleDate<=")) {
 			paramMap.put("saleDate<=", "'"+DateUtil.getCustomEndDateStrOfMonthByDate(new Date())+"'");
 		}
+		int searchType = 0;	//查询维度，0：查询本人的销售业绩；1：查询总的销售业绩
 		try {
 			//String sql = "SELECT t.*, SUM(t1.bonus) FROM tbl_oa_sale t LEFT JOIN tbl_oa_sale_log t1 ON t.id=t1.sale_id";
-			String sql1 = "SELECT * FROM tbl_oa_sale";
+			if(null != paramMap.get("searchType")) {
+				searchType = (Integer) paramMap.get("searchType");
+			}
+			String sql1 = "SELECT * FROM "+(searchType == 0 ? "tbl_oa_sale" : "sale");
 			String sql2 = "SELECT sale_id, SUM(bonus) salary FROM tbl_oa_sale_log";
 			String condition = "";
 			if(null != paramMap.get("saleDate>=")) {
@@ -50,12 +54,18 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 				}
 				condition += "sale_date<="+paramMap.get("saleDate<=").toString();
 			}
+			
+			Long employeeId = 1L;
 			if(null != paramMap.get("employeeId")) {
-				if(!StringUtil.isEmpty(condition)) {
-					condition += " AND ";
+				if(searchType == 0) {
+					if(!StringUtil.isEmpty(condition)) {
+						condition += " AND ";
+					}
+					condition += "employee_id="+paramMap.get("employeeId");
 				}
-				condition += "employee_id="+paramMap.get("employeeId");
+				employeeId = (Long) paramMap.get("employeeId");
 			}
+			String withSql = "WITH RECURSIVE sale AS(SELECT * FROM (SELECT * FROM tbl_oa_sale t WHERE t.employee_id="+employeeId+" ORDER BY t.id ASC LIMIT 1) t UNION SELECT t2.* FROM sale t1 join tbl_oa_sale t2 ON t1.id=t2.last_sale_id)";
 			sql1 = sql1+(StringUtil.isEmpty(condition)?"":" WHERE ")+condition;
 			sql2 = sql2+(StringUtil.isEmpty(condition)?"":" WHERE ")+condition+" GROUP BY sale_id";
 			String selectColumn = "SELECT t.id, t.name, t.name_en," +
@@ -66,9 +76,13 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 					" t.department_id, t.department_name, t1.salary";
 			String selectWhere = " FROM ("+sql1+") t LEFT JOIN ("+sql2+") t1 ON t.id=t1.sale_id";
 			String sql = selectColumn +
-					selectWhere + " LIMIT "+(pageNo-1)*limit+", "+limit;
+					selectWhere;
+			
+			if(searchType != 0) {
+				sql = withSql + " "+sql;
+			}
 			System.out.println(sql);
-			PreparedStatement ps = JdbcHelper.getConnection().prepareStatement(sql);
+			PreparedStatement ps = JdbcHelper.getConnection().prepareStatement(sql+ " LIMIT "+(pageNo-1)*limit+", "+limit);
 			ResultSet rs = ps.executeQuery();
 			List<Sale> list = new ArrayList<Sale> ();
 			while(rs.next()) {
@@ -110,7 +124,7 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
-			String countSql = "SELECT COUNT(*) "+selectWhere;
+			String countSql = "SELECT COUNT(*) FROM ("+sql+")";
 			ps = JdbcHelper.getConnection().prepareStatement(countSql);
 			rs = ps.executeQuery();
 			Long count = 0l;
@@ -119,7 +133,7 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 			}
 			long totalPage = count % limit == 0 ? count / limit : (int)(count / limit) + 1;
 			
-			String sumSQL = "SELECT SUM(bonus) salary FROM tbl_oa_sale_log"+(StringUtil.isEmpty(condition)?"":" WHERE ")+condition;
+			String sumSQL = "SELECT SUM(salary) salary FROM ("+sql+")";
 			ps = JdbcHelper.getConnection().prepareStatement(sumSQL);
 			rs = ps.executeQuery();
 			Long sum = 0l;
@@ -129,8 +143,11 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 			Sale sale = new Sale();
 			sale.setName("汇总");
 			sale.setSalary(sum);
+			sale.setLastSaleName("销售总数：");
+			sale.setRewardPoints(count);
 			list.add(sale);
 			pageObj = new Page<Sale> (pageNo, totalPage, limit, list);
+			pageObj.setTotalCount(count);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -416,7 +433,7 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 			if(null == bl && managerCount >= maxBalanceLevel.getManagerCount()) {
 				bl = maxBalanceLevel;
 			}
-			if(balanceLevel.getManagerCount() >= bl.getManagerCount()) {
+			if(null == balanceLevel || balanceLevel.getManagerCount() >= bl.getManagerCount()) {
 				balanceLevel = bl;
 			}
 		}

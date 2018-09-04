@@ -1,5 +1,7 @@
 package com.saleoa.model;
 
+import java.util.Date;
+
 import com.saleoa.common.annotation.Column;
 import com.saleoa.common.annotation.Table;
 import com.saleoa.common.constant.JdbcType;
@@ -22,6 +24,9 @@ public class BalanceLevel {
 	//要求达到的经理数
 	@Column(name="manager_count", jdbcType=JdbcType.INTEGER)
 	private Integer managerCount;
+	
+	@Column(name="create_date")
+	private Date createDate;
 
 	public Long getId() {
 		return id;
@@ -45,5 +50,13 @@ public class BalanceLevel {
 
 	public void setManagerCount(Integer managerCount) {
 		this.managerCount = managerCount;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 }

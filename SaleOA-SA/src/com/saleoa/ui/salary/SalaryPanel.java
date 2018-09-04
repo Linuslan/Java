@@ -351,6 +351,10 @@ public class SalaryPanel extends JGridPanel<Salary> {
 					JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 					return;
 				}
+				if(1 == salary.getStatus()) {
+					JOptionPane.showMessageDialog(lp, "工资已生效，无法删除", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
 				int value = JOptionPane.showConfirmDialog(lp, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
 					boolean success = false;

@@ -122,9 +122,9 @@ public class DepartmentPanel extends JPanel {
 				}
 				int value = JOptionPane.showConfirmDialog(lp, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
-					//boolean success = departmentDao.delete(department);
-					if(true/*success*/) {
-						lp.initGrid();
+					boolean success = departmentDao.delete(department);
+					if(success) {
+						initGrid();
 						JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}

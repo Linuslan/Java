@@ -62,7 +62,11 @@ public class SalaryDialog {
 	private Long companyLend = 0L;
 	private Long tax = 0L;
 	private Long supposedMoney = 0L;
+	private Long directSellMoney = 0L;
+	private Long balanceMoney = 0L;
 	final JFormattedTextField salaryIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField directSellMoneyIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
+	final JFormattedTextField balanceMoneyIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
 	final JFormattedTextField deductMoneyIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
 	final JFormattedTextField reachGoalBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
 	final JFormattedTextField overGoalBonusIpt = new JFormattedTextField(NumberFormat.getNumberInstance(Locale.CHINA));
@@ -97,6 +101,8 @@ public class SalaryDialog {
 			this.companyLend = salary.getCompanyLend();
 			this.tax = salary.getTax();
 			this.supposedMoney = salary.getSupposedMoney();
+			this.directSellMoney = salary.getDirectSellMoney();
+			this.balanceMoney = salary.getBalanceMoney();
 		}
 		
 		dialog.setBackground(Color.WHITE);
@@ -206,6 +212,53 @@ public class SalaryDialog {
 		reachGoalBonusIpt.setLocation(FormCss.getLocation(reachGoalBonusLbl, salaryIpt));
 		reachGoalBonusIpt.setText(String.valueOf(this.reachGoalBonus/100.0));
 		reachGoalBonusIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel directSellMoneyLbl = new JLabel("直销奖：");
+		directSellMoneyLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(directSellMoneyLbl);
+		directSellMoneyLbl.setLocation(FormCss.getLocation(null, reachGoalBonusLbl));
+		
+		directSellMoneyIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(directSellMoneyIpt);
+		directSellMoneyIpt.setLocation(FormCss.getLocation(directSellMoneyLbl, reachGoalBonusIpt));
+		directSellMoneyIpt.setText(String.valueOf(this.directSellMoney/100.0));
+		directSellMoneyIpt.addFocusListener(new FocusListener() {
+
+			public void focusGained(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void focusLost(FocusEvent arg0) {
+				// TODO Auto-generated method stub
+				calculateTotalMoney();
+			}
+			
+		});
+		
+		JLabel balanceMoneyLbl = new JLabel("差额工资：");
+		balanceMoneyLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		panel.add(balanceMoneyLbl);
+		balanceMoneyLbl.setLocation(FormCss.getLocation(null, directSellMoneyLbl));
+		
+		balanceMoneyIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
+		panel.add(balanceMoneyIpt);
+		balanceMoneyIpt.setLocation(FormCss.getLocation(balanceMoneyLbl, employeeComb));
+		balanceMoneyIpt.setText(String.valueOf(this.balanceMoney/100.0));
+		
+		balanceMoneyIpt.addFocusListener(new FocusListener() {
 
 			public void focusGained(FocusEvent arg0) {
 				// TODO Auto-generated method stub
@@ -615,6 +668,16 @@ public class SalaryDialog {
 		Double reachGoalBonusDl = Double.parseDouble(reachGoalBonusStr);
 		Long reachGoalBonus = (long) (reachGoalBonusDl*100);
 		
+		String directSellMoneyStr = directSellMoneyIpt.getText();
+		directSellMoneyStr = directSellMoneyStr.replaceAll(",", "");
+		Double directSellMoneyDl = Double.parseDouble(directSellMoneyStr);
+		Long directSellMoney = (long) (directSellMoneyDl*100);
+		
+		String balanceMoneyStr = balanceMoneyIpt.getText();
+		balanceMoneyStr = balanceMoneyStr.replaceAll(",", "");
+		Double balanceMoneyDl = Double.parseDouble(balanceMoneyStr);
+		Long balanceMoney = (long) (balanceMoneyDl*100);
+		
 		String overGoalBonusStr = overGoalBonusIpt.getText();
 		overGoalBonusStr = overGoalBonusStr.replaceAll(",", "");
 		Double overGoalBonusDl = Double.parseDouble(overGoalBonusStr);
@@ -645,7 +708,7 @@ public class SalaryDialog {
 		Double companyLendDl = Double.parseDouble(companyLendStr);
 		Long companyLend = (long) (companyLendDl*100);
 		
-		Long supposedMoney = reachGoalBonus + overGoalBonus + officeManageBonus
+		Long supposedMoney = reachGoalBonus + directSellMoney + balanceMoney + overGoalBonus + officeManageBonus
 				+ fullDutyBonus + totalReachGoalBonus + money - deductMoney;
 		supposedMoneyIpt.setText(String.valueOf(supposedMoney/100.0));
 		Long tax = 0L;

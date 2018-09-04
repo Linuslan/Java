@@ -56,7 +56,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		try {
 			Long id = JdbcHelper.id(getTClass());
 			for(int i = 0; i < list.size(); i ++) {
-				id += i;
+				id ++;
 				BeanUtil.setValue(list.get(i), "id", id);
 			}
 			JdbcHelper.insertBatch(list);
@@ -122,7 +122,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		return false;
+		return success;
 	}
 
 	public List<T> select(Map<String, Object> paramMap) {
@@ -133,7 +133,8 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				getTClass().getField("isDelete");
 				paramMap.put("isDelete", 0);
 			} catch(Exception ex) {
-				ex.printStackTrace();
+				//ex.printStackTrace();
+				System.out.println("Œ¥’“µΩis_delete Ù–‘");
 			}
 			
 			String sql = JdbcHelper.selectSql(getTClass(), paramMap, false, null, null);

@@ -227,8 +227,14 @@ public class EmployeePanel extends JGridPanel<Employee> {
 				}
 				int value = JOptionPane.showConfirmDialog(ep, "您确定删除所选数据吗？", "温馨提示", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 				if(value == JOptionPane.YES_OPTION) {
-					//boolean success = levelDao.delete(level);
-					if(true/*success*/) {
+					boolean success = false;
+					try {
+						success = employeeService.delete(employee);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(success) {
 						ep.initGrid();
 						JOptionPane.showMessageDialog(ep, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 						return;

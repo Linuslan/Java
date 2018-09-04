@@ -7,11 +7,15 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,7 +23,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 import com.eltima.components.ui.DatePicker;
 import com.saleoa.common.constant.FormCss;
@@ -82,6 +85,7 @@ public class SaleDialog {
 		employeeComb.setLocation(FormCss.getLocation(employeeLbl, null));
 		panel.add(employeeComb);
 		
+		
 		JLabel saleNoLbl = new JLabel("售出编号：");
 		saleNoLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(saleNoLbl);
@@ -128,6 +132,41 @@ public class SaleDialog {
 			lastSaleComb.addItem(saleList.get(i));
 		}
 		
+		employeeComb.addItemListener(new ItemListener() {
+
+			public void itemStateChanged(ItemEvent event) {
+				// TODO Auto-generated method stub
+				if(event.getStateChange() == ItemEvent.SELECTED) {
+					Employee employee = (Employee) event.getItem();
+					long maxSaleNo = saleService.getMaxNoByEmployeeId(employee.getId());
+					if(maxSaleNo > 0) {
+						maxSaleNo ++;
+					}
+					saleNoIpt.setText(String.valueOf(maxSaleNo));
+					
+					Map<String, Object> paramMap = new HashMap<String, Object> ();
+					paramMap.put("employeeId", employee.getId());
+					paramMap.put("orderby", " ORDER BY id DESC");
+					List<Sale> saleList = null;
+					try {
+						saleList = saleService.select(paramMap);
+						if(null == saleList || saleList.isEmpty()) {
+							saleList = saleService.select(null);
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						saleList = new ArrayList<Sale>();
+					}
+					lastSaleComb.removeAllItems();
+					for(int i = 0; i < saleList.size(); i ++) {
+						lastSaleComb.addItem(saleList.get(i));
+					}
+				}
+			}
+			
+		});
+		
 		lastSaleComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		lastSaleComb.setLocation(FormCss.getLocation(lastSaleLbl, datePicker));
 		panel.add(lastSaleComb);
@@ -159,9 +198,14 @@ public class SaleDialog {
 					return;
 				}
 				if(null == lastSaleComb.getSelectedItem()) {
-					JOptionPane.showMessageDialog(dialog, "请选择上一套售出", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(dialog, "请选择推荐人", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+				Sale lastSale = (Sale) lastSaleComb.getSelectedItem();
+				/*if(lastSale.getId().longValue() <= 0l) {
+					JOptionPane.showMessageDialog(dialog, "请选择推荐人", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}*/
 				Sale temp = new Sale();
 				if(null != sale) {
 					BeanUtil.copyBean(sale, temp);
@@ -176,7 +220,7 @@ public class SaleDialog {
 				temp.setSaleNo(saleNo);
 				temp.setEmployeeId(employee.getId());
 				temp.setEmployeeName(employee.getName());
-				Sale lastSale = (Sale) lastSaleComb.getSelectedItem();
+				
 				temp.setLastSaleId(lastSale.getId());
 				temp.setLastSaleName(lastSale.getName());
 				temp.setSaleDate((Date) datePicker.getValue());

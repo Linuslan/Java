@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.Set;
 
 import com.saleoa.common.annotation.Column;
 import com.saleoa.common.constant.JdbcType;
+import com.saleoa.model.BalanceLevel;
 import com.saleoa.model.Department;
 import com.saleoa.model.Employee;
 import com.saleoa.model.EmployeeRole;
@@ -37,6 +39,25 @@ public class JdbcHelper {
 			conn = DriverManager.getConnection(url);
 		}
 		return conn;
+	}
+	
+	public static void openTransaction() {
+		try {
+			conn.setAutoCommit(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void commitTransaction() {
+		try {
+			conn.commit();
+			conn.setAutoCommit(true);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static boolean close(ResultSet rs, PreparedStatement ps, Connection conn) {
@@ -118,6 +139,31 @@ public class JdbcHelper {
 			}
 		}
 		sql += ")";
+		return sql;
+	}
+	
+	public static String tableIndexSql(Class cls) throws Exception {
+		String sql = "";
+		String tableName = AnnotationUtil.getTableName(cls);
+		List<Annotation> annotations = new ArrayList<Annotation> ();
+		Field[] fields = cls.getDeclaredFields();
+		for(int i = 0; i < fields.length; i ++) {
+			Field field = fields[i];
+			Annotation[] fieldAnnoArr = field.getDeclaredAnnotations();
+			for(int j = 0; j < fieldAnnoArr.length; j ++) {
+				Annotation annotation = fieldAnnoArr[j];
+				if(annotation.annotationType().equals(Column.class)) {
+					annotations.add(annotation);
+				}
+			}
+		}
+		if(StringUtil.isEmpty(tableName)) {
+			ExceptionUtil.throwExcep("Table name is null.");
+		}
+		if(annotations.isEmpty()) {
+			ExceptionUtil.throwExcep("Column not found.");
+		}
+		sql = "CREATE INDEX IF NOT EXISTS id_index ON "+tableName+" (id)";
 		return sql;
 	}
 	
@@ -496,6 +542,11 @@ public class JdbcHelper {
 			if(null == paramMap || paramMap.isEmpty()) {
 				ExceptionUtil.throwExcep("Condition map is null.");
 			}
+			String orderby = " ORDER BY id ASC";
+			if(null != paramMap.get("orderby")) {
+				orderby = paramMap.get("orderby").toString();
+				paramMap.remove("orderby");
+			}
 			sql += " WHERE";
 			Field[] fields = cls.getDeclaredFields();
 			Map<String, Object> param = new HashMap<String, Object> ();
@@ -546,7 +597,7 @@ public class JdbcHelper {
 					sql += " AND";
 				}
 			}
-			
+			sql += orderby;
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		} finally {
@@ -623,40 +674,77 @@ public class JdbcHelper {
 		Class<ManagerLevel> managerLevelCls = ManagerLevel.class;
 		Class<SalaryConfig> salaryConfigCls = SalaryConfig.class;
 		Class<SaleLog> saleLogCls = SaleLog.class;
+		Class<BalanceLevel> balanceLevelCls = BalanceLevel.class;
 		String sql = tableSql(employeeCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableIndexSql(employeeCls);
 		executeSql(sql);
 		System.out.println(sql);
 		sql = tableSql(levelCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(levelCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(salaryCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(salaryCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(saleCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(saleCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(saleSalaryCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(saleSalaryCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(employeeRoleCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(employeeRoleCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(departmentCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(departmentCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(managerLevelCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(managerLevelCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(salaryConfigCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(salaryConfigCls);
+		System.out.println(sql);
+		executeSql(sql);
 		sql = tableSql(saleLogCls);
 		executeSql(sql);
 		System.out.println(sql);
+		sql = tableIndexSql(saleLogCls);
+		System.out.println(sql);
+		executeSql(sql);
+		sql = tableSql(balanceLevelCls);
+		executeSql(sql);
+		System.out.println(sql);
+		sql = tableIndexSql(balanceLevelCls);
+		System.out.println(sql);
+		executeSql(sql);
 		return isSuccess;
 	}
 	
-	public static void initEmployee() {
+	/*public static void initEmployee() {
 		try {
 			Employee employee = new Employee();
 			employee.setId(0L);
@@ -683,7 +771,7 @@ public class JdbcHelper {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
-	}
+	}*/
 	
 	public static void initSale() {
 		try {
@@ -716,7 +804,7 @@ public class JdbcHelper {
 	
 	public static void main(String[] args) {
 		try {
-			initTable();
+			//initTable();
 			//initEmployee();
 			//initSale();
 			/*Level level = new Level();
