@@ -40,6 +40,7 @@ import com.saleoa.dao.ISalaryDao;
 import com.saleoa.dao.ISalaryDaoImpl;
 import com.saleoa.dao.ISaleDao;
 import com.saleoa.dao.ISaleDaoImpl;
+import com.saleoa.model.BalanceLevel;
 import com.saleoa.model.Employee;
 import com.saleoa.model.ManagerLevel;
 import com.saleoa.model.Salary;
@@ -145,6 +146,14 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 						mngSalarys = new ArrayList<Salary> ();
 						mngSalaryMap.put(departmentId.longValue(), mngSalarys);
 					}
+					BalanceLevel balanceLevel = this.saleDao.getBalanceLevelByEmployeeId(employee.getId());
+					String endDateStr = DateUtil.getCustomEndDateStr(year, month);
+					Map<String, Object> paramMap = new HashMap<String, Object> ();
+					paramMap.put("saleDate>=", dateStr);
+					paramMap.put("saleDate<=", endDateStr);
+					long totalSaleCount = this.saleDao.getMinSaleCount(employee.getId(), paramMap);
+					long balanceMoney = balanceLevel.getBonus()*totalSaleCount;
+					mngSalary.setBalanceMoney(balanceMoney);
 					mngSalarys.add(mngSalary);
 				}
 			}

@@ -2,11 +2,16 @@ package com.saleoa.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.saleoa.base.IBaseServiceImpl;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.ExceptionUtil;
+import com.saleoa.dao.IBalanceLevelDao;
+import com.saleoa.dao.IBalanceLevelDaoImpl;
 import com.saleoa.dao.IDepartmentDao;
 import com.saleoa.dao.IDepartmentDaoImpl;
 import com.saleoa.dao.IEmployeeDao;
@@ -21,6 +26,7 @@ import com.saleoa.dao.ISaleLogDao;
 import com.saleoa.dao.ISaleLogDaoImpl;
 import com.saleoa.dao.ISaleSalaryDao;
 import com.saleoa.dao.ISaleSalaryDaoImpl;
+import com.saleoa.model.BalanceLevel;
 import com.saleoa.model.Employee;
 import com.saleoa.model.Level;
 import com.saleoa.model.ManagerLevel;
@@ -37,6 +43,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 	private IDepartmentDao departmentDao;
 	private IManagerLevelDao managerLevelDao;
 	private ISaleLogDao saleLogDao;
+	private IBalanceLevelDao balanceLevelDao;
 	public ISaleServiceImpl() {
 		saleDao = new ISaleDaoImpl();
 		levelDao = new ILevelDaoImpl();
@@ -46,6 +53,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		managerLevelDao = new IManagerLevelDaoImpl();
 		saleSalaryDao = new ISaleSalaryDaoImpl();
 		saleLogDao = new ISaleLogDaoImpl();
+		balanceLevelDao = new IBalanceLevelDaoImpl();
 	}
 	
 	/**
@@ -196,5 +204,59 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		updates.add(lastSale);
 		success = true;
 		return success;
+	}
+	
+	public BalanceLevel getBalanceLevelByEmployeeId(Long employeeId) {
+		Sale sale = this.saleDao.selectFirstSaleByEmployeeId(employeeId);
+		Map<String, Object> paramMap = new HashMap<String, Object> ();
+		paramMap.put("lastSaleId", sale.getId());
+		List<Sale> sales = this.saleDao.select(paramMap);
+		List<BalanceLevel> balances = this.balanceLevelDao.select(null);
+		BalanceLevel balanceLevel = null;
+		BalanceLevel maxBalanceLevel = null;
+		Iterator<BalanceLevel> blIter = balances.iterator();
+		while(blIter.hasNext()) {
+			BalanceLevel bl = blIter.next();
+			if(null == maxBalanceLevel
+					|| bl.getManagerCount() >= maxBalanceLevel.getManagerCount()) {
+				maxBalanceLevel = bl;
+			}
+		}
+		for(int i = 0; i < sales.size(); i ++) {
+			int managerCount = this.saleDao.selectManagerCountBySale(sales.get(i));
+			BalanceLevel bl = null;
+			blIter = balances.iterator();
+			while(blIter.hasNext()) {
+				if(blIter.next().getManagerCount() == managerCount) {
+					bl = blIter.next();
+					break;
+				}
+			}
+			if(null == bl && managerCount >= maxBalanceLevel.getManagerCount()) {
+				bl = maxBalanceLevel;
+			}
+			if(balanceLevel.getManagerCount() >= bl.getManagerCount()) {
+				balanceLevel = bl;
+			}
+		}
+		return balanceLevel;
+	}
+	
+	public long getMinSaleCount(Long employeeId, Map<String, Object> paramMap) {
+		long count = 0;
+		Sale sale = this.saleDao.selectFirstSaleByEmployeeId(employeeId);
+		Map<String, Object> paramMap2 = new HashMap<String, Object> ();
+		paramMap.put("lastSaleId", sale.getId());
+		List<Sale> sales = this.saleDao.select(paramMap2);
+		
+		for(int i = 0; i < sales.size(); i ++) {
+			sale = sales.get(i);
+			paramMap.put("saleId", sale.getId());
+			long cnt = this.saleDao.selectSaleCountBySale(paramMap);
+			if(count > cnt) {
+				count = cnt;
+			}
+		}
+		return count;
 	}
 }

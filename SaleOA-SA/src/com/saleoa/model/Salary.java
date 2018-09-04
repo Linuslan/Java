@@ -35,11 +35,11 @@ public class Salary {
 	
 	//工资金额，以分为单位，精确到小数点后两位
 	@Column(name="money", jdbcType=JdbcType.INTEGER)
-	private Long money;
+	private Long money=0l;
 	
 	//扣款
 	@Column(name="deduct_money", jdbcType=JdbcType.INTEGER)
-	private Long deductMoney;
+	private Long deductMoney=0l;
 	
 	//创建时间
 	@Column(name="create_date")
@@ -51,18 +51,18 @@ public class Salary {
 	
 	//状态，预留字段
 	@Column(name="status", jdbcType=JdbcType.INTEGER)
-	private Integer status;
+	private Integer status=0;
 	
 	//删除状态，0：未删除；1：已删除；
 	@Column(name="is_delete", jdbcType=JdbcType.INTEGER)
-	private Integer isDelete;
+	private Integer isDelete=0;
 	
 	@Column(name="memo", length=4000)
 	private String memo;
 	
 	//最终工资
 	@Column(name="total_money", jdbcType=JdbcType.INTEGER)
-	private Long totalMoney;
+	private Long totalMoney=0l;
 	
 	//3500以上扣税20%
 	@Column(name="tax", jdbcType=JdbcType.INTEGER)
@@ -70,34 +70,42 @@ public class Salary {
 	
 	//达标奖
 	@Column(name="reach_goal_bonus", jdbcType=JdbcType.INTEGER)
-	private Long reachGoalBonus;
+	private Long reachGoalBonus=0l;
 	
 	//达标超额奖
 	@Column(name="over_goal_bonus", jdbcType=JdbcType.INTEGER)
-	private Long overGoalBonus;
+	private Long overGoalBonus=0l;
 	
 	//内勤管理奖
 	@Column(name="office_manage_bonus", jdbcType=JdbcType.INTEGER)
-	private Long officeManageBonus;
+	private Long officeManageBonus=0l;
 	
 	//满勤奖
 	@Column(name="full_duty_bonus", jdbcType=JdbcType.INTEGER)
-	private Long fullDutyBonus;
+	private Long fullDutyBonus=0l;
 	
 	//总达标奖
 	@Column(name="total_reach_goal_bonus", jdbcType=JdbcType.INTEGER)
-	private Long totalReachGoalBonus;
+	private Long totalReachGoalBonus=0l;
 	
 	//罚款
 	@Column(name="amercement", jdbcType=JdbcType.INTEGER)
-	private Long amercement;
+	private Long amercement=0l;
 	
 	//公司借款
 	@Column(name="company_lend", jdbcType=JdbcType.INTEGER)
-	private Long companyLend;
+	private Long companyLend=0l;
 	
 	@Column(name="supposed_money", jdbcType=JdbcType.INTEGER)
-	private Long supposedMoney;
+	private Long supposedMoney=0l;
+	
+	//差额
+	@Column(name="balance_money", jdbcType=JdbcType.INTEGER)
+	private Long balanceMoney=0l;
+	
+	//直销
+	@Column(name="direct_sell", jdbcType=JdbcType.INTEGER)
+	private Long directSellMoney=0l;
 
 	public Long getId() {
 		return id;
@@ -289,5 +297,21 @@ public class Salary {
 
 	public void setSupposedMoney(Long supposedMoney) {
 		this.supposedMoney = supposedMoney;
+	}
+
+	public Long getBalanceMoney() {
+		return balanceMoney;
+	}
+
+	public void setBalanceMoney(Long balanceMoney) {
+		this.balanceMoney = balanceMoney;
+	}
+
+	public Long getDirectSellMoney() {
+		return directSellMoney;
+	}
+
+	public void setDirectSellMoney(Long directSellMoney) {
+		this.directSellMoney = directSellMoney;
 	}
 }

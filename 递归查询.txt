@@ -1,0 +1,5 @@
+with recursive sale as (SELECT * FROM (SELECT * FROM tbl_oa_sale t WHERE employee_id=1 ORDER BY id ASC LIMIT 1) t UNION SELECT t.* FROM sale t1 join tbl_oa_sale t ON t1.id=t.last_sale_id) SELECT * FROM sale;
+
+with recursive sale as (SELECT * FROM (SELECT * FROM tbl_oa_sale t WHERE id=1 ORDER BY id ASC LIMIT 1) t UNION SELECT t.* FROM sale t1 join tbl_oa_sale t ON t1.id=t.last_sale_id) SELECT t.* FROM sale s INNER JOIN tbl_oa_employee t ON s.employee_id=t.id WHERE t.status = 0 AND s.employee_id <> 1 GROUP BY employee_id;
+
+with recursive sale as (SELECT * FROM (SELECT * FROM tbl_oa_sale t WHERE id=1 ORDER BY id ASC LIMIT 1) t UNION SELECT t.* FROM sale t1 join tbl_oa_sale t ON t1.id=t.last_sale_id) SELECT COUNT(*) FROM sale s WHERE s.employee_id=1 AND s.sale_date >= '';

@@ -2,6 +2,7 @@ package com.saleoa.base;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,12 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 	public String getKey() {
 		Class<T> cls = getTClass();
 		String key = cls.getSimpleName()+"_";
+		return key;
+	}
+	
+	public String getPKey() {
+		Class<T> cls = getTClass();
+		String key = cls.getSimpleName()+"_p_";
 		return key;
 	}
 	
@@ -169,6 +176,9 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		try {
 			String sql = JdbcHelper.selectSql(getTClass(), paramMap, false, currPage, limit);
 			List<T> list = JdbcHelper.select(sql, getTClass());
+			if(null == list) {
+				list = new ArrayList<T> ();
+			}
 			sql = JdbcHelper.selectSql(getTClass(), paramMap, true, null, null);
 			page = (Page<T>) JdbcHelper.select(sql, Page.class).get(0);
 			page.setData(list);

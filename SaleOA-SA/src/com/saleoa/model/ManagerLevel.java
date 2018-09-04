@@ -15,6 +15,12 @@ public class ManagerLevel {
 	@Column(name="name")
 	private String name;
 	
+	@Column(name="department_id", jdbcType=JdbcType.INTEGER)
+	private Long departmentId;
+	
+	@Column(name="department_name")
+	private String departmentName;
+	
 	//»ù´¡¹¤×Ê
 	@Column(name="basic_salary", jdbcType=JdbcType.INTEGER)
 	private Long basicSalary;
@@ -109,5 +115,21 @@ public class ManagerLevel {
 
 	public void setReachGoalBonus(Long reachGoalBonus) {
 		this.reachGoalBonus = reachGoalBonus;
+	}
+
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 }

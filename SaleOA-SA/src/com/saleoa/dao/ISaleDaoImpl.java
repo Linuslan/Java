@@ -5,18 +5,25 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.saleoa.base.IBaseDaoImpl;
+import com.saleoa.common.cache.DataCache;
+import com.saleoa.common.constant.EmployeeRoleConst;
 import com.saleoa.common.plugin.Page;
 import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.JdbcHelper;
 import com.saleoa.common.utils.StringUtil;
+import com.saleoa.model.BalanceLevel;
 import com.saleoa.model.Sale;
 import com.saleoa.model.SaleSalary;
 
 public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
+	
+	private IBalanceLevelDao balanceLevelDao = new IBalanceLevelDaoImpl();
 	
 	public Page<Sale> selectPage(Map<String, Object> paramMap, long pageNo, int limit) {
 		Page<Sale> pageObj = null;
@@ -85,6 +92,23 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 				sale.setDepartmentName(rs.getString("department_name"));
 				sale.setSalary(rs.getLong("salary"));
 				list.add(sale);
+			}
+			try {
+				Sale sale = null;
+				for(int i = 0; i < list.size(); i ++) {
+					sale = list.get(i);
+					if(0 >= sale.getLastSaleId().longValue()) {
+						continue;
+					}
+					String pKey = getPKey() + sale.getLastSaleId().longValue();
+					String cKey = getKey() + sale.getId();
+					if(null == DataCache.treeGet(pKey)
+							|| null == DataCache.treeGetChild(pKey, cKey)) {
+						DataCache.treePush(pKey, cKey, sale);
+					}
+				}
+			} catch(Exception ex) {
+				ex.printStackTrace();
 			}
 			String countSql = "SELECT COUNT(*) "+selectWhere;
 			ps = JdbcHelper.getConnection().prepareStatement(countSql);
@@ -164,15 +188,264 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 		return number;
 	}
 	
+	public Sale selectById(Long id) {
+		Sale sale = super.selectById(id);
+		if(0 >= sale.getLastSaleId().longValue()) {
+			return sale;
+		}
+		String pKey = getPKey() + sale.getLastSaleId().longValue();
+		String cKey = getKey() + sale.getId();
+		if(null == DataCache.treeGet(pKey)
+				|| null == DataCache.treeGetChild(pKey, cKey)) {
+			DataCache.treePush(pKey, cKey, sale);
+		}
+		return sale;
+	}
+	
+	public List<Sale> select(Map<String, Object> paramMap) {
+		List<Sale> list = super.select(paramMap);
+		Sale sale = null;
+		for(int i = 0; i < list.size(); i ++) {
+			sale = list.get(i);
+			if(0 >= sale.getLastSaleId().longValue()) {
+				continue;
+			}
+			String pKey = getPKey() + sale.getLastSaleId().longValue();
+			String cKey = getKey() + sale.getId();
+			if(null == DataCache.treeGet(pKey)
+					|| null == DataCache.treeGetChild(pKey, cKey)) {
+				DataCache.treePush(pKey, cKey, sale);
+			}
+		}
+		return list;
+	}
+	
 	public boolean add(Sale sale) {
 		boolean success = false;
 		try {
 			super.add(sale);
-			
+			if(0 >= sale.getLastSaleId().longValue()) {
+				return true;
+			}
+			String pKey = getPKey() + sale.getLastSaleId().longValue();
+			String cKey = getKey() + sale.getId();
+			DataCache.treePush(pKey, cKey, sale);
+			success = true;
 		} catch(Exception ex) {
-			
+			ex.printStackTrace();
 		}
 		return success;
 	}
 	
+	public boolean addBatch(List<Sale> list) {
+		boolean success = false;
+		try {
+			super.addBatch(list);
+			Sale sale = null;
+			for(int i = 0; i < list.size(); i ++) {
+				sale = list.get(i);
+				if(0 >= sale.getLastSaleId().longValue()) {
+					continue;
+				}
+				String pKey = getPKey() + sale.getLastSaleId().longValue();
+				String cKey = getKey() + sale.getId();
+				DataCache.treePush(pKey, cKey, sale);
+			}
+			success = true;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return success;
+	}
+	
+	public boolean update(Sale sale) {
+		boolean success = false;
+		try {
+			super.update(sale);
+			if(0 >= sale.getLastSaleId().longValue()) {
+				return true;
+			}
+			String pKey = getPKey() + sale.getLastSaleId().longValue();
+			String cKey = getKey() + sale.getId();
+			DataCache.treePush(pKey, cKey, sale);
+			success = true;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return success;
+	}
+	
+	public boolean updateBatch(List<Sale> list) {
+		boolean success = false;
+		try {
+			super.updateBatch(list);
+			Sale sale = null;
+			for(int i = 0; i < list.size(); i ++) {
+				sale = list.get(i);
+				if(0 >= sale.getLastSaleId().longValue()) {
+					continue;
+				}
+				String pKey = getPKey() + sale.getLastSaleId().longValue();
+				String cKey = getKey() + sale.getId();
+				DataCache.treePush(pKey, cKey, sale);
+			}
+			success = true;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return success;
+	}
+	
+	public boolean delete(Sale sale) {
+		boolean success = false;
+		try {
+			super.delete(sale);
+			if(0 >= sale.getLastSaleId().longValue()) {
+				return true;
+			}
+			String pKey = getPKey() + sale.getLastSaleId().longValue();
+			String cKey = getKey() + sale.getId();
+			DataCache.treeRemoveChild(pKey, cKey);
+			success = true;
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return success;
+	}
+	
+	/**
+	 * 通过员工id查询员工的第一个售出
+	 * @param employeeId
+	 * @return
+	 */
+	public Sale selectFirstSaleByEmployeeId(Long employeeId) {
+		Sale sale = null;
+		try {
+			String sql = "SELECT * FROM tbl_oa_sale t WHERE employee_id="+employeeId+" ORDER BY id ASC LIMIT 1";
+			List<Sale> sales = JdbcHelper.select(sql, Sale.class);
+			if(null != sales && !sales.isEmpty()) {
+				sale = sales.get(0);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return sale;
+	}
+	
+	//查询经理
+	public int selectManagerCountBySale(Sale sale) {
+		int count = 0;
+		String sql = "with recursive sale as (SELECT * FROM (SELECT * FROM tbl_oa_sale t WHERE id="+sale.getId()+" ORDER BY id ASC LIMIT 1) t UNION SELECT t.* FROM sale t1 join tbl_oa_sale t ON t1.id=t.last_sale_id) SELECT COUNT(*) FROM sale s INNER JOIN tbl_oa_employee t ON s.employee_id=t.id WHERE t.status = 0 AND s.employee_id <> "+sale.getEmployeeId()+" AND t.employee_role_id="+EmployeeRoleConst.MANAGER+" GROUP BY employee_id";
+		try {
+			PreparedStatement ps = JdbcHelper.getConnection().prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return count;
+	}
+	
+	/**
+	 * 
+	 * @param sale
+	 * @return
+	 */
+	public long selectSaleCountBySale(Map<String, Object> paramMap) {
+		long count = 0;
+		String condition1 = "";
+		if(null != paramMap) {
+			if(null != paramMap.get("saleId")) {
+				condition1 += " AND id="+paramMap.get("saleId");
+			}
+			if(null != paramMap.get("employeeId")) {
+				condition1 += " AND employee_id="+paramMap.get("employeeId");
+			}
+		}
+		String sql = "with recursive sale as (SELECT * FROM (SELECT * FROM tbl_oa_sale t WHERE 1=1"+condition1+" ORDER BY id ASC LIMIT 1) t UNION SELECT t.* FROM sale t1 join tbl_oa_sale t ON t1.id=t.last_sale_id) SELECT COUNT(*) FROM sale s WHERE 1=1";
+		String condition = "";
+		if(null != paramMap) {
+			if(null != paramMap.get("saleDate>=")) {
+				condition += " AND sale_date >= '"+paramMap.get("saleDate>=").toString()+"'";
+			}
+			if(null != paramMap.get("saleDate<=")) {
+				condition += " AND sale_date <= '"+paramMap.get("saleDate<=").toString()+"'";
+			}
+		}
+		sql+=condition;
+		try {
+			PreparedStatement ps = JdbcHelper.getConnection().prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+				count = rs.getLong(1);
+			}
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return count;
+	}
+	
+	public BalanceLevel getBalanceLevelByEmployeeId(Long employeeId) {
+		Sale sale = this.selectFirstSaleByEmployeeId(employeeId);
+		Map<String, Object> paramMap = new HashMap<String, Object> ();
+		paramMap.put("lastSaleId", sale.getId());
+		List<Sale> sales = this.select(paramMap);
+		List<BalanceLevel> balances = this.balanceLevelDao.select(null);
+		BalanceLevel balanceLevel = null;
+		BalanceLevel maxBalanceLevel = null;
+		Iterator<BalanceLevel> blIter = balances.iterator();
+		while(blIter.hasNext()) {
+			BalanceLevel bl = blIter.next();
+			if(null == maxBalanceLevel
+					|| bl.getManagerCount() >= maxBalanceLevel.getManagerCount()) {
+				maxBalanceLevel = bl;
+			}
+		}
+		for(int i = 0; i < sales.size(); i ++) {
+			int managerCount = this.selectManagerCountBySale(sales.get(i));
+			BalanceLevel bl = null;
+			blIter = balances.iterator();
+			while(blIter.hasNext()) {
+				if(blIter.next().getManagerCount() == managerCount) {
+					bl = blIter.next();
+					break;
+				}
+			}
+			if(null == bl && managerCount >= maxBalanceLevel.getManagerCount()) {
+				bl = maxBalanceLevel;
+			}
+			if(balanceLevel.getManagerCount() >= bl.getManagerCount()) {
+				balanceLevel = bl;
+			}
+		}
+		return balanceLevel;
+	}
+	
+	public long getMinSaleCount(Long employeeId, Map<String, Object> paramMap) {
+		long count = 0;
+		Sale sale = this.selectFirstSaleByEmployeeId(employeeId);
+		Map<String, Object> paramMap2 = new HashMap<String, Object> ();
+		paramMap.put("lastSaleId", sale.getId());
+		List<Sale> sales = this.select(paramMap2);
+		
+		for(int i = 0; i < sales.size(); i ++) {
+			sale = sales.get(i);
+			paramMap.put("saleId", sale.getId());
+			long cnt = this.selectSaleCountBySale(paramMap);
+			if(count > cnt) {
+				count = cnt;
+			}
+		}
+		return count;
+	}
+	
+	/*public static void main(String[] args) {
+		Sale sale = new Sale();
+		sale.setId(11L);
+		sale.setEmployeeId(1L);
+		int count = selectManagerCountBySale(sale);
+		System.out.println(count);
+	}*/
 }

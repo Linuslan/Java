@@ -26,7 +26,7 @@ public class Login {
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	public void init() {
 		try {
-			boolean check = USBUtil.checkUSB();
+			//boolean check = USBUtil.checkUSB();
 		} catch(Exception ex) {
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "Œ¬‹∞Ã· æ",JOptionPane.WARNING_MESSAGE);
 			return;
