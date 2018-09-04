@@ -119,7 +119,6 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 					mngSalary.setDepartmentId(employee.getDepartmentId());
 					mngSalary.setDepartmentName(employee.getDepartmentName());
 					mngSalary.setFullDutyBonus(0l);
-					mngSalary.setIsDelete(0);
 					mngSalary.setMemo("");
 					try {
 						ManagerLevel managerLevel = this.managerLevelDao.selectBySale(saleCount, employee.getDepartmentId());
@@ -133,8 +132,6 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 					} catch(Exception ex) {
 						ex.printStackTrace();
 					}
-					mngSalary.setOverGoalBonus(0L);
-					mngSalary.setReachGoalBonus(0L);
 					mngSalary.setStatus(0);
 					mngSalary.setSupposedMoney(0L);
 					mngSalary.setTax(0L);
@@ -190,7 +187,7 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 					sal.setSupposedMoney(getSupposedMoney(sal));
 					Employee employee = this.employeeDao.selectById(sal.getUserId());
 					if(employee.getEmployeeRoleId().longValue() == EmployeeRoleConst.MANAGER.longValue()) {
-						Long tax = getTax(salary.getSupposedMoney());
+						Long tax = getTax(sal.getSupposedMoney());
 						sal.setTax(tax);
 					}
 					Long totalMoney = getTotalSalary(sal);
@@ -524,8 +521,11 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 		cell = headerRow.createCell(cellIndex ++);
 		cell.setCellValue("应发工资");
 		cell.setCellStyle(cs);
+		if(null == salaryConfig) {
+			this.salaryConfig = this.salaryConfigDao.selectById(1L);
+		}
 		cell = headerRow.createCell(cellIndex ++);
-		cell.setCellValue("3500以上纳税20%");
+		cell.setCellValue(String.valueOf(this.salaryConfig.getTaxThreshold()/100.0)+"以上纳税"+this.salaryConfig.getTaxRate()+"%");
 		cell.setCellStyle(cs);
 		cell = headerRow.createCell(cellIndex ++);
 		cell.setCellValue("本月罚款");
@@ -540,8 +540,8 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 		cell.setCellValue("签名");
 		cell.setCellStyle(cs);
 		
-		cellIndex = 0;
 		for(int i = 0; i < list.size(); i ++) {
+			cellIndex = 0;
 			Salary salary = list.get(i);
 			HSSFRow row = sheet.createRow(rowIndex++);
 			row.setHeightInPoints(rowHeight);

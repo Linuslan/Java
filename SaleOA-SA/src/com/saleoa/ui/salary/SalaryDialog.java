@@ -255,7 +255,7 @@ public class SalaryDialog {
 		
 		balanceMoneyIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		panel.add(balanceMoneyIpt);
-		balanceMoneyIpt.setLocation(FormCss.getLocation(balanceMoneyLbl, employeeComb));
+		balanceMoneyIpt.setLocation(FormCss.getLocation(balanceMoneyLbl, directSellMoneyIpt));
 		balanceMoneyIpt.setText(String.valueOf(this.balanceMoney/100.0));
 		
 		balanceMoneyIpt.addFocusListener(new FocusListener() {
@@ -275,11 +275,11 @@ public class SalaryDialog {
 		JLabel overGoalBonusLbl = new JLabel("达标超额奖：");
 		overGoalBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(overGoalBonusLbl);
-		overGoalBonusLbl.setLocation(FormCss.getLocation(null, reachGoalBonusLbl));
+		overGoalBonusLbl.setLocation(FormCss.getLocation(null, balanceMoneyLbl));
 		
 		overGoalBonusIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		panel.add(overGoalBonusIpt);
-		overGoalBonusIpt.setLocation(FormCss.getLocation(overGoalBonusLbl, reachGoalBonusIpt));
+		overGoalBonusIpt.setLocation(FormCss.getLocation(overGoalBonusLbl, balanceMoneyIpt));
 		overGoalBonusIpt.setText(String.valueOf(this.overGoalBonus/100.0));
 		overGoalBonusIpt.addFocusListener(new FocusListener() {
 
@@ -592,7 +592,6 @@ public class SalaryDialog {
 					}
 					temp.setUserId(employee.getId());
 					temp.setUserName(employee.getName());
-					temp.setIsDelete(0);
 					temp.setStatus(0);
 					if(null == yearComb.getSelectedItem()) {
 						JOptionPane.showMessageDialog(dialog, "请选择年份", "温馨提示",JOptionPane.WARNING_MESSAGE);

@@ -20,6 +20,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JTabbedPane;
 
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.service.IEmployeeService;
 import com.saleoa.service.IEmployeeServiceImpl;

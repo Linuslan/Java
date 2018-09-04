@@ -133,7 +133,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				getTClass().getField("isDelete");
 				paramMap.put("isDelete", 0);
 			} catch(Exception ex) {
-				//ex.printStackTrace();
+				ex.printStackTrace();
 				System.out.println("Œ¥’“µΩis_delete Ù–‘");
 			}
 			

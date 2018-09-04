@@ -804,7 +804,7 @@ public class JdbcHelper {
 	
 	public static void main(String[] args) {
 		try {
-			//initTable();
+			initTable();
 			//initEmployee();
 			//initSale();
 			/*Level level = new Level();

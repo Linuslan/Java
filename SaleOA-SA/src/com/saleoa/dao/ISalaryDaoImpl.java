@@ -44,7 +44,6 @@ public class ISalaryDaoImpl extends IBaseDaoImpl<Salary> implements ISalaryDao {
 				salaryObj.setMoney(salary);
 				salaryObj.setTotalMoney(salary);
 				salaryObj.setDeductMoney(0l);
-				salaryObj.setIsDelete(0);
 				salaryObj.setMonth(month);
 				salaryObj.setStatus(0);
 				salaryObj.setUpdateDate(new Date());
@@ -60,6 +59,8 @@ public class ISalaryDaoImpl extends IBaseDaoImpl<Salary> implements ISalaryDao {
 				salaryObj.setSupposedMoney(0L);
 				salaryObj.setTax(0L);
 				salaryObj.setTotalReachGoalBonus(0L);
+				salaryObj.setBalanceMoney(0l);
+				salaryObj.setDirectSellMoney(0L);
 				salaryList.add(salaryObj);
 			}
 		} catch (Exception e) {

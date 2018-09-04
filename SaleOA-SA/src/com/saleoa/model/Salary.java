@@ -53,10 +53,6 @@ public class Salary {
 	@Column(name="status", jdbcType=JdbcType.INTEGER)
 	private Integer status=0;
 	
-	//É¾³ý×´Ì¬£¬0£ºÎ´É¾³ý£»1£ºÒÑÉ¾³ý£»
-	@Column(name="is_delete", jdbcType=JdbcType.INTEGER)
-	private Integer isDelete=0;
-	
 	@Column(name="memo", length=4000)
 	private String memo;
 	
@@ -177,14 +173,6 @@ public class Salary {
 
 	public void setStatus(Integer status) {
 		this.status = status;
-	}
-
-	public Integer getIsDelete() {
-		return isDelete;
-	}
-
-	public void setIsDelete(Integer isDelete) {
-		this.isDelete = isDelete;
 	}
 
 	public Long getDeductMoney() {

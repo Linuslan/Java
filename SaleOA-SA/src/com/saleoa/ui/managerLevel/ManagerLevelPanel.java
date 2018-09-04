@@ -1,56 +1,54 @@
 package com.saleoa.ui.managerLevel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.constant.ModuleName;
 import com.saleoa.common.constant.TableCss;
 import com.saleoa.common.utils.BeanUtil;
-import com.saleoa.common.utils.StringUtil;
 import com.saleoa.dao.IManagerLevelDao;
 import com.saleoa.dao.IManagerLevelDaoImpl;
 import com.saleoa.model.ManagerLevel;
+import com.saleoa.service.IManagerLevelService;
+import com.saleoa.service.IManagerLevelServiceImpl;
 import com.saleoa.ui.MainEntry;
+import com.saleoa.ui.plugin.JGridPanel;
+import com.saleoa.ui.plugin.PagePanel;
 
 
-public class ManagerLevelPanel extends JPanel {
+public class ManagerLevelPanel extends JGridPanel<ManagerLevel> {
 	IManagerLevelDao managerLevelDao = new IManagerLevelDaoImpl();
+	IManagerLevelService managerLevelService = new IManagerLevelServiceImpl();
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	final Vector<Vector<String>> row = new Vector<Vector<String>> ();
 	final Vector<String> cols = new Vector<String>();
 	DefaultTableModel model = null;
 	JTable table = null;
+	private PagePanel<ManagerLevel> pagePanel = new PagePanel<ManagerLevel>(this, managerLevelService);
 	public ManagerLevelPanel() {
 		this.setName(ModuleName.MANAGERLEVEL);
 		init();
 	}
 	
 	public void init() {
+		JPanel centerPanel = new JPanel();
+		centerPanel.setLayout(new BorderLayout());
 		final ManagerLevelPanel lp = this;
 		cols.add("编号");
 		cols.add("等级");
@@ -129,7 +127,7 @@ public class ManagerLevelPanel extends JPanel {
 				if(value == JOptionPane.YES_OPTION) {
 					boolean success = managerLevelDao.delete(managerLevel);
 					if(success) {
-						lp.initGrid();
+						lp.refresh();
 						JOptionPane.showMessageDialog(lp, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
@@ -142,15 +140,14 @@ public class ManagerLevelPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         // 将滚动面板添加到边界布局的中间
         this.add(scrollPane, BorderLayout.CENTER);
-        initGrid();
+        refresh();
 	}
 	
 	public void initGrid() {
 		try {
 			row.clear();
-        	List<ManagerLevel> managerLevels = managerLevelDao.select(null);
-        	for(int i = 0; i < managerLevels.size(); i ++) {
-        		ManagerLevel managerLevel = managerLevels.get(i);
+        	for(int i = 0; i < data.size(); i ++) {
+        		ManagerLevel managerLevel = data.get(i);
         		Vector<String> newRow = new Vector<String> ();
 				newRow.add(String.valueOf(managerLevel.getId()));
 				newRow.add(managerLevel.getName());
@@ -167,5 +164,10 @@ public class ManagerLevelPanel extends JPanel {
         } catch(Exception ex) {
         	ex.printStackTrace();
         }
+	}
+	
+	public void refresh() {
+		pagePanel.loadData(null);
+		initGrid();
 	}
 }

@@ -425,8 +425,9 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 			BalanceLevel bl = null;
 			blIter = balances.iterator();
 			while(blIter.hasNext()) {
-				if(blIter.next().getManagerCount() == managerCount) {
-					bl = blIter.next();
+				BalanceLevel level = blIter.next();
+				if(level.getManagerCount() == managerCount) {
+					bl = level;
 					break;
 				}
 			}
@@ -441,17 +442,17 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 	}
 	
 	public long getMinSaleCount(Long employeeId, Map<String, Object> paramMap) {
-		long count = 0;
+		Long count = null;
 		Sale sale = this.selectFirstSaleByEmployeeId(employeeId);
 		Map<String, Object> paramMap2 = new HashMap<String, Object> ();
-		paramMap.put("lastSaleId", sale.getId());
+		paramMap2.put("lastSaleId", sale.getId());
 		List<Sale> sales = this.select(paramMap2);
 		
 		for(int i = 0; i < sales.size(); i ++) {
 			sale = sales.get(i);
 			paramMap.put("saleId", sale.getId());
 			long cnt = this.selectSaleCountBySale(paramMap);
-			if(count > cnt) {
+			if(null == count || count > cnt) {
 				count = cnt;
 			}
 		}

@@ -69,6 +69,8 @@ public class SalaryPanel extends JGridPanel<Salary> {
 		cols.add("归属部门");
 		cols.add("基本工资");
 		cols.add("达标奖金");
+		cols.add("直销奖");
+		cols.add("差额奖");
 		cols.add("达标超额奖");
 		cols.add("内勤管理补助");
 		cols.add("全勤奖");
@@ -401,6 +403,8 @@ public class SalaryPanel extends JGridPanel<Salary> {
 				newRow.add(salary.getDepartmentName());
 				newRow.add(String.valueOf(salary.getMoney()/100.0));
 				newRow.add(String.valueOf(salary.getReachGoalBonus()/100.0));
+				newRow.add(String.valueOf(salary.getDirectSellMoney()/100.0));
+				newRow.add(String.valueOf(salary.getBalanceMoney()/100.0));
 				newRow.add(String.valueOf(salary.getOverGoalBonus()/100.0));
 				newRow.add(String.valueOf(salary.getOfficeManageBonus()/100.0));
 				newRow.add(String.valueOf(salary.getFullDutyBonus()/100.0));

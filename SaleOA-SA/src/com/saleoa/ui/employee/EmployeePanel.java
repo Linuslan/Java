@@ -235,7 +235,7 @@ public class EmployeePanel extends JGridPanel<Employee> {
 						e.printStackTrace();
 					}
 					if(success) {
-						ep.initGrid();
+						ep.refresh();
 						JOptionPane.showMessageDialog(ep, "删除成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
 						return;
 					}
