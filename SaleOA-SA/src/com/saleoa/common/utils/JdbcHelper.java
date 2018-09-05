@@ -35,7 +35,8 @@ public class JdbcHelper {
 	private static Connection conn = null;
 	public static Connection getConnection() throws Exception {
 		if(null == conn) {
-			String url = "jdbc:sqlite:java-sqlite.db";
+			//String url = "jdbc:sqlite:java-sqlite.db";
+			String url = "jdbc:sqlite:test";
 			conn = DriverManager.getConnection(url);
 		}
 		return conn;
