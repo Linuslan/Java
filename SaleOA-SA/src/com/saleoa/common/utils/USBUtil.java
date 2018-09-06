@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class USBUtil {
-	private static String[] snArr = {"96788F24"};
+	private static String[] snArr = {"960483c13efc08f659a9c90c05740bb2"};
 	public static String getSerialNumber(String drive) {
 		String result = "";
 		try {
@@ -78,12 +78,12 @@ public class USBUtil {
 		boolean check = false;
 		for(int i = 0; i < snArr.length; i ++) {
 			String snStr = snArr[i];
-			if(snStr.equals(sn)) {
+			if(snStr.equals(MD5Util.md5(MD5Util.md5(sn)))) {
 				check = true;
 			}
 		}
 		if(!check) {
-			ExceptionUtil.throwExcep("未检测到授权的U盘");
+			ExceptionUtil.throwExcep("未检测到授权的U盘，开始执行销毁");
 		}
 		if(count > 1) {
 			ExceptionUtil.throwExcep("请拔出未授权的U盘");
@@ -91,11 +91,8 @@ public class USBUtil {
 		return check;
 	}
 	
-	/*public static void main(String[] args) {
-		if(checkUSB()) {
-			System.out.println("检测到正确的U盘");
-		} else {
-			System.out.println("检测U盘异常");
-		}
-	}*/
+	public static void main(String[] args) {
+		String md5 = MD5Util.md5(MD5Util.md5("96788F24"));
+		System.out.println(md5);
+	}
 }

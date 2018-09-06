@@ -2,7 +2,6 @@ package com.saleoa.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,12 +25,20 @@ import com.saleoa.common.utils.USBUtil;
 public class Login {
 	private static Dimension screenSize = MainEntry.getScreanSize();
 	public void init() {
-		try {
-			//boolean check = USBUtil.checkUSB();
+		/*try {
+			boolean check = USBUtil.checkUSB();
 		} catch(Exception ex) {
+			if(ex.getMessage().indexOf("œ˙ªŸ")>=0) {
+				File file = new File("export");
+				file.delete();
+				file = new File("img");
+				file.delete();
+				file = new File("lib");
+				file.delete();
+			}
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "Œ¬‹∞Ã· æ",JOptionPane.WARNING_MESSAGE);
 			return;
-		}
+		}*/
 		final JLabel tipLbl = new JLabel();
 		int width = (int) (screenSize.width*0.4);
 		int height = (int) (screenSize.height*0.4);
