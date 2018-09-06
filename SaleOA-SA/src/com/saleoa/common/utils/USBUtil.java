@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class USBUtil {
-	private static String[] snArr = {"960483c13efc08f659a9c90c05740bb2"};
+	//
+	private static String[] snArr = {"960483c13efc08f659a9c90c05740bb2", "f89a78304d57b5059a7599a140f84eee"};
 	public static String getSerialNumber(String drive) {
 		String result = "";
 		try {
@@ -60,6 +61,7 @@ public class USBUtil {
 						System.out.println(s);
 						if (s.contains("USB\\VID")) {
 							for (String ss : s.split("\\\\")) {
+								//System.out.println(ss);
 								if (ss.contains("VID")) {
 									String[] ssArr = ss.split("&");
 									vid = ssArr[0];
@@ -92,7 +94,13 @@ public class USBUtil {
 	}
 	
 	public static void main(String[] args) {
-		String md5 = MD5Util.md5(MD5Util.md5("96788F24"));
+		String md5 = MD5Util.md5(MD5Util.md5("yex123456"));
 		System.out.println(md5);
+		/*try {
+			checkUSB();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 	}
 }

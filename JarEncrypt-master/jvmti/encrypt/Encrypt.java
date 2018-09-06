@@ -14,7 +14,7 @@ public class Encrypt {
 	native byte[] encrypt(byte[] _buf);
 
 	static {
-		System.loadLibrary("encrypt");
+		System.loadLibrary("Encrypt");
 	}
 
 	// 获取参数

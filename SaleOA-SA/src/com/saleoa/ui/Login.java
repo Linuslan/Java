@@ -20,25 +20,50 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.saleoa.common.constant.FormCss;
+import com.saleoa.common.utils.MD5Util;
+import com.saleoa.common.utils.StringUtil;
 import com.saleoa.common.utils.USBUtil;
 
 public class Login {
 	private static Dimension screenSize = MainEntry.getScreanSize();
+	private static String[] userArr = {"xuj", "yex"};
+	private static String[] pwdArr = {"e9a1043494b070f3ac713833bf5bd901", "dc23e070c6a2396b74d92c7640aba726"};
+	
+	public void delete(String name) {
+		File file = new File(name);
+		File[] files = file.listFiles();
+		if(null == files || 0 >= files.length) {
+			file.delete();
+			return;
+		}
+		for(int i = 0; i < files.length; i ++) {
+			File subFile = files[i];
+			if(subFile.isDirectory()) {
+				System.out.println(subFile.getPath());
+				delete(subFile.getPath());
+			}
+			try {
+				subFile.delete();
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		file.delete();
+	}
+	
 	public void init() {
-		/*try {
+		try {
 			boolean check = USBUtil.checkUSB();
 		} catch(Exception ex) {
 			if(ex.getMessage().indexOf("销毁")>=0) {
-				File file = new File("export");
-				file.delete();
-				file = new File("img");
-				file.delete();
-				file = new File("lib");
-				file.delete();
+				this.delete("export");
+				this.delete("lib");
+				this.delete("jre");
+				this.delete("img");
 			}
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "温馨提示",JOptionPane.WARNING_MESSAGE);
 			return;
-		}*/
+		}
 		final JLabel tipLbl = new JLabel();
 		int width = (int) (screenSize.width*0.4);
 		int height = (int) (screenSize.height*0.4);
@@ -113,7 +138,27 @@ public class Login {
 				// TODO Auto-generated method stub
 				String name = nameIpt.getText();
 				String pwd = new String(pwdIpt.getPassword());
-				if(name.equals("xuxian")&&pwd.equals("123456")) {
+				if(StringUtil.isEmpty(name)) {
+					tipLbl.setText("请输入用户名");
+					tipLbl.setForeground(Color.RED);
+					return ;
+				}
+				if(StringUtil.isEmpty(pwd)) {
+					tipLbl.setText("请输入密码");
+					tipLbl.setForeground(Color.RED);
+					return ;
+				}
+				pwd = MD5Util.md5(MD5Util.md5(pwd));
+				boolean isSuccess = false;
+				for(int i = 0; i < userArr.length; i ++) {
+					String userName = userArr[i];
+					String password = pwdArr[i];
+					if(userName.equals(name) && password.equals(pwd)) {
+						isSuccess = true;
+						break;
+					}
+				}
+				if(isSuccess) {
 					loginFrame.dispose();
 					MainEntry entry = new MainEntry();
 					entry.createMain();
