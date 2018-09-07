@@ -1,0 +1,8 @@
+将reids指定key导入到某个文件命令
+redis-cli -h host -a pwd keys record* > /home/1.txt
+修改文件，在文件头加上某个字符串命令为
+sed "s/^/abc/ g" 1.txt
+在文件尾加上命令为
+sed "s/$/abc/ g" 1.txt
+文件修改为
+sed -i
