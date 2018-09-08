@@ -26,8 +26,8 @@ import com.saleoa.common.utils.USBUtil;
 
 public class Login {
 	private static Dimension screenSize = MainEntry.getScreanSize();
-	private static String[] userArr = {"xuj", "yex"};
-	private static String[] pwdArr = {"e9a1043494b070f3ac713833bf5bd901", "dc23e070c6a2396b74d92c7640aba726"};
+	private static String[] userArr = {"Xxa", "Zy"};
+	private static String[] pwdArr = {"ac3eaf64cb4126206febffd95658a4df", "e36cb84be0948ffba6516dd5f7f78749"};
 	
 	public void delete(String name) {
 		File file = new File(name);

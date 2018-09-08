@@ -43,6 +43,7 @@ public class ManagerLevelDialog {
 	private Long basicSalary = 0L;
 	private Long reachGoalBonus = 0L;
 	private Long departmentId = null;
+	private Long commission = 0L;
 
 	public void initDialog(final ManagerLevel level, final ManagerLevelPanel parent) {
 		if(null != level) {
@@ -53,6 +54,7 @@ public class ManagerLevelDialog {
 			this.basicSalary = level.getBasicSalary();
 			reachGoalBonus = level.getReachGoalBonus();
 			departmentId = level.getDepartmentId();
+			commission = level.getCommission();
 		}
 		final JDialog dialog = new JDialog(MainEntry.main);
 		dialog.setBackground(Color.WHITE);
@@ -140,7 +142,7 @@ public class ManagerLevelDialog {
 		commissionIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		commissionIpt.setLocation(FormCss.getLocation(commissionLbl, basicSalaryIpt));
 		panel.add(commissionIpt);
-		commissionIpt.setText(String.valueOf(basicSalary/100.0));
+		commissionIpt.setText(String.valueOf(commission/100.0));
 		
 		JLabel reachGoalBonusLbl = new JLabel("´ï±ê½±£º");
 		reachGoalBonusLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
