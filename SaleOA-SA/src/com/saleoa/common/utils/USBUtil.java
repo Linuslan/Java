@@ -45,6 +45,7 @@ public class USBUtil {
 		String pid = "";
 		String sn = "";
 		int count = 0;
+		boolean check = false;
 		try {
 			// 获取注册表信息
 			Process ps = null;
@@ -55,9 +56,15 @@ public class USBUtil {
 			BufferedReader ir = new BufferedReader(i);
 			// 将信息分离出来
 			while ((line = ir.readLine()) != null) {
+				if(check) {
+					break;
+				}
 				if (line.contains("USB\\VID")) {
 					count++;
 					for (String s : line.split("    ")) {
+						if(check) {
+							break;
+						}
 						System.out.println(s);
 						if (s.contains("USB\\VID")) {
 							for (String ss : s.split("\\\\")) {
@@ -68,6 +75,16 @@ public class USBUtil {
 									pid = ssArr[1];
 								}else {
 									sn = ss;
+									for(int j = 0; j< snArr.length; j ++) {
+										String snStr = snArr[j];
+										if(snStr.equals(MD5Util.md5(MD5Util.md5(sn)))) {
+											check = true;
+										}
+									}
+									
+								}
+								if(check) {
+									break;
 								}
 							}
 						}
@@ -77,19 +94,19 @@ public class USBUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		boolean check = false;
+		/*boolean check = false;
 		for(int i = 0; i < snArr.length; i ++) {
 			String snStr = snArr[i];
 			if(snStr.equals(MD5Util.md5(MD5Util.md5(sn)))) {
 				check = true;
 			}
-		}
+		}*/
 		if(!check) {
 			ExceptionUtil.throwExcep("未检测到授权的U盘，开始执行销毁");
 		}
-		if(count > 1) {
+		/*if(count > 1) {
 			ExceptionUtil.throwExcep("请拔出未授权的U盘");
-		}
+		}*/
 		return check;
 	}
 	
