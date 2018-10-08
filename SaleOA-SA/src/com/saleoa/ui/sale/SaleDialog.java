@@ -213,6 +213,11 @@ public class SaleDialog {
 					temp.setCreateDate(new Date());
 				}
 				int saleNo = Integer.parseInt(saleNoIpt.getText());
+				int maxSaleNo = (int)saleService.getMaxNoByEmployeeId(employee.getId()).longValue();
+				if(saleNo <= maxSaleNo) {
+					JOptionPane.showMessageDialog(dialog, "所选人员的最大销售编号为"+maxSaleNo+"，请输入大于该编号的数字", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					return;
+				}
 				String name = employee.getName()+saleNo;
 				String nameEn = PinyinUtil.getStringPinYin(name);
 				temp.setName(name);
@@ -224,11 +229,29 @@ public class SaleDialog {
 				temp.setLastSaleId(lastSale.getId());
 				temp.setLastSaleName(lastSale.getName());
 				temp.setSaleDate((Date) datePicker.getValue());
-				
+				int step = saleNo - maxSaleNo;
 				boolean success = false;
 				try {
 					if(null == temp.getId()) {
-						success = saleService.add(temp);
+						Sale lastSaleTemp = lastSale;
+						for(int i = 1; i <= step; i ++) {
+							try {
+								Sale sale = new Sale();
+								BeanUtil.copyBean(temp, sale);
+								sale.setId(null);
+								sale.setSaleNo(maxSaleNo+i);
+								name = employee.getName() + sale.getSaleNo();
+								nameEn = PinyinUtil.getStringPinYin(name);
+								sale.setName(name);
+								sale.setNameEn(nameEn);
+								sale.setLastSaleId(lastSaleTemp.getId());
+								sale.setLastSaleName(lastSaleTemp.getName());
+								success = saleService.add(sale);
+								lastSaleTemp = sale;
+							} catch(Exception ex) {
+								ex.printStackTrace();
+							}
+						}
 					} else {
 						success = saleService.update(temp);
 					}
