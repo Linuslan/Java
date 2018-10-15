@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +52,8 @@ public class EmployeeDialog {
 	private String inheritor = "";
 	private String inheritorPhone = "";
 	private Long departmentId = 0L;
+	private Date registerDate = new Date();
+	private Date fireDate = new Date();
 
 	public void initDialog(final Employee employee, final EmployeePanel parent) {
 		if(null != employee) {
@@ -62,7 +66,11 @@ public class EmployeeDialog {
 			inheritor = employee.getInheritor();
 			inheritorPhone = employee.getInheritorPhone();
 			departmentId = employee.getDepartmentId();
+			registerDate = employee.getRegisterDate();
+			fireDate = employee.getFireDate();
 		}
+		System.out.println("在职状态："+status);
+		System.out.println("离职时间："+DateUtil.formatFullDate(fireDate));
 		final JDialog dialog = new JDialog(MainEntry.main);
 		dialog.setBackground(Color.WHITE);
 		int dialogWidth = 480;
@@ -87,10 +95,10 @@ public class EmployeeDialog {
 		
 		JLabel registerDateLbl = new JLabel("入职时间：");
 		registerDateLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
-		panel.add(registerDateLbl);
-		//registerDateLbl.setLocation(FormCss.getLocation(null, introducerLbl));
 		registerDateLbl.setLocation(FormCss.getLocation(null, nameLbl));
 		panel.add(registerDateLbl);
+		//registerDateLbl.setLocation(FormCss.getLocation(null, introducerLbl));
+		//panel.add(registerDateLbl);
 		
 		String DefaultFormat = "yyyy-MM-dd HH:mm:ss";
 		// 当前时间
@@ -98,7 +106,7 @@ public class EmployeeDialog {
         // 字体
         Font font = new Font("Times New Roman", Font.BOLD, 14);
         Dimension dimension = new Dimension(FormCss.FORM_WIDTH, FormCss.HEIGHT);
-		final DatePicker datePicker = new DatePicker(date, DefaultFormat, font, dimension);
+		final DatePicker datePicker = new DatePicker(registerDate, DefaultFormat, font, dimension);
 		//datePicker.setLocation(FormCss.getLocation(registerDateLbl, introducerComb));
 		datePicker.setLocation(FormCss.getLocation(registerDateLbl, nameIpt));
 		datePicker.setLocale(Locale.CHINA);
@@ -173,14 +181,49 @@ public class EmployeeDialog {
 			statusComb.setSelectedIndex(0);
 		}
 		
+		final JLabel fireDateLbl = new JLabel("离职时间：");
+		fireDateLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
+		fireDateLbl.setLocation(FormCss.getLocation(null, statusLbl));
+		panel.add(fireDateLbl);
+		final DatePicker fireDatePicker = new DatePicker(fireDate, DefaultFormat, font, dimension);
+		//datePicker.setLocation(FormCss.getLocation(registerDateLbl, introducerComb));
+		fireDatePicker.setLocation(FormCss.getLocation(fireDateLbl, statusComb));
+		fireDatePicker.setLocale(Locale.CHINA);
+        // 设置时钟面板可见
+		fireDatePicker.setTimePanleVisible(true);
+		panel.add(fireDatePicker);
+		
+		statusComb.addItemListener(new ItemListener() {
+
+			public void itemStateChanged(ItemEvent event) {
+				// TODO Auto-generated method stub
+				if(event.getStateChange() == ItemEvent.SELECTED) {
+					int i = statusComb.getSelectedIndex();
+					if(1 == i) {
+						fireDateLbl.setVisible(true);
+						fireDatePicker.setVisible(true);
+					} else {
+						fireDateLbl.setVisible(false);
+						fireDatePicker.setVisible(false);
+					}
+				}
+			}
+			
+		});
+		//离职状态，则显示离职的输入框
+		if(0==status) {
+			fireDateLbl.setVisible(false);
+			fireDatePicker.setVisible(false);
+		}
+		
 		JLabel idNumberLbl = new JLabel("身份证号：");
 		idNumberLbl.setSize(FormCss.LABEL_WIDTH, FormCss.HEIGHT);
 		panel.add(idNumberLbl);
-		idNumberLbl.setLocation(FormCss.getLocation(null, statusLbl));
+		idNumberLbl.setLocation(FormCss.getLocation(null, fireDateLbl));
 		final JTextField idNumberIpt = new JTextField();
 		idNumberIpt.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		panel.add(idNumberIpt);
-		idNumberIpt.setLocation(FormCss.getLocation(idNumberLbl, statusComb));
+		idNumberIpt.setLocation(FormCss.getLocation(idNumberLbl, fireDatePicker));
 		idNumberIpt.setText(idNumber);
 		
 		JLabel addressLbl = new JLabel("家庭住址：");
@@ -240,7 +283,7 @@ public class EmployeeDialog {
 					return;
 				}
 				if(null == datePicker.getValue()) {
-					JOptionPane.showMessageDialog(dialog, "请选择介绍时间", "温馨提示",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(dialog, "请选择入职时间", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
 				if(null == employeeRoleComb.getSelectedItem()) {
@@ -268,7 +311,12 @@ public class EmployeeDialog {
 					temp.setLeaderName(leader.getName());
 				}*/
 				temp.setRegisterDate((Date) datePicker.getValue());
-				temp.setStatus(statusComb.getSelectedIndex());
+				Date fireDate = (Date) fireDatePicker.getValue();
+				Date initDate = DateUtil.parseFullDate("1000-01-01 00:00:00");
+				temp.setFireDate((Date)fireDatePicker.getValue());
+				int status = statusComb.getSelectedIndex();
+				System.out.println("选中的在职状态为："+status);
+				temp.setStatus(status);
 				temp.setAddress(addressIpt.getText());
 				Department department = (Department) departmentComb.getSelectedItem();
 				temp.setDepartmentId(department.getId());
@@ -281,14 +329,16 @@ public class EmployeeDialog {
 				temp.setInheritorPhone(inheritorPhoneIpt.getText());
 				boolean success = false;
 				try {
+					if(temp.getStatus() == 1) {
+						if(null == fireDate || initDate.equals(fireDate)) {
+							temp.setFireDate(new Date());
+						}
+					} else {
+						temp.setFireDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
+					}
 					if(null == temp.getId()) {
 						success = employeeService.add(temp);
 					} else {
-						if(temp.getStatus() == 1) {
-							temp.setFireDate(new Date());
-						} else {
-							temp.setFireDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
-						}
 						success = employeeService.update(temp);
 					}
 				} catch (Exception e) {

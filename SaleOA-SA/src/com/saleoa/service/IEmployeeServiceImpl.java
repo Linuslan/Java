@@ -35,8 +35,6 @@ public class IEmployeeServiceImpl extends IBaseServiceImpl<Employee> implements
 		employee.setIsDelete(0);
 		employee.setCreateDate(new Date());
 		employee.setUpdateDate(new Date());
-		employee.setFireDate(DateUtil.parseFullDate("1000-01-01 00:00:00"));
-		employee.setStatus(0);
 		if(null == employee.getLeaderId()) {
 			employee.setLeaderId(0L);
 			employee.setLeaderName("");

@@ -210,4 +210,15 @@ public class Sale {
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
 	}
+	
+	public boolean equals(Object obj) {
+		if(null == obj || !(obj instanceof Sale)) {
+			return false;
+		}
+		Sale sale = (Sale)obj;
+		if(sale.getId().longValue() == this.getId().longValue()) {
+			return true;
+		}
+		return false;
+	}
 }

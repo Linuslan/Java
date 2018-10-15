@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +29,7 @@ import javax.swing.JPanel;
 import com.eltima.components.ui.DatePicker;
 import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.utils.BeanUtil;
+import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.PinyinUtil;
 import com.saleoa.common.utils.StringUtil;
 import com.saleoa.model.Employee;
@@ -150,17 +153,31 @@ public class SaleDialog {
 					List<Sale> saleList = null;
 					try {
 						saleList = saleService.select(paramMap);
-						if(null == saleList || saleList.isEmpty()) {
-							saleList = saleService.select(null);
+						if(null == saleList) {
+							saleList = new ArrayList<Sale> ();
 						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 						saleList = new ArrayList<Sale>();
 					}
+					List<Sale> allList = null;
+					try {
+						allList = saleService.select(null);
+						if(null == allList) {
+							allList = new ArrayList<Sale> ();
+						}
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					allList.removeAll(saleList);
 					lastSaleComb.removeAllItems();
 					for(int i = 0; i < saleList.size(); i ++) {
 						lastSaleComb.addItem(saleList.get(i));
+					}
+					for(int i = 0; i < allList.size(); i ++) {
+						lastSaleComb.addItem(allList.get(i));
 					}
 				}
 			}
@@ -218,6 +235,14 @@ public class SaleDialog {
 					JOptionPane.showMessageDialog(dialog, "所选人员的最大销售编号为"+maxSaleNo+"，请输入大于该编号的数字", "温馨提示",JOptionPane.WARNING_MESSAGE);
 					return;
 				}
+				int step = saleNo - maxSaleNo;
+				Date saleDate = (Date) datePicker.getValue();
+				String saleDateStr = DateUtil.formatFullDate(saleDate);
+				int res=JOptionPane.showConfirmDialog(dialog, "您确定新增归属人为："+employee.getName()+"，推荐人为："+lastSale.getName()+"，销售时间为："+saleDateStr+"，编号为："+saleNo+"，新增数为："+step+"个的销售记录吗？", "请您确认销售信息", JOptionPane.YES_NO_OPTION);
+				if (res == JOptionPane.NO_OPTION) {
+					//JOptionPane.showMessageDialog(dialog, "您已取消新增", "温馨提示",JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
 				String name = employee.getName()+saleNo;
 				String nameEn = PinyinUtil.getStringPinYin(name);
 				temp.setName(name);
@@ -228,8 +253,8 @@ public class SaleDialog {
 				
 				temp.setLastSaleId(lastSale.getId());
 				temp.setLastSaleName(lastSale.getName());
-				temp.setSaleDate((Date) datePicker.getValue());
-				int step = saleNo - maxSaleNo;
+				temp.setSaleDate(saleDate);
+				
 				boolean success = false;
 				try {
 					if(null == temp.getId()) {
@@ -260,6 +285,18 @@ public class SaleDialog {
 					e.printStackTrace();
 				}
 				if(success) {
+					String batPath = System.getProperty("user.dir").replace("\\", "/")+"/backup.bat";
+					String cmd = "cmd /c start " + batPath;// pass
+					try {
+						Process ps = Runtime.getRuntime().exec(cmd);
+						ps.waitFor();
+					} catch (IOException ioe) {
+						ioe.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println("child thread donn");
 					dialog.dispose();
 					parent.refresh();
 					JOptionPane.showMessageDialog(dialog, "保存成功", "温馨提示",JOptionPane.INFORMATION_MESSAGE);

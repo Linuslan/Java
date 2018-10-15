@@ -123,33 +123,33 @@ public class MainEntry {
 		//JPanel panel = new JPanel();
 		
 		//获得系统托盘实例
-		systemTray = SystemTray.getSystemTray();
+//		systemTray = SystemTray.getSystemTray();
+//		
+//		try {
+//			trayIcon = new TrayIcon(ImageIO.read(new File(miniIcon)));
+//			systemTray.add(trayIcon);
+//		} catch(Exception ex) {
+//			ex.printStackTrace();
+//		}
 		
-		try {
-			trayIcon = new TrayIcon(ImageIO.read(new File(miniIcon)));
-			systemTray.add(trayIcon);
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		main.addWindowListener(new WindowAdapter() {
-			public void windowIconified(WindowEvent e) {
-				main.dispose();//窗口最小化时，dispose该窗口
-			}
-		});
-		
-		trayIcon.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				
-				/*
-				 * 双击显示正常窗口
-				 */
-				if(e.getClickCount() == 2) {
-					main.setExtendedState(JFrame.NORMAL);
-					main.setVisible(true);
-				}
-			}
-		});
+//		main.addWindowListener(new WindowAdapter() {
+//			public void windowIconified(WindowEvent e) {
+//				main.dispose();//窗口最小化时，dispose该窗口
+//			}
+//		});
+//		
+//		trayIcon.addMouseListener(new MouseAdapter() {
+//			public void mouseClicked(MouseEvent e) {
+//				
+//				/*
+//				 * 双击显示正常窗口
+//				 */
+//				if(e.getClickCount() == 2) {
+//					main.setExtendedState(JFrame.NORMAL);
+//					main.setVisible(true);
+//				}
+//			}
+//		});
 		
 		/*final JButton startBtn = new JButton("启动服务");
 		startBtn.addActionListener(new ActionListener() {
