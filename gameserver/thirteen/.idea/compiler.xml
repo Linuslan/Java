@@ -8,9 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="eureka" />
         <module name="thirteen" />
-        <module name="thirteen (1)" />
-        <module name="thirteen (2) (com.fzjr)" />
-        <module name="thirteen (3)" />
+        <module name="thirteen (2) (com.craftsman)" />
+        <module name="thirteenBasicService" />
+        <module name="thirteenEureka" />
+        <module name="thirteenWebSocket" />
         <module name="websocket" />
       </profile>
     </annotationProcessing>
