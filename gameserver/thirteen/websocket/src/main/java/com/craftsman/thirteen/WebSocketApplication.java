@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @EnableEurekaClient
 @RestController
+@ComponentScan(basePackages = "com.craftsman")
+@EnableFeignClients(basePackages = "com.craftsman")
+@EnableDiscoveryClient
 public class WebSocketApplication {
 
     public static void main(String[] args) {
