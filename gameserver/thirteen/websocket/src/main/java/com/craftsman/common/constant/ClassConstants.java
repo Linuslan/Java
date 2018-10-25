@@ -6,7 +6,8 @@ import com.craftsman.common.constant.enums.CommandType;
  * 类里面常用到的一些写死在代码里面的常量
  */
 public enum ClassConstants {
-    RECIPIENTS(1, "recipients"), COMMAND(2, "command"), SOCKETID(3, "socketId"), RETURN_FLAG(4, "success"), RETURN_DATA(5, "data"), COMMAND_OPEN(6, "open");
+    RECIPIENTS(1, "recipients"), COMMAND(2, "command"), SOCKET_ID(3, "socketId"), RETURN_FLAG(4, "success"), RETURN_DATA(5, "data"),
+    COMMAND_OPEN(6, "open"), PROCESS_DATA_PLAYER_ID(7, "playerId");
     private String value;
     private int index;
     private ClassConstants(int i, String value) {

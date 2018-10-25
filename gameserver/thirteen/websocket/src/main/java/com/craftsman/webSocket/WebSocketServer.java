@@ -47,7 +47,7 @@ public class WebSocketServer {
         String socketId = SerialNoUtil.getRandomString(16);
         this.socketId = socketId;
         Map<String, Object> map = new HashMap<String, Object> ();
-        map.put(ClassConstants.SOCKETID.getName(), socketId);
+        map.put(ClassConstants.SOCKET_ID.getName(), socketId);
         webSocketMap.put(socketId, this);
         logger.info("生成的socketId为："+socketId);
         try{
@@ -92,6 +92,7 @@ public class WebSocketServer {
             } else {
                 ExceptionUtil.throwExceptionJsonByError(ErrorCode.PROCESS_ERROR_EMPTY_RESULT);
             }
+            success = true;
         } catch(Exception ex) {
             String exMsg = ex.getMessage();
             JSONObject errorJson = null;

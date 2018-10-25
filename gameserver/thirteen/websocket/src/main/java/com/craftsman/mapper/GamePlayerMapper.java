@@ -1,17 +1,15 @@
 package com.craftsman.mapper;
 
 import com.craftsman.model.GamePlayer;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface GamePlayerMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(GamePlayer record);
 
     int insertSelective(GamePlayer record);
 
-    GamePlayer selectByPrimaryKey(Integer id);
+    GamePlayer selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(GamePlayer record);
 

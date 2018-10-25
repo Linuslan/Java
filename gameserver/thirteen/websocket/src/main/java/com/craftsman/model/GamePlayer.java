@@ -3,7 +3,7 @@ package com.craftsman.model;
 import java.util.Date;
 
 public class GamePlayer {
-    private Integer id;
+    private Long id;
 
     private String userName;
 
@@ -19,11 +19,15 @@ public class GamePlayer {
 
     private Date loginTime;
 
-    public Integer getId() {
+    private String socketId;
+
+    private Date logoutTime;
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -81,5 +85,21 @@ public class GamePlayer {
 
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
+    }
+
+    public String getSocketId() {
+        return socketId;
+    }
+
+    public void setSocketId(String socketId) {
+        this.socketId = socketId == null ? null : socketId.trim();
+    }
+
+    public Date getLogoutTime() {
+        return logoutTime;
+    }
+
+    public void setLogoutTime(Date logoutTime) {
+        this.logoutTime = logoutTime;
     }
 }
