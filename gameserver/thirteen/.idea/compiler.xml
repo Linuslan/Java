@@ -9,6 +9,7 @@
         <module name="eureka" />
         <module name="thirteen" />
         <module name="thirteen (2) (com.craftsman)" />
+        <module name="thirteen-basic-service" />
         <module name="thirteenBasicService" />
         <module name="thirteenEureka" />
         <module name="thirteenWebSocket" />
