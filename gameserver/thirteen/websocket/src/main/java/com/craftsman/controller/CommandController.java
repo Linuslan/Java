@@ -43,6 +43,7 @@ public class CommandController {
     public Map<String, Object> enterRoom(JSONObject jsonObject) throws Exception {
         Map<String, Object> dataMap = new HashMap<String, Object>();
         JSONObject dataJson = JSONUtil.getProcessData(jsonObject);
+        Long playerId = JSONUtil.getPlayerId(dataJson);
 
         return null;
     }
