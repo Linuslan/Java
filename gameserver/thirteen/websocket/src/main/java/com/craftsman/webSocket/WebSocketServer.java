@@ -1,8 +1,11 @@
 package com.craftsman.webSocket;
 
+import com.alibaba.fastjson.JSONObject;
+import com.craftsman.common.ExceptionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -46,6 +49,15 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(String message, Session session) {
         logger.info("接收到客户端的消息："+message);
+        try {
+            JSONObject json = JSONObject.parseObject(message);
+            if(StringUtils.isEmpty(json.getString("cmd"))) {
+                ExceptionUtil.throwExcep("");
+            }
+        } catch(Exception ex) {
+
+        }
+
     }
 
     @OnError
