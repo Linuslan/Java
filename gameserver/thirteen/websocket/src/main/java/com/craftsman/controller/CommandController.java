@@ -8,6 +8,10 @@ import java.util.Map;
 @Controller
 public class CommandController {
 
+    public Map<String, Object> register(JSONObject jsonObject) {
+        return null;
+    }
+
     public Map<String, Object> login(JSONObject jsonObject) {
         return null;
     }
