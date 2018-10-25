@@ -1,9 +1,8 @@
-package com.craftsman.common;
+package com.craftsman.common.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -68,7 +67,7 @@ public class BeanUtil {
 				}
 			}
 		} catch(Exception ex) {
-			ExceptionUtil.throwRuntimeExcep(ExceptionUtil.getStackTrace(ex));
+			ExceptionUtil.throwRuntimeException(ExceptionUtil.getStackTrace(ex));
 		}
 		return oldObj;
 	}
@@ -229,7 +228,7 @@ public class BeanUtil {
 				value = new Object();
 			}
 		} catch(Exception ex) {
-			ExceptionUtil.throwRuntimeExcep(ExceptionUtil.getStackTrace(ex));
+			ExceptionUtil.throwRuntimeException(ExceptionUtil.getStackTrace(ex));
 		}
 		return value;
 	}
@@ -245,7 +244,7 @@ public class BeanUtil {
 				field = superCls.getDeclaredField(key);
 			}
 		} catch(Exception ex) {
-			ExceptionUtil.throwRuntimeExcep(ExceptionUtil.getStackTrace(ex));
+			ExceptionUtil.throwRuntimeException(ExceptionUtil.getStackTrace(ex));
 		}
 		return field.getType();
 	}
@@ -260,7 +259,7 @@ public class BeanUtil {
 				field = superCls.getDeclaredField(key);
 			}
 		} catch(Exception ex) {
-			ExceptionUtil.throwRuntimeExcep(ExceptionUtil.getStackTrace(ex));
+			ExceptionUtil.throwRuntimeException(ExceptionUtil.getStackTrace(ex));
 		}
 		return field.getType();
 	}
@@ -332,7 +331,7 @@ public class BeanUtil {
 	
 	/**
 	 * 将字符串集合转换成Long类型的集�?
-	 * @param list
+	 * @param string
 	 * @return
 	 */
 	public static List<Long> parseStringToLongList(String string, String sperator) {
@@ -401,7 +400,7 @@ public class BeanUtil {
 	/**
 	 * 通过类的属�?名获取�?
 	 * @param object
-	 * @param field
+	 * @param fieldName
 	 * @return
 	 * @throws Exception
 	 */
@@ -419,7 +418,7 @@ public class BeanUtil {
 			Method setMethod = object.getClass().getMethod(setMethodName, new Class[] {field.getType()});
 			setMethod.invoke(object, new Object[] {value});
 		} catch(Exception ex) {
-			ExceptionUtil.throwRuntimeExcep(ExceptionUtil.getStackTrace(ex));
+			ExceptionUtil.throwRuntimeException(ExceptionUtil.getStackTrace(ex));
 		}
 		return value;
 	}
@@ -433,7 +432,7 @@ public class BeanUtil {
 	public static void setValueBatch(List<? extends Object> list, Map<String, ? extends Object> valueMap) throws RuntimeException {
 		try {
 			if(null == list) {
-				ExceptionUtil.throwExcep("Object collection IS NULL");
+				ExceptionUtil.throwException("Object collection IS NULL");
 			}
 			if(null == valueMap) {
 				valueMap = new HashMap<String, Object> ();
@@ -453,7 +452,7 @@ public class BeanUtil {
 				}
 			}
 		} catch(Exception ex) {
-			ExceptionUtil.throwRuntimeExcep(ex);
+			ExceptionUtil.throwRuntimeException(ex);
 		}
 	}
 	
@@ -516,6 +515,11 @@ public class BeanUtil {
 			}
 		}
 		return null;
+	}
+
+	public static Object invokeMethod(Object obj, String method, Class<?>[] parameterTypes, Object[] parameters) throws Exception {
+		Method m = obj.getClass().getMethod(method, parameterTypes);
+		return m.invoke(obj, parameters);
 	}
 	
 	/*

@@ -1,4 +1,4 @@
-package com.craftsman.common;
+package com.craftsman.common.util;
 
 public class StringUtil {
 	public static boolean isEmpty(String str) {

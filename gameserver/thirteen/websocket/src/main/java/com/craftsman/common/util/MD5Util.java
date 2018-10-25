@@ -1,4 +1,4 @@
-package com.craftsman.common;
+package com.craftsman.common.util;
 
 import java.security.MessageDigest;
 
