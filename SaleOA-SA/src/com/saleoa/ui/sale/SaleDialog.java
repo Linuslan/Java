@@ -5,10 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
@@ -19,12 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import com.eltima.components.ui.DatePicker;
 import com.saleoa.common.constant.FormCss;
@@ -134,51 +126,23 @@ public class SaleDialog {
 		for(int i = 0; i < saleList.size(); i ++) {
 			lastSaleComb.addItem(saleList.get(i));
 		}
-		
+		employeeComb.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				System.out.println("defghijk");
+				JComboBox<Employee> combo = (JComboBox) event.getSource();
+				Employee employee = (Employee) combo.getSelectedItem();
+				doAutoComplete(employee, saleNoIpt, lastSaleComb);
+			}
+		});
+
 		employeeComb.addItemListener(new ItemListener() {
 
 			public void itemStateChanged(ItemEvent event) {
 				// TODO Auto-generated method stub
 				if(event.getStateChange() == ItemEvent.SELECTED) {
 					Employee employee = (Employee) event.getItem();
-					long maxSaleNo = saleService.getMaxNoByEmployeeId(employee.getId());
-					if(maxSaleNo > 0) {
-						maxSaleNo ++;
-					}
-					saleNoIpt.setText(String.valueOf(maxSaleNo));
-					
-					Map<String, Object> paramMap = new HashMap<String, Object> ();
-					paramMap.put("employeeId", employee.getId());
-					paramMap.put("orderby", " ORDER BY id DESC");
-					List<Sale> saleList = null;
-					try {
-						saleList = saleService.select(paramMap);
-						if(null == saleList) {
-							saleList = new ArrayList<Sale> ();
-						}
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						saleList = new ArrayList<Sale>();
-					}
-					List<Sale> allList = null;
-					try {
-						allList = saleService.select(null);
-						if(null == allList) {
-							allList = new ArrayList<Sale> ();
-						}
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					allList.removeAll(saleList);
-					lastSaleComb.removeAllItems();
-					for(int i = 0; i < saleList.size(); i ++) {
-						lastSaleComb.addItem(saleList.get(i));
-					}
-					for(int i = 0; i < allList.size(); i ++) {
-						lastSaleComb.addItem(allList.get(i));
-					}
+					doAutoComplete(employee, saleNoIpt, lastSaleComb);
 				}
 			}
 			
@@ -304,5 +268,47 @@ public class SaleDialog {
 			}
 			
 		});
+	}
+
+	public void doAutoComplete(Employee employee, JFormattedTextField ipt, JAutoCompleteComboBox combo) {
+
+		long maxSaleNo = saleService.getMaxNoByEmployeeId(employee.getId());
+		if(maxSaleNo > 0) {
+			maxSaleNo ++;
+		}
+		ipt.setText(String.valueOf(maxSaleNo));
+
+		Map<String, Object> paramMap = new HashMap<String, Object> ();
+		paramMap.put("employeeId", employee.getId());
+		paramMap.put("orderby", " ORDER BY id DESC");
+		List<Sale> saleList = null;
+		try {
+			saleList = saleService.select(paramMap);
+			if(null == saleList) {
+				saleList = new ArrayList<Sale> ();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			saleList = new ArrayList<Sale>();
+		}
+		List<Sale> allList = null;
+		try {
+			allList = saleService.select(null);
+			if(null == allList) {
+				allList = new ArrayList<Sale> ();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		allList.removeAll(saleList);
+		combo.removeAllItems();
+		for(int i = 0; i < saleList.size(); i ++) {
+			combo.addItem(saleList.get(i));
+		}
+		for(int i = 0; i < allList.size(); i ++) {
+			combo.addItem(allList.get(i));
+		}
 	}
 }
