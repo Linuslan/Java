@@ -127,7 +127,6 @@ public class SaleDialog {
 			lastSaleComb.addItem(saleList.get(i));
 		}
 		employeeComb.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent event) {
 				System.out.println("defghijk");
 				JComboBox<Employee> combo = (JComboBox) event.getSource();
