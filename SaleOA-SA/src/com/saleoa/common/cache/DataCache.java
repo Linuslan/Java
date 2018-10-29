@@ -1,13 +1,18 @@
 package com.saleoa.common.cache;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.saleoa.model.Sale;
 
 public class DataCache {
 	private static final Map<String, Object> cache = new HashMap<String, Object>();
 	private static final Map<String, Object> secondCache = new HashMap<String, Object> ();
 	private static final Map<String, Map<String, Object>> treeCache = new HashMap<String, Map<String, Object>> ();
 	private static final Map<String, Map<String, Object>> treeSecondCache = new HashMap<String, Map<String, Object>> ();
+	private static final Map<String, Map<String, Object>> DATA_CACHE = new HashMap<String, Map<String, Object>> ();
 	private static final int cacheSize = 500000;
 	public static void push(String key, Object value) {
 		if(cache.size() <= cacheSize) {
@@ -17,6 +22,14 @@ public class DataCache {
 		} else {
 			cache.put(key, value);
 		}
+		String pKey = value.getClass().getSimpleName();
+		Map<String, Object> map = null;
+		if(null == DATA_CACHE.get(pKey)) {
+			map = new HashMap<String, Object>();
+			DATA_CACHE.put(pKey, map);
+		}
+		map = DATA_CACHE.get(pKey);
+		map.put(key, value);
 	}
 	
 	public static Object get(String key) {
@@ -29,13 +42,25 @@ public class DataCache {
 		return null;
 	}
 	
-	public static void remove(String key) {
+	public static void remove(String key, String pKey) {
 		if(null != cache.get(key)) {
 			cache.remove(key);
 		}
 		if(null != secondCache.get(key)) {
 			secondCache.remove(key);
 		}
+		if(null != DATA_CACHE.get(pKey) && null != DATA_CACHE.get(pKey).get(key)) {
+			DATA_CACHE.get(pKey).remove(key);
+		}
+	}
+	
+	public static List<Object> selectAll(String key) {
+		List<Object> list = new ArrayList<Object> ();
+		if(null == DATA_CACHE.get(key)) {
+			return list;
+		}
+		
+		return list;
 	}
 	
 	/**

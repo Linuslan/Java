@@ -108,7 +108,8 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		// TODO Auto-generated method stub
 		boolean success = false;
 		try {
-			String key = getKey()+((Long)BeanUtil.getValue(t, "id")).longValue();
+			String pKey = getKey();
+			String key = pKey+((Long)BeanUtil.getValue(t, "id")).longValue();
 			try {
 				Field field = t.getClass().getDeclaredField("isDelete");
 				BeanUtil.setValue(t, "isDelete", 1);
@@ -117,7 +118,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				String sql = JdbcHelper.deleteSql(t);
 				JdbcHelper.executeSql(sql);
 			}
-			DataCache.remove(key);
+			DataCache.remove(key, pKey);
 			success = true;
 		} catch(Exception ex) {
 			ex.printStackTrace();
