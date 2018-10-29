@@ -58,14 +58,14 @@ public class MainEntry {
 		int width = (int) (screenSize.width*0.8);
 		int height = (int) (screenSize.height*0.8);
 		
-		try {
+		/*try {
 			this.employeeService.select(null);
 			this.saleService.select(null);
 			this.saleLogService.select(null);
 		} catch(Exception ex) {
 			System.out.println("初始化数据异常");
 			ex.printStackTrace();
-		}
+		}*/
 		
 		JMenuBar menuBar = new JMenuBar();
 		main.setJMenuBar(menuBar);

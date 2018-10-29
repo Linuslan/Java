@@ -37,6 +37,14 @@ public class IBaseServiceImpl<T> implements IBaseService<T> {
 		return dao.select(paramMap);
 	}
 
+	/**
+	 * 查询所有的对象
+	 * @return
+	 */
+	public List<T> selectAll() {
+		return dao.selectAll();
+	}
+
 	public T selectOne(Map<String, Object> paramMap) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.selectOne(paramMap);

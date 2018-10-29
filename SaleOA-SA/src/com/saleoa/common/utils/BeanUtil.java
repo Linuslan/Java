@@ -332,7 +332,7 @@ public class BeanUtil {
 	
 	/**
 	 * 将字符串集合转换成Long类型的集�?
-	 * @param list
+	 * @param string
 	 * @return
 	 */
 	public static List<Long> parseStringToLongList(String string, String sperator) {
@@ -401,7 +401,7 @@ public class BeanUtil {
 	/**
 	 * 通过类的属�?名获取�?
 	 * @param object
-	 * @param field
+	 * @param fieldName
 	 * @return
 	 * @throws Exception
 	 */
@@ -516,6 +516,21 @@ public class BeanUtil {
 			}
 		}
 		return null;
+	}
+
+	public static List<Object> parseMapValueToList(Map<String, Object> map) {
+		List<Object> list = new ArrayList<Object> ();
+		Set<Map.Entry<String, Object>> entrySet = map.entrySet();
+		Iterator<Map.Entry<String, Object>> entryIter = entrySet.iterator();
+		while(entryIter.hasNext()) {
+			Map.Entry<String, Object> entry = entryIter.next();
+			Object obj = entry.getValue();
+			if(null == obj) {
+				continue;
+			}
+			list.add(obj);
+		}
+		return list;
 	}
 	
 	/*

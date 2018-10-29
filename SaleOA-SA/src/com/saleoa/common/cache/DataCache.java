@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.model.Sale;
 
 public class DataCache {
@@ -22,7 +23,7 @@ public class DataCache {
 		} else {
 			cache.put(key, value);
 		}
-		String pKey = value.getClass().getSimpleName();
+		String pKey = value.getClass().getSimpleName()+"_";
 		Map<String, Object> map = null;
 		if(null == DATA_CACHE.get(pKey)) {
 			map = new HashMap<String, Object>();
@@ -54,12 +55,13 @@ public class DataCache {
 		}
 	}
 	
-	public static List<Object> selectAll(String key) {
+	public static List<? extends Object> selectAll(String key) {
 		List<Object> list = new ArrayList<Object> ();
-		if(null == DATA_CACHE.get(key)) {
+		Map<String, Object> map = DATA_CACHE.get(key);
+		if(null == map) {
 			return list;
 		}
-		
+		list = BeanUtil.parseMapValueToList(map);
 		return list;
 	}
 	

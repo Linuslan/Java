@@ -67,6 +67,8 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 	}
 	
 	public boolean add(Sale sale) throws Exception {
+		long start = System.currentTimeMillis();
+		System.out.println("执行开始时间："+start);
 		boolean success = false;
 		Level maxLevel = this.levelDao.selectExtremeLevel(true);
 		Long rewardPoints = 1L;
@@ -159,6 +161,9 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		}
 		JdbcHelper.commitTransaction();
 		success = true;
+		long end = System.currentTimeMillis();
+		System.out.println("执行结束时间："+end);
+		System.out.println("本次执行耗时："+(end-start));
 		return success;
 	}
 	

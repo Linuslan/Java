@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.saleoa.base.IBaseDaoImpl;
+import com.saleoa.common.cache.DataCache;
 import com.saleoa.common.plugin.Page;
 import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.JdbcHelper;
@@ -96,6 +97,33 @@ public class ISaleSalaryDaoImpl extends IBaseDaoImpl<SaleSalary> implements ISal
 	 */
 	public SaleSalary selectByEmployeeOnSaleDate(Long employeeId, Date saleDate) {
 		SaleSalary log = null;
+		String key = super.getKey();
+		List<SaleSalary> list = (List<SaleSalary>) DataCache.selectAll(key);
+		Date startDate = DateUtil.getCustomFirstDateOfMonthByDate(saleDate);
+		Date endDate = DateUtil.getCustomEndDateOfMonthByDate(saleDate);
+		if(list.size() > 0) {
+			List<SaleSalary> selectedList = new ArrayList<SaleSalary>();
+			for(int i = 0; i < list.size(); i ++) {
+				SaleSalary saleSalary = list.get(i);
+				Long empId = saleSalary.getEmployeeId();
+				if(employeeId != empId) {
+					continue;
+				}
+				if(saleSalary.getCreateDate().before(startDate)) {
+					continue;
+				}
+				if(saleSalary.getCreateDate().after(endDate)) {
+					continue;
+				}
+				selectedList.add(saleSalary);
+			}
+			if(selectedList.size() > 0) {
+				log = selectedList.get(0);
+			}
+		}
+		if(null != log) {
+			return log;
+		}
 		Map<String, Object> paramMap = new HashMap<String, Object> ();
 		paramMap.put("employeeId", employeeId);
 		paramMap.put("createDate>=", DateUtil.getCustomFirstDateStrOfMonthByDate(saleDate));

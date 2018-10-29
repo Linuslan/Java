@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.saleoa.common.annotation.Table;
 import com.saleoa.common.cache.DataCache;
 import com.saleoa.common.plugin.Page;
+import com.saleoa.common.utils.AnnotationUtil;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.JdbcHelper;
 
@@ -60,12 +62,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				BeanUtil.setValue(list.get(i), "id", id);
 			}
 			JdbcHelper.insertBatch(list);
-			for(int i = 0; i < list.size(); i ++) {
-				T t = list.get(i);
-				Long objId = (Long) BeanUtil.getValue(t, "id");
-				String key = getKey()+objId.longValue();
-				DataCache.push(key, t);
-			}
+			this.pushList(list);
 			success = true;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -92,12 +89,7 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		boolean success = false;
 		try {
 			success = JdbcHelper.updateBatch(list);
-			for(int i = 0; i < list.size(); i ++) {
-				T t = list.get(i);
-				Long objId = (Long) BeanUtil.getValue(t, "id");
-				String key = getKey()+objId.longValue();
-				DataCache.push(key, t);
-			}
+			this.pushList(list);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -134,24 +126,39 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 				getTClass().getField("isDelete");
 				paramMap.put("isDelete", 0);
 			} catch(Exception ex) {
-				ex.printStackTrace();
+				//ex.printStackTrace();
 				System.out.println("未找到is_delete属性");
 			}
 			
 			String sql = JdbcHelper.selectSql(getTClass(), paramMap, false, null, null);
 			System.out.println(sql);
 			List<T> list = JdbcHelper.select(sql, getTClass());
-			for(int i = 0; i < list.size(); i ++) {
-				T t = list.get(i);
-				Long objId = (Long) BeanUtil.getValue(t, "id");
-				String key = getKey()+objId.longValue();
-				DataCache.push(key, t);
-			}
+			this.pushList(list);
 			return list;
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * 查询所有的对象
+	 * @return
+	 */
+	public List<T> selectAll() {
+		List<T> list = null;
+		try {
+			Class<T> cls = this.getTClass();
+			String tableName = AnnotationUtil.getTableName(cls);
+			String sql = "SELECT * FROM "+tableName+" ORDER BY id ASC";
+			list = JdbcHelper.select(sql, cls);
+			this.pushList(list);
+			System.out.println("加载("+tableName+")所有数据成功");
+		} catch(Exception ex) {
+			ex.printStackTrace();
+			list = new ArrayList<T>();
+		}
+		return list;
 	}
 
 	public T selectById(Long id) {
@@ -193,6 +200,15 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		}
 		
 		return page;
+	}
+
+	public void pushList(List<T> list) {
+		for(int i = 0; i < list.size(); i ++) {
+			T t = list.get(i);
+			Long objId = (Long) BeanUtil.getValue(t, "id");
+			String key = getKey()+objId.longValue();
+			DataCache.push(key, t);
+		}
 	}
 	
 }
