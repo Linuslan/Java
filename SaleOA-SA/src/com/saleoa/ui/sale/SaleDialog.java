@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.Map;
 import javax.swing.*;
 
 import com.eltima.components.ui.DatePicker;
+import com.saleoa.common.cache.DataCache;
 import com.saleoa.common.constant.FormCss;
 import com.saleoa.common.utils.BeanUtil;
 import com.saleoa.common.utils.DateUtil;
@@ -67,7 +70,20 @@ public class SaleDialog {
 		final JAutoCompleteComboBox<Employee> employeeComb = new JAutoCompleteComboBox<Employee>();
 		List<Employee> employeeList = null;
 		try {
-			employeeList = this.employeeService.select(null);
+			employeeList = this.employeeService.selectCacheAll();
+			Comparator<Employee> employeeComparator = new Comparator<Employee>() {
+
+				@Override
+				public int compare(Employee arg0, Employee arg1) {
+					// TODO Auto-generated method stub
+					if(arg0.getId().longValue() >= arg1.getId().longValue()) {
+						return 1;
+					} else {
+						return -1;
+					}
+				}
+			};
+			Collections.sort(employeeList, employeeComparator);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,7 +132,19 @@ public class SaleDialog {
 		lastSaleLbl.setLocation(FormCss.getLocation(null, datePicker));
 		List<Sale> saleList = null;
 		try {
-			saleList = this.saleService.select(null);
+			saleList = this.saleService.selectCacheAll();
+			Comparator<Sale> saleComparator = new Comparator<Sale>() {
+				@Override
+				public int compare(Sale arg0, Sale arg1) {
+					// TODO Auto-generated method stub
+					if(arg0.getId().longValue() >= arg1.getId().longValue()) {
+						return 1;
+					} else {
+						return -1;
+					}
+				}
+			};
+			Collections.sort(saleList, saleComparator);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -192,7 +220,9 @@ public class SaleDialog {
 				} else {
 					temp.setCreateDate(new Date());
 				}
-				int saleNo = Integer.parseInt(saleNoIpt.getText());
+				String saleNoStr = saleNoIpt.getText();
+				saleNoStr = saleNoStr.replaceAll(",", "");
+				int saleNo = Integer.parseInt(saleNoStr);
 				int maxSaleNo = (int)saleService.getMaxNoByEmployeeId(employee.getId()).longValue();
 				if(saleNo <= maxSaleNo) {
 					JOptionPane.showMessageDialog(dialog, "所选人员的最大销售编号为"+maxSaleNo+"，请输入大于该编号的数字", "温馨提示",JOptionPane.WARNING_MESSAGE);
@@ -220,6 +250,7 @@ public class SaleDialog {
 				
 				boolean success = false;
 				try {
+					long start = System.currentTimeMillis();
 					if(null == temp.getId()) {
 						Sale lastSaleTemp = lastSale;
 						for(int i = 1; i <= step; i ++) {
@@ -243,6 +274,8 @@ public class SaleDialog {
 					} else {
 						success = saleService.update(temp);
 					}
+					long end = System.currentTimeMillis();
+					System.out.println("新增销售执行完成总共耗时："+(end-start));
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -276,24 +309,22 @@ public class SaleDialog {
 			maxSaleNo ++;
 		}
 		ipt.setText(String.valueOf(maxSaleNo));
-
-		Map<String, Object> paramMap = new HashMap<String, Object> ();
-		paramMap.put("employeeId", employee.getId());
-		paramMap.put("orderby", " ORDER BY id DESC");
-		List<Sale> saleList = null;
-		try {
-			saleList = saleService.select(paramMap);
-			if(null == saleList) {
-				saleList = new ArrayList<Sale> ();
+		List<Sale> saleList = this.saleService.selectByEmployeeId(employee.getId());
+		Comparator<Sale> saleComparator = new Comparator<Sale>() {
+			@Override
+			public int compare(Sale arg0, Sale arg1) {
+				// TODO Auto-generated method stub
+				if(arg0.getId().longValue() >= arg1.getId().longValue()) {
+					return -1;
+				} else {
+					return 1;
+				}
 			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			saleList = new ArrayList<Sale>();
-		}
+		};
+		Collections.sort(saleList, saleComparator);
 		List<Sale> allList = null;
 		try {
-			allList = saleService.select(null);
+			allList = this.saleService.selectCacheAll();
 			if(null == allList) {
 				allList = new ArrayList<Sale> ();
 			}
@@ -301,6 +332,7 @@ public class SaleDialog {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		Collections.sort(allList, saleComparator);
 		allList.removeAll(saleList);
 		combo.removeAllItems();
 		for(int i = 0; i < saleList.size(); i ++) {

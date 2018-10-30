@@ -1,6 +1,7 @@
 package com.saleoa.dao;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.saleoa.base.IBaseDao;
@@ -17,6 +18,13 @@ public interface ISaleDao extends IBaseDao<Sale> {
 	 */
 	public int getSaleCountByDepartment(Long departmentId, Date saleDate);
 
+	/**
+	 * 根据员工id查找员工的销售记录
+	 * @param employeeId
+	 * @return
+	 */
+	public List<Sale> selectByEmployeeId(Long employeeId);
+	
 	/**
 	 * 获取某个用户最大的售出套数
 	 * @param id

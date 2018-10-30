@@ -124,14 +124,14 @@ public class ISaleSalaryDaoImpl extends IBaseDaoImpl<SaleSalary> implements ISal
 		if(null != log) {
 			return log;
 		}
-		Map<String, Object> paramMap = new HashMap<String, Object> ();
+		/*Map<String, Object> paramMap = new HashMap<String, Object> ();
 		paramMap.put("employeeId", employeeId);
 		paramMap.put("createDate>=", DateUtil.getCustomFirstDateStrOfMonthByDate(saleDate));
 		paramMap.put("createDate<=", DateUtil.getCustomEndDateStrOfMonthByDate(saleDate));
 		List<SaleSalary> logs = this.select(paramMap);
 		if(logs.size() > 0) {
 			log = logs.get(0);
-		}
+		}*/
 		return log;
 	}
 	

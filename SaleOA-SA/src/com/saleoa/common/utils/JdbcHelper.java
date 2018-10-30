@@ -290,7 +290,7 @@ public class JdbcHelper {
 		columnSql += ")";
 		valueSql += ")";
 		sql += columnSql + " VALUES"+valueSql;
-		System.out.println(sql);
+		//System.out.println(sql);
 		return sql;
 	}
 	
@@ -400,7 +400,7 @@ public class JdbcHelper {
 		}
 		
 		sql += " WHERE id="+id;
-		System.out.println(sql);
+		//System.out.println(sql);
 		return sql;
 	}
 	
@@ -461,7 +461,7 @@ public class JdbcHelper {
 		
 		sql += " WHERE id=?";
 		values.add(BeanUtil.getValue(obj, "id"));
-		System.out.println(sql);
+		//System.out.println(sql);
 		return sql;
 	}
 	
@@ -531,7 +531,7 @@ public class JdbcHelper {
 		String sql = "";
 		String tableName = AnnotationUtil.getTableName(cls);
 		sql = "DELETE FROM "+tableName+" WHERE id="+id;
-		System.out.println(sql);
+		//System.out.println(sql);
 		return sql;
 	}
 	
@@ -612,7 +612,7 @@ public class JdbcHelper {
 				}
 			}
 		}
-		System.out.println(sql);
+		//System.out.println(sql);
 		return sql;
 	}
 	

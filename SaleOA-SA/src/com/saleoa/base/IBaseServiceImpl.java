@@ -37,6 +37,10 @@ public class IBaseServiceImpl<T> implements IBaseService<T> {
 		return dao.select(paramMap);
 	}
 
+	public List<T> selectCacheAll() {
+		return dao.selectCacheAll();
+	}
+	
 	/**
 	 * 查询所有的对象
 	 * @return

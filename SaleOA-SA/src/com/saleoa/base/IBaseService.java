@@ -16,6 +16,8 @@ public interface IBaseService<T> {
 	
 	public List<T> select(Map<String, Object> paramMap) throws Exception;
 
+	public List<T> selectCacheAll();
+	
 	/**
 	 * 查询所有的对象
 	 * @return

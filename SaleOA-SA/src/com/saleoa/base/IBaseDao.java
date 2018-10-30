@@ -17,6 +17,8 @@ public interface IBaseDao<T> {
 	public boolean delete(T t);
 	
 	public List<T> select(Map<String, Object> paramMap);
+	
+	public List<T> selectCacheAll();
 
 	/**
 	 * 查询所有的对象

@@ -18,6 +18,7 @@ import com.saleoa.common.utils.DateUtil;
 import com.saleoa.common.utils.JdbcHelper;
 import com.saleoa.common.utils.StringUtil;
 import com.saleoa.model.BalanceLevel;
+import com.saleoa.model.Level;
 import com.saleoa.model.Sale;
 import com.saleoa.model.SaleSalary;
 
@@ -163,9 +164,26 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 	 */
 	public int getSaleCountByDepartment(Long departmentId, Date saleDate) {
 		int count = 0;
-		String startDate = DateUtil.getCustomFirstDateStrOfMonthByDate(saleDate);
-		String endDate = DateUtil.getCustomEndDateStrOfMonthByDate(saleDate);
-		String sql = "SELECT COUNT(*) FROM tbl_oa_sale WHERE sale_date >= '"+startDate+"'" +
+		Date startDate = DateUtil.getCustomFirstDateOfMonthByDate(saleDate);
+		Date endDate = DateUtil.getCustomEndDateOfMonthByDate(saleDate);
+		List<Sale> allSales = this.selectCacheAll();
+		Iterator<Sale> iter = allSales.iterator();
+		while(iter.hasNext()) {
+			Sale sale = iter.next();
+			if(sale.getDepartmentId().longValue() != departmentId.longValue()) {
+				continue;
+			}
+			if(sale.getSaleDate().before(startDate)) {
+				continue;
+			}
+			if(sale.getSaleDate().after(endDate)) {
+				continue;
+			}
+			count ++;
+		}
+		//String startDate = DateUtil.getCustomFirstDateStrOfMonthByDate(saleDate);
+		//String endDate = DateUtil.getCustomEndDateStrOfMonthByDate(saleDate);
+		/*String sql = "SELECT COUNT(*) FROM tbl_oa_sale WHERE sale_date >= '"+startDate+"'" +
 				" AND sale_date <= '"+endDate+"' AND department_id="+departmentId;
 		try {
 			PreparedStatement ps = JdbcHelper.getConnection().prepareStatement(sql);
@@ -176,8 +194,44 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return count;
+	}
+	
+	/**
+	 * 根据员工id查找员工的销售记录
+	 * @param employeeId
+	 * @return
+	 */
+	public List<Sale> selectByEmployeeId(Long employeeId) {
+		List<Sale> sales = new ArrayList<Sale>();
+		String key = this.getKey();
+		List<Sale> list = (List<Sale>) DataCache.selectAll(key);
+		if(list.size() > 0) {
+			for(int i = 0; i < list.size(); i ++) {
+				Sale temp = list.get(i);
+				if(temp.getEmployeeId().longValue() != employeeId) {
+					continue;
+				}
+				sales.add(temp);
+			}
+		}
+		if(sales.size() <= 0) {
+			Map<String, Object> paramMap = new HashMap<String, Object> ();
+			paramMap.put("employeeId", employeeId);
+			paramMap.put("orderby", " ORDER BY id DESC");
+			try {
+				sales = this.select(paramMap);
+				if(null == sales) {
+					sales = new ArrayList<Sale> ();
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				sales = new ArrayList<Sale>();
+			}
+		}
+		return sales;
 	}
 	
 	/**

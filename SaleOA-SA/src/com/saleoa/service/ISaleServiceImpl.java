@@ -58,6 +58,15 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 	}
 	
 	/**
+	 * 根据员工id查找员工的销售记录
+	 * @param employeeId
+	 * @return
+	 */
+	public List<Sale> selectByEmployeeId(Long employeeId) {
+		return this.saleDao.selectByEmployeeId(employeeId);
+	}
+	
+	/**
 	 * 获取某个用户最大的售出套数
 	 * @param id
 	 * @return
@@ -173,9 +182,6 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		if(0l >= lastSaleId) {
 			return true;
 		}
-		if(sale.getId() == 3l) {
-			System.out.println("===========");
-		}
 		Long levelId = sale.getLevelId();
 		Level level = this.levelDao.selectById(levelId);
 		Sale lastSale = this.dao.selectById(lastSaleId);
@@ -200,9 +206,10 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 			bonus = bonus - lastSaleSalaryBonus;
 		}
 		//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
-		if(bonus > 0) {
-			upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs);
-		}
+		/*if(bonus > 0) {
+			
+		}*/
+		upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs);
 		Level nextLevel = this.levelDao.selectByPoint(lastSale.getRewardPoints());
 		if(null == nextLevel) {
 			ExceptionUtil.throwExcep("未查询到介绍人积分对应的等级，积分："+lastSale.getRewardPoints());

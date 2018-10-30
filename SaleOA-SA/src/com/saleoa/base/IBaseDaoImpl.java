@@ -141,6 +141,10 @@ public class IBaseDaoImpl<T> implements IBaseDao<T> {
 		return null;
 	}
 
+	public List<T> selectCacheAll() {
+		return (List<T>) DataCache.selectAll(this.getKey());
+	}
+	
 	/**
 	 * 查询所有的对象
 	 * @return
