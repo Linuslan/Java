@@ -102,6 +102,7 @@ public class EmployeePanel extends JGridPanel<Employee> {
 		final JComboBox<String> statusSearchComb = new JComboBox<String>();
 		statusSearchComb.addItem("在职");
 		statusSearchComb.addItem("离职");
+		statusSearchComb.addItem("全部");
 		statusSearchComb.setSize(FormCss.FORM_WIDTH, FormCss.HEIGHT);
 		searchPanel.add(statusSearchComb);
 		
@@ -137,7 +138,8 @@ public class EmployeePanel extends JGridPanel<Employee> {
 				if(!StringUtil.isEmpty(name)) {
 					paramMap.put("name LIKE ", "%"+name+"%");
 				}
-				if(null != statusSearchComb.getSelectedItem()) {
+				if(null != statusSearchComb.getSelectedItem()
+						&& statusSearchComb.getSelectedIndex() < 2) {
 					int status = statusSearchComb.getSelectedIndex();
 					paramMap.put("status", status);
 				}

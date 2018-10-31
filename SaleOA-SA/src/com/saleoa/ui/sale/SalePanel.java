@@ -111,6 +111,7 @@ public class SalePanel extends JGridPanel<Sale> {
 		Employee nullItem = new Employee();
 		nullItem.setId(0L);
 		nullItem.setName("нч");
+		nullItem.setNameEn("wu");
 		employeeSearchComb.addItem(nullItem);
 		searchPanel.add(employeeSearchComb);
 		try {
