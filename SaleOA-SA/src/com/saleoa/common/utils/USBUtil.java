@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 
 public class USBUtil {
 	//
-	private static String[] snArr = {"b56f71490e14abcf42e5500a3344329d", "dc3d814bc10a67b1dc2357461d86aa0e", "f89a78304d57b5059a7599a140f84eee"};
+	private static String[] snArr = {"b56f71490e14abcf42e5500a3344329d",
+		"dc3d814bc10a67b1dc2357461d86aa0e", "f89a78304d57b5059a7599a140f84eee",
+		"24c087f17e44ae7b7f28e4744a58eb6f", "d13626320ceea15ff7d89e77baa030bb"};
 	public static String getSerialNumber(String drive) {
 		String result = "";
 		try {
@@ -161,6 +163,6 @@ public class USBUtil {
 			e.printStackTrace();
 		}*/
 		getSerialNo();
-		System.out.println(MD5Util.md5(MD5Util.md5("0013729B6EB8BB319559025E")));
+		System.out.println(MD5Util.md5(MD5Util.md5("AACGVGDAKDB8")));
 	}
 }
