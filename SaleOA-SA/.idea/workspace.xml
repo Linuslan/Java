@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="xskoa" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="b0140816-9d3f-41e4-8f9e-51632b992008" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -7,8 +12,7 @@
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/base/IBaseDaoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/base/IBaseDaoImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/base/IBaseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/base/IBaseService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/base/IBaseServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/base/IBaseServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/common/cache/DataCache.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/common/cache/DataCache.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/common/utils/BeanUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/common/utils/BeanUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/common/utils/JdbcHelper.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/common/utils/JdbcHelper.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/dao/IBalanceLevelDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/dao/IBalanceLevelDao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/dao/IBalanceLevelDaoImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/dao/IBalanceLevelDaoImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/dao/IDepartmentDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/dao/IDepartmentDao.class" afterDir="false" />
@@ -39,6 +43,8 @@
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/IEmployeeRoleServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/IEmployeeRoleServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/IEmployeeService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/IEmployeeService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/IEmployeeServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/IEmployeeServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/ILevelService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/ILevelService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/ILevelServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/ILevelServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/IManagerLevelService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/IManagerLevelService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/IManagerLevelServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/IManagerLevelServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/ISalaryConfigService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/ISalaryConfigService.class" afterDir="false" />
@@ -54,26 +60,25 @@
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$5.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/MainEntry$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/MainEntry$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/MainEntry.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/MainEntry.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/employee/EmployeePanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$2.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog$6.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SaleDialog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/slf4j.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slf4j.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/base/IBaseDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/base/IBaseDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/base/IBaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/base/IBaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/common/cache/DataCache.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/common/cache/DataCache.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/common/utils/BeanUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/common/utils/BeanUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/ui/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/ui/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/saleoa/ui/MainEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/ui/MainEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SalePanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SalePanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SalePanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SalePanel$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SalePanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/sale/SalePanel.class" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -86,30 +91,33 @@
     <session id="-211110534">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.5" value="1" />
+          <entry key="project.closed" value="4" />
+          <entry key="project.open.time.5" value="2" />
+          <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="62" />
+          <entry key="java" value="65" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="62" />
+          <entry key="JAVA" value="65" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="java" value="4451" />
+          <entry key="txt" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JAVA" value="4451" />
+          <entry key="PLAIN_TEXT" value="13" />
         </counts>
       </usages-collector>
     </session>
@@ -117,23 +125,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/sale/SaleDialog.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="225" column="33" selection-start-line="225" selection-start-column="33" selection-end-line="225" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="65">
-              <caret line="194" column="13" selection-start-line="194" selection-start-column="13" selection-end-line="194" selection-end-column="13" />
-              <folding>
-                <element signature="e#2065#2066#0" expanded="true" />
-                <element signature="e#2116#2117#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="3423">
+              <caret line="200" column="13" selection-start-line="200" selection-start-column="13" selection-end-line="200" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -141,11 +136,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="77">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
-              <folding>
-                <element signature="e#1159#1166#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="756">
+              <caret line="46" column="50" selection-start-line="46" selection-start-column="50" selection-end-line="46" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -153,11 +145,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
+            <state relative-caret-position="1743">
               <caret line="98" selection-start-line="98" selection-end-line="98" />
               <folding>
                 <element signature="e#3768#3780#0" expanded="true" />
-                <element signature="e#4308#4324#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -166,7 +157,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/common/cache/DataCache.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="483">
+            <state relative-caret-position="546">
               <caret line="32" selection-start-line="32" selection-end-line="32" />
             </state>
           </provider>
@@ -175,8 +166,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+            <state relative-caret-position="315">
+              <caret line="170" column="25" lean-forward="true" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -184,12 +175,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="36" selection-start-line="36" selection-end-line="36" />
-              <folding>
-                <element signature="e#985#986#0" expanded="true" />
-                <element signature="e#1014#1015#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="819">
+              <caret line="49" column="5" selection-start-line="49" selection-start-column="5" selection-end-line="49" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -197,8 +184,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/sale/SalePanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="421">
-              <caret line="65" column="24" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
+            <state relative-caret-position="1596">
+              <caret line="118" column="59" selection-start-line="118" selection-start-column="59" selection-end-line="118" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/IEmployeeDaoImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -206,8 +202,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/MainEntry.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
+            <state relative-caret-position="4179">
               <caret line="240" column="13" selection-start-line="240" selection-start-column="13" selection-end-line="240" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/Login.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4620">
+              <caret line="253" column="38" selection-start-line="253" selection-start-column="38" selection-end-line="253" selection-end-column="38" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#7689#8451#0" expanded="true" />
+                <element signature="e#8450#8451#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -259,7 +269,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="196" />
     <option name="y" value="93" />
     <option name="width" value="1857" />
@@ -281,7 +291,20 @@
             <path>
               <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
               <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
+              <item name="classes" type="462c0819:PsiDirectoryNode" />
+              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
+              <item name="xskoa" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
@@ -315,66 +338,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="annotation" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="cache" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="constant" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="service" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
               <item name="ui" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -397,10 +360,13 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1540830561035" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541296297061" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="Console" />
   </component>
   <component name="RunDashboard">
@@ -446,17 +412,28 @@
       <option name="presentableId" value="Default" />
       <updated>1540602086492</updated>
       <workItem from="1540602089660" duration="7239000" />
-      <workItem from="1540815527273" duration="13767000" />
+      <workItem from="1540815527273" duration="14031000" />
+      <workItem from="1541232406627" duration="2153000" />
+      <workItem from="1541295223124" duration="1092000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21006000" />
+    <option name="totallyTimeSpent" value="24515000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25294748" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1982851" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -465,7 +442,37 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.6647792" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989282" weight="0.22423556" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.2853907" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994641" weight="0.3295583" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4994641" weight="0.3295583" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5010718" side_tool="true" visible="true" weight="0.22423556" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.3295583" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.24973205" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="right" id="Capture Analysis" order="4" />
+      <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="right" id="Theme Preview" order="6" />
+      <window_info anchor="right" id="Palette&#9;" order="7" />
+      <window_info anchor="right" id="Maven Projects" order="8" />
+    </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19560558" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="UI Designer" order="4" />
+      <window_info id="Capture Tool" order="5" />
+      <window_info id="Favorites" order="6" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.22423556" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.2853907" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -484,7 +491,7 @@
       <window_info anchor="right" id="Theme Preview" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Maven Projects" order="8" />
-    </layout>
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -497,25 +504,25 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java</url>
-          <line>96</line>
+          <line>105</line>
           <properties />
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java</url>
-          <line>114</line>
+          <line>123</line>
           <properties />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java</url>
-          <line>188</line>
+          <line>194</line>
           <properties />
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java</url>
-          <line>205</line>
+          <line>212</line>
           <properties />
           <option name="timeStamp" value="14" />
         </line-breakpoint>
@@ -530,12 +537,6 @@
           <line>40</line>
           <properties />
           <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/saleoa/ui/Login.java</url>
-          <line>253</line>
-          <properties />
-          <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java</url>
@@ -555,11 +556,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
           <caret line="146" selection-start-line="146" selection-end-line="146" />
-          <folding>
-            <element signature="e#1665#1666#0" expanded="true" />
-            <element signature="e#1681#1682#0" expanded="true" />
-            <element signature="e#2832#2833#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -581,10 +577,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15519">
           <caret line="799" column="16" selection-start-line="799" selection-start-column="16" selection-end-line="799" selection-end-column="16" />
-          <folding>
-            <element signature="e#27274#27275#0" expanded="true" />
-            <element signature="e#27311#27312#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -599,9 +591,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3667">
           <caret line="334" column="20" selection-start-line="334" selection-start-column="20" selection-end-line="334" selection-end-column="20" />
-          <folding>
-            <element signature="e#16155#16163#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -637,10 +626,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
           <caret line="8" column="61" selection-start-line="8" selection-start-column="61" selection-end-line="8" selection-end-column="61" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#199#221#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -655,9 +640,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
           <caret line="90" selection-start-line="90" selection-end-line="90" />
-          <folding>
-            <element signature="e#1906#1907#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -665,9 +647,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="5" column="52" lean-forward="true" selection-start-line="5" selection-start-column="52" selection-end-line="5" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -748,93 +727,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/Login.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="266" selection-start-line="266" selection-end-line="266" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#7567#8329#0" expanded="true" />
-            <element signature="e#8328#8329#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/common/cache/DataCache.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="32" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
-          <folding>
-            <element signature="e#985#986#0" expanded="true" />
-            <element signature="e#1014#1015#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/sale/SalePanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="421">
-          <caret line="65" column="24" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/MainEntry.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="240" column="13" selection-start-line="240" selection-start-column="13" selection-end-line="240" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="98" selection-start-line="98" selection-end-line="98" />
-          <folding>
-            <element signature="e#3768#3780#0" expanded="true" />
-            <element signature="e#4308#4324#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="77">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-          <folding>
-            <element signature="e#1159#1166#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://D:/software/install/work/java/jdk8/src.zip!/javax/swing/AbstractButton.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1744">
           <caret line="2020" column="17" lean-forward="true" selection-start-line="2020" selection-start-column="17" selection-end-line="2020" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/sale/SaleDialog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="225" column="33" selection-start-line="225" selection-start-column="33" selection-end-line="225" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="65">
-          <caret line="194" column="13" selection-start-line="194" selection-start-column="13" selection-end-line="194" selection-end-column="13" />
-          <folding>
-            <element signature="e#2065#2066#0" expanded="true" />
-            <element signature="e#2116#2117#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -845,12 +741,167 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/sale/SaleDialog.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="24" column="5" selection-start-line="24" selection-start-column="5" selection-end-line="24" selection-end-column="5" />
+        <state relative-caret-position="5166">
+          <caret line="256" column="33" selection-start-line="256" selection-start-column="33" selection-end-line="256" selection-end-column="33" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3423">
+          <caret line="200" column="13" selection-start-line="200" selection-start-column="13" selection-end-line="200" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="46" column="50" selection-start-line="46" selection-start-column="50" selection-end-line="46" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1743">
+          <caret line="98" selection-start-line="98" selection-end-line="98" />
+          <folding>
+            <element signature="e#3768#3780#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/common/cache/DataCache.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="546">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="819">
+          <caret line="49" column="5" selection-start-line="49" selection-start-column="5" selection-end-line="49" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/sale/SalePanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1596">
+          <caret line="118" column="59" selection-start-line="118" selection-start-column="59" selection-end-line="118" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/IEmployeeDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/MainEntry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4179">
+          <caret line="240" column="13" selection-start-line="240" selection-start-column="13" selection-end-line="240" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/Login.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4620">
+          <caret line="253" column="38" selection-start-line="253" selection-start-column="38" selection-end-line="253" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#7689#8451#0" expanded="true" />
+            <element signature="e#8450#8451#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="170" column="25" lean-forward="true" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>xskoa</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>No facets are configured</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>SaleOA-SA</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
