@@ -101,7 +101,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		sale.setDepartmentName(employee.getDepartmentName());
 		if(0l < lastSaleId) {
 			Sale lastSale = this.dao.selectById(lastSaleId);
-			SaleLog saleLog = this.saleLogDao.getInstance(lastSale);
+			SaleLog saleLog = this.saleLogDao.getInstance(lastSale, sale.getSaleDate());
 			addSaleLogs.add(saleLog);
 			SaleSalary lastSaleSalary = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
 			if(null == lastSaleSalary) {
@@ -119,7 +119,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 			bonus = bonus-lastSaleLevel.getBonus();
 			//剩余奖金大于0，则接着找下个有层级查的介绍人计算奖金
 			if(bonus > 0 && 0l < lastSale.getId()) {
-				upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs);
+				upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs, sale);
 			}
 			Level nextLevel = this.levelDao.selectByPoint(lastSale.getRewardPoints());
 			if(null == nextLevel) {
@@ -165,6 +165,9 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		if(!updateSaleSalarys.isEmpty()) {
 			this.saleSalaryDao.updateBatch(updateSaleSalarys);
 		}
+		Map<String, Object> valueMap = new HashMap<String, Object>();
+		valueMap.put("saleId", sale.getId());
+		BeanUtil.setValueBatch(addSaleLogs, valueMap);
 		if(!addSaleLogs.isEmpty()) {
 			this.saleLogDao.addBatch(addSaleLogs);
 		}
@@ -176,7 +179,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		return success;
 	}
 	
-	public boolean upgradeSale(Sale sale, long bonus, List<Sale> updates, List<SaleSalary> addSaleSalarys, List<SaleSalary> updateSaleSalarys, List<SaleLog> addSaleLogs) throws Exception {
+	public boolean upgradeSale(Sale sale, long bonus, List<Sale> updates, List<SaleSalary> addSaleSalarys, List<SaleSalary> updateSaleSalarys, List<SaleLog> addSaleLogs, Sale newSale) throws Exception {
 		boolean success = false;
 		Long lastSaleId = sale.getLastSaleId();
 		if(0l >= lastSaleId) {
@@ -190,7 +193,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		Level lastSaleLevel = this.levelDao.selectById(lastSaleLevelId);
 		//有等级差才有奖金，且奖金有剩余
 		if(lastSaleLevel.getLevel() > level.getLevel() && bonus > 0) {
-			SaleLog saleLog = this.saleLogDao.getInstance(lastSale);
+			SaleLog saleLog = this.saleLogDao.getInstance(lastSale, newSale.getSaleDate());
 			addSaleLogs.add(saleLog);
 			SaleSalary lastSaleSalary = this.saleSalaryDao.selectByEmployeeOnSaleDate(lastSale.getEmployeeId(), sale.getSaleDate());
 			if(null == lastSaleSalary) {
@@ -209,7 +212,7 @@ public class ISaleServiceImpl extends IBaseServiceImpl<Sale> implements
 		/*if(bonus > 0) {
 			
 		}*/
-		upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs);
+		upgradeSale(lastSale, bonus, updates, addSaleSalarys, updateSaleSalarys, addSaleLogs, newSale);
 		Level nextLevel = this.levelDao.selectByPoint(lastSale.getRewardPoints());
 		if(null == nextLevel) {
 			ExceptionUtil.throwExcep("未查询到介绍人积分对应的等级，积分："+lastSale.getRewardPoints());

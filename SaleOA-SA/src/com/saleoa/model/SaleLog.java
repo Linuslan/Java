@@ -14,6 +14,9 @@ public class SaleLog {
 	
 	@Column(name="sale_id", jdbcType=JdbcType.INTEGER)
 	private Long saleId;
+
+	@Column(name="original_sale_id", jdbcType = JdbcType.INTEGER)
+	private Long originalSaleId;
 	
 	@Column(name="employee_id", jdbcType=JdbcType.INTEGER)
 	private Long employeeId;
@@ -84,5 +87,13 @@ public class SaleLog {
 
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+
+	public Long getOriginalSaleId() {
+		return originalSaleId;
+	}
+
+	public void setOriginalSaleId(Long originalSaleId) {
+		this.originalSaleId = originalSaleId;
 	}
 }

@@ -7,13 +7,17 @@ import com.saleoa.model.Sale;
 import com.saleoa.model.SaleLog;
 
 public class ISaleLogDaoImpl extends IBaseDaoImpl<SaleLog> implements ISaleLogDao {
-	public SaleLog getInstance(Sale sale) {
+	public SaleLog getInstance(Sale sale, Date saleDate) {
 		SaleLog saleLog = new SaleLog();
 		saleLog.setEmployeeId(sale.getEmployeeId());
 		saleLog.setEmployeeName(sale.getEmployeeName());
-		saleLog.setSaleDate(sale.getSaleDate());
+		if(null != saleDate) {
+			saleLog.setSaleDate(saleDate);
+		} else {
+			saleLog.setSaleDate(sale.getSaleDate());
+		}
 		saleLog.setCreateDate(new Date());
-		saleLog.setSaleId(sale.getId());
+		saleLog.setOriginalSaleId(sale.getId());
 		return saleLog;
 	}
 }

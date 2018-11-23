@@ -27,6 +27,10 @@ public class IBaseServiceImpl<T> implements IBaseService<T> {
 		return dao.update(t);
 	}
 
+	public boolean updateBatch(List<T> list) throws Exception {
+		return dao.updateBatch(list);
+	}
+
 	public boolean delete(T t) throws Exception {
 		// TODO Auto-generated method stub
 		return dao.delete(t);

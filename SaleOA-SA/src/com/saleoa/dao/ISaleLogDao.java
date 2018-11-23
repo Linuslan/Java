@@ -5,7 +5,9 @@ import com.saleoa.model.SalaryConfig;
 import com.saleoa.model.Sale;
 import com.saleoa.model.SaleLog;
 
+import java.util.Date;
+
 public interface ISaleLogDao extends IBaseDao<SaleLog> {
 
-	public SaleLog getInstance(Sale sale);
+	public SaleLog getInstance(Sale sale, Date saleDate);
 }

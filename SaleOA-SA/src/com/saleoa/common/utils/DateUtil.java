@@ -147,6 +147,13 @@ public class DateUtil {
 		startDate = year + "-" + (month > 9 ? month : "0"+month) + "-" + (startDay > 9 ? startDay : "0" + startDay) + " 00:00:00";
 		return startDate;
 	}
+
+	public static Date addSecond(Date date, int second) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.SECOND, second);
+		return calendar.getTime();
+	}
 	
 	public static String getCustomEndDateStr(int year, int month) throws Exception {
 		String startDate = "";
@@ -158,11 +165,12 @@ public class DateUtil {
 	}
 	
 	public static void main(String[] args) {
-		String dateStr = "2018-08-25 23:59:59";
+		String dateStr = "2018-08-25 23:59:56";
 		Date date = parseFullDate(dateStr);
+		System.out.println(DateUtil.addSecond(date, 1));
 		//System.out.println(date);
 		
-		System.out.println(DateUtil.getCustomFirstDateStrOfMonthByDate(date));
-		System.out.println(DateUtil.getCustomEndDateStrOfMonthByDate(date));
+		//System.out.println(DateUtil.getCustomFirstDateStrOfMonthByDate(date));
+		//System.out.println(DateUtil.getCustomEndDateStrOfMonthByDate(date));
 	}
 }

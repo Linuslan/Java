@@ -495,7 +495,7 @@ public class JdbcHelper {
 		String sql = updateSql(object, values);
 		PreparedStatement ps = getConnection().prepareStatement(sql);
 		updatePrepared(values, ps);
-		ps.executeBatch();
+		int[] i = ps.executeBatch();
 		success = true;
 		return success;
 	}

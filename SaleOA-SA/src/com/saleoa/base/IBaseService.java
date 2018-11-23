@@ -11,6 +11,8 @@ public interface IBaseService<T> {
 	public boolean addBatch(List<T> list) throws Exception;
 	
 	public boolean update(T t) throws Exception;
+
+	public boolean updateBatch(List<T> list) throws Exception;
 	
 	public boolean delete(T t) throws Exception;
 	
