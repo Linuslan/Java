@@ -54,7 +54,7 @@ public class Login {
 	}
 	
 	public void init() {
-		/*try {
+		try {
 			boolean check = USBUtil.checkUSB();
 		} catch(Exception ex) {
 			if(ex.getMessage().indexOf("œ˙ªŸ")>=0) {
@@ -65,7 +65,7 @@ public class Login {
 			}
 			JOptionPane.showMessageDialog(null, ex.getMessage(), "Œ¬‹∞Ã· æ",JOptionPane.WARNING_MESSAGE);
 			return;
-		}*/
+		}
 		final JLabel tipLbl = new JLabel();
 		int width = (int) (screenSize.width*0.4);
 		int height = (int) (screenSize.height*0.4);
