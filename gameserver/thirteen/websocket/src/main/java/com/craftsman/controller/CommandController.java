@@ -19,7 +19,17 @@ public class CommandController {
     @Autowired
     private IGamePlayerService gamePlayerService;
 
-    public Map<String, Object> register(JSONObject jsonObject) {
+    /**
+     * 游客注册
+     * @param jsonObject
+     * @return
+     */
+    public Map<String, Object> register(JSONObject jsonObject) throws Exception {
+        String userName = "";
+        String password = "123456";
+        if(StringUtils.isEmpty(userName)) {
+            ExceptionUtil.throwExceptionJsonByError(ErrorCode.REGISTER_ERROR_EMPTY_USERNAME);
+        }
         return null;
     }
 
