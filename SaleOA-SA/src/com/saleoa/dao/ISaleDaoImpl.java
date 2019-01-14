@@ -421,7 +421,7 @@ public class ISaleDaoImpl extends IBaseDaoImpl<Sale> implements ISaleDao {
 	
 	/**
 	 * 
-	 * @param sale
+	 * @param paramMap
 	 * @return
 	 */
 	public long selectSaleCountBySale(Map<String, Object> paramMap) {

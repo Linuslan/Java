@@ -203,7 +203,7 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 		return success;
 	}
 	
-	private Long getSupposedMoney(Salary salary) {
+	public Long getSupposedMoney(Salary salary) {
 		return salary.getMoney() + salary.getDirectSellMoney() + salary.getBalanceMoney() + salary.getReachGoalBonus() + salary.getOverGoalBonus() + salary.getOfficeManageBonus() + salary.getFullDutyBonus() + salary.getTotalReachGoalBonus()
 				-salary.getDeductMoney();
 	}
@@ -222,7 +222,7 @@ public class ISalaryServiceImpl extends IBaseServiceImpl<Salary> implements
 		return tax;
 	}
 	
-	private Long getTotalSalary(Salary salary) {
+	public Long getTotalSalary(Salary salary) {
 		return salary.getSupposedMoney()
 				- salary.getAmercement() - salary.getCompanyLend() - salary.getTax();
 	}

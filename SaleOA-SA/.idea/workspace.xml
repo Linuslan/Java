@@ -8,8 +8,26 @@
   <component name="ChangeListManager">
     <list default="true" id="b0140816-9d3f-41e4-8f9e-51632b992008" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameserver/thirteen/websocket/src/main/java/com/craftsman/common/constant/enums/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/../gameserver/thirteen/websocket/src/main/java/com/craftsman/common/constant/enums/ErrorCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gameserver/thirteen/websocket/src/main/java/com/craftsman/controller/CommandController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../gameserver/thirteen/websocket/src/main/java/com/craftsman/controller/CommandController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backup/slf4j.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/ISalaryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/ISalaryService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/service/ISalaryServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/service/ISalaryServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/Login.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/Login.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/salary/SalaryDialog$15.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/salary/SalaryDialog$15.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/com/saleoa/ui/salary/SalaryDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/saleoa/ui/salary/SalaryDialog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/slf4j.jar" beforeDir="false" afterPath="$PROJECT_DIR$/lib/slf4j.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/saleoa/dao/ISaleDaoImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/dao/ISaleDaoImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/saleoa/service/ISalaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/service/ISalaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/saleoa/service/ISalaryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/service/ISalaryServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/saleoa/ui/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/ui/Login.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/saleoa/ui/salary/SalaryDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/saleoa/ui/salary/SalaryDialog.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,61 +45,146 @@
     <session id="-211110534">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="8" />
+          <entry key="project.closed" value="9" />
           <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.22" value="1" />
+          <entry key="project.open.time.28" value="1" />
           <entry key="project.open.time.3" value="2" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="9" />
+          <entry key="project.opened" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="107" />
+          <entry key="java" value="137" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="107" />
+          <entry key="JAVA" value="137" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="6898" />
+          <entry key="java" value="7787" />
           <entry key="txt" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="6898" />
+          <entry key="JAVA" value="7787" />
           <entry key="PLAIN_TEXT" value="13" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/IBalanceLevelService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.4725051">
+      <split-first>
+        <leaf>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISalaryServiceImpl.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="469">
+                  <caret line="85" column="30" selection-start-line="85" selection-start-column="30" selection-end-line="85" selection-end-column="30" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/IManagerLevelDaoImpl.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="315">
+                  <caret line="37" column="40" selection-start-line="37" selection-start-column="40" selection-end-line="37" selection-end-column="40" />
+                  <folding>
+                    <element signature="e#813#827#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/salary/SalaryPanel.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="440">
+                  <caret line="390" column="5" lean-forward="true" selection-start-line="390" selection-start-column="5" selection-end-line="390" selection-end-column="5" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/IManagerLevelServiceImpl.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="315">
+                  <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="483">
+                  <caret line="66" column="25" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="21">
+                  <caret line="186" column="19" selection-start-line="186" selection-start-column="19" selection-end-line="186" selection-end-column="19" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="235">
+                  <caret line="135" column="29" selection-start-line="135" selection-start-column="29" selection-end-line="135" selection-end-column="29" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/salary/SalaryDialog.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-2024">
+                  <caret line="577" column="46" selection-start-line="577" selection-start-column="46" selection-end-line="577" selection-end-column="46" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelPanel.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="197">
+                  <caret line="136" column="11" selection-start-line="136" selection-start-column="11" selection-end-line="136" selection-end-column="11" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelDialog.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="3448">
+                  <caret line="232" column="29" selection-start-line="232" selection-start-column="29" selection-end-line="232" selection-end-column="29" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -120,11 +223,17 @@
         <option value="$PROJECT_DIR$/src/com/saleoa/base/IBaseService.java" />
         <option value="$PROJECT_DIR$/src/com/saleoa/common/utils/JdbcHelper.java" />
         <option value="$PROJECT_DIR$/src/com/test/RecoverSaleLog.java" />
-        <option value="$PROJECT_DIR$/src/com/saleoa/ui/Login.java" />
         <option value="$PROJECT_DIR$/src/com/saleoa/dao/ISaleLogDao.java" />
         <option value="$PROJECT_DIR$/src/com/saleoa/dao/ISaleLogDaoImpl.java" />
         <option value="$PROJECT_DIR$/src/com/saleoa/model/SaleLog.java" />
         <option value="$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/com/saleoa/dao/ISaleDaoImpl.java" />
+        <option value="$PROJECT_DIR$/src/com/saleoa/ui/Login.java" />
+        <option value="$PROJECT_DIR$/src/com/saleoa/service/ISalaryServiceImpl.java" />
+        <option value="$PROJECT_DIR$/src/com/saleoa/service/ISalaryService.java" />
+        <option value="$PROJECT_DIR$/src/com/saleoa/ui/salary/SalaryDialog.java" />
+        <option value="$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelDialog.java" />
+        <option value="$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelPanel.java" />
       </list>
     </option>
   </component>
@@ -134,7 +243,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="196" />
     <option name="y" value="93" />
     <option name="width" value="1857" />
@@ -146,7 +255,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -154,11 +262,6 @@
             <path>
               <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
               <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
@@ -192,31 +295,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="common" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
               <item name="service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -227,16 +305,35 @@
               <item name="saleoa" type="462c0819:PsiDirectoryNode" />
               <item name="ui" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="managerLevel" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SaleOA-SA" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SaleOA-SA" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="saleoa" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="salary" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543059453164" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1547452442323" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -246,12 +343,12 @@
     <property name="settings.editor.selected.configurable" value="Console" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Code\GithubRepository\Java\SaleOA-SA\lib" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Code\GithubRepository\Java\SaleOA-SA\lib" />
       <recent name="D:\Code\GithubRepository\Java\SaleOA-SA\src" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Code\GithubRepository\Java\SaleOA-SA\lib" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -338,11 +435,13 @@
       <workItem from="1543552220445" duration="21000" />
       <workItem from="1544689914060" duration="721000" />
       <workItem from="1544712760459" duration="95000" />
+      <workItem from="1547192134961" duration="2391000" />
+      <workItem from="1547429388099" duration="11782000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40381000" />
+    <option name="totallyTimeSpent" value="54554000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -354,9 +453,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
+    <frame x="-9" y="-9" width="1938" height="1048" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20310825" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17470525" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -365,15 +465,15 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49571276" visible="true" weight="0.26613817" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49732047" weight="0.37032843" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49356914" visible="true" weight="0.26613817" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49571276" weight="0.37032843" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994641" weight="0.3295583" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4989282" weight="0.3295583" />
       <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4994641" weight="0.3295583" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50428724" side_tool="true" visible="true" weight="0.25028312" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50643086" side_tool="true" visible="true" weight="0.26613817" />
       <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.4994641" weight="0.3295583" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.24973205" />
@@ -427,24 +527,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java</url>
-          <line>215</line>
-          <properties />
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java</url>
-          <line>98</line>
-          <properties />
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java</url>
-          <line>40</line>
-          <properties />
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java</url>
           <line>117</line>
           <properties />
@@ -456,6 +538,18 @@
           <properties />
           <option name="timeStamp" value="32" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/saleoa/dao/IManagerLevelDaoImpl.java</url>
+          <line>22</line>
+          <properties />
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java</url>
+          <line>135</line>
+          <properties />
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -464,73 +558,10 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/common/constant/ConfigFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="8" column="61" selection-start-line="8" selection-start-column="61" selection-end-line="8" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/employee/EmployeePanel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="67" column="25" selection-start-line="67" selection-start-column="25" selection-end-line="67" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ILevelService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="5" column="52" lean-forward="true" selection-start-line="5" selection-start-column="52" selection-end-line="5" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/IDepartmentServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/IEmployeeRoleServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISalaryConfigServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISaleSalaryServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/IEmployeeServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="6" selection-start-column="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/IManagerLevelServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="18" column="45" lean-forward="true" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -555,23 +586,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="46" column="50" selection-start-line="46" selection-start-column="50" selection-end-line="46" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1743">
-          <caret line="98" selection-start-line="98" selection-end-line="98" />
-          <folding>
-            <element signature="e#3768#3780#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/sale/SalePanel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1596">
@@ -583,13 +597,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISalaryServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="672">
-          <caret line="74" column="59" selection-start-line="74" selection-start-column="59" selection-end-line="74" selection-end-column="59" />
         </state>
       </provider>
     </entry>
@@ -635,20 +642,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="334" column="21" selection-start-line="334" selection-start-column="21" selection-end-line="334" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="165" column="36" selection-start-line="165" selection-start-column="36" selection-end-line="165" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleLogDaoImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -689,20 +682,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/MainEntry.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="44" column="54" selection-start-line="44" selection-start-column="54" selection-end-line="44" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/Login.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
-          <caret line="63" column="35" selection-start-line="63" selection-start-column="35" selection-end-line="63" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/BaseEntity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
@@ -721,13 +700,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="504">
-          <caret line="30" column="20" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -752,13 +724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/Salary.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/SalaryConfig.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
@@ -766,24 +731,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/Sale.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1554">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/SaleSalary.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/SaleLog.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1239">
-          <caret line="91" column="37" selection-start-line="91" selection-start-column="37" selection-end-line="91" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -822,10 +773,169 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java">
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/Login.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="64" column="13" selection-start-line="64" selection-start-column="13" selection-end-line="64" selection-end-column="13" />
+          <folding>
+            <element signature="e#2208#2331#0" expanded="true" />
+            <element signature="e#2330#2331#0" expanded="true" />
+            <element signature="e#7689#8451#0" expanded="true" />
+            <element signature="e#8450#8451#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/MainEntry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3612">
+          <caret line="52" column="7" selection-start-line="52" selection-start-column="7" selection-end-line="52" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/Salary.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3671">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISalaryService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="382">
+          <caret line="32" column="31" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="460" column="24" selection-start-line="460" selection-start-column="24" selection-end-line="460" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/Sale.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1554">
+          <caret line="90" selection-start-line="90" selection-end-line="90" />
+          <folding>
+            <element signature="e#1906#1907#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/model/SaleLog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="15" column="24" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+          <folding>
+            <element signature="e#1743#1744#0" expanded="true" />
+            <element signature="e#1771#1772#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ISaleSalaryDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="287">
+          <caret line="99" selection-start-line="99" selection-end-line="99" />
+          <folding>
+            <element signature="e#3768#3780#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/ILevelDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="40" selection-start-line="40" selection-end-line="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISaleServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="135" column="29" selection-start-line="135" selection-start-column="29" selection-end-line="135" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/salary/SalaryDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2024">
+          <caret line="577" column="46" selection-start-line="577" selection-start-column="46" selection-end-line="577" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/IManagerLevelServiceImpl.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
-          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
+          <caret line="26" column="20" selection-start-line="26" selection-start-column="20" selection-end-line="26" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="483">
+          <caret line="66" column="25" selection-start-line="66" selection-start-column="25" selection-end-line="66" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/base/IBaseDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="186" column="19" selection-start-line="186" selection-start-column="19" selection-end-line="186" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/software/install/work/java/jdk8/src.zip!/java/util/Vector.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="85" column="13" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/plugin/PagePanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1685">
+          <caret line="24" column="11" selection-start-line="24" selection-start-column="11" selection-end-line="24" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelDialog.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3448">
+          <caret line="232" column="29" selection-start-line="232" selection-start-column="29" selection-end-line="232" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/dao/IManagerLevelDaoImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="37" column="40" selection-start-line="37" selection-start-column="40" selection-end-line="37" selection-end-column="40" />
+          <folding>
+            <element signature="e#813#827#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/service/ISalaryServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="469">
+          <caret line="85" column="30" selection-start-line="85" selection-start-column="30" selection-end-line="85" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/managerLevel/ManagerLevelPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="197">
+          <caret line="136" column="11" selection-start-line="136" selection-start-column="11" selection-end-line="136" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/saleoa/ui/salary/SalaryPanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="390" column="5" lean-forward="true" selection-start-line="390" selection-start-column="5" selection-end-line="390" selection-end-column="5" />
         </state>
       </provider>
     </entry>

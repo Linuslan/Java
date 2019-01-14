@@ -31,5 +31,9 @@ public interface ISalaryService extends IBaseService<Salary> {
 	 * @param month
 	 */
 	public void export(int year, int month);
+
+	public Long getTotalSalary(Salary salary);
+
+	public Long getSupposedMoney(Salary salary);
 	
 }

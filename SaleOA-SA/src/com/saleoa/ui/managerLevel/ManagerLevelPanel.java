@@ -1,7 +1,6 @@
 package com.saleoa.ui.managerLevel;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -136,11 +135,16 @@ public class ManagerLevelPanel extends JGridPanel<ManagerLevel> {
 			}
 			
 		});
-        // 创建显示表格的滚动面板
-        JScrollPane scrollPane = new JScrollPane(table);
-        // 将滚动面板添加到边界布局的中间
-        this.add(scrollPane, BorderLayout.CENTER);
-        refresh();
+		// 创建显示表格的滚动面板
+		JScrollPane scrollPane = new JScrollPane(table);
+		// 将滚动面板添加到边界布局的中间
+		scrollPane.getViewport().setBackground(Color.WHITE);
+		centerPanel.add(scrollPane, BorderLayout.CENTER);
+		centerPanel.setBackground(Color.WHITE);
+		// 将滚动面板添加到边界布局的中间
+		this.add(centerPanel, BorderLayout.CENTER);
+		this.add(pagePanel, BorderLayout.SOUTH);
+		refresh();
 	}
 	
 	public void initGrid() {

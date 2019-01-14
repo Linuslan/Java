@@ -539,7 +539,7 @@ public class SalaryDialog {
 		panel.add(memoLbl);
 		memoLbl.setLocation(FormCss.getLocation(null, statusLbl));
 		final JTextArea memoTxt = new JTextArea();
-		memoTxt.setSize(FormCss.FORM_WIDTH, 80);
+		memoTxt.setSize(FormCss.FORM_WIDTH, 50);
 		memoTxt.setLocation(FormCss.getLocation(memoLbl, statusComb));
 		panel.add(memoTxt);
 		memoTxt.setText(memo);
@@ -576,6 +576,59 @@ public class SalaryDialog {
 				}
 				Long totalMoney = money-deductMoney;
 				totalMoneyIpt.setText(String.valueOf(totalMoney/100.0));
+				//总达标奖
+				String totalReachGoalBonusStr = totalReachGoalBonusIpt.getText();
+				totalReachGoalBonusStr = totalReachGoalBonusStr.replaceAll(",", "");
+				Double totalReachGoalBonusD = Double.parseDouble(totalReachGoalBonusStr);
+				Long totalReachGoalBonus = (long) (totalReachGoalBonusD*100);
+
+				//达标奖
+				String reachGoalBonusStr = reachGoalBonusIpt.getText();
+				reachGoalBonusStr = reachGoalBonusStr.replaceAll(",", "");
+				Double reachGoalBonusD = Double.parseDouble(reachGoalBonusStr);
+				Long reachGoalBonus = (long) (reachGoalBonusD*100);
+
+				//超额奖
+				String overGoalBonusStr = overGoalBonusIpt.getText();
+				overGoalBonusStr = overGoalBonusStr.replaceAll(",", "");
+				Double overGoalBonusD = Double.parseDouble(overGoalBonusStr);
+				Long overGoalBonus = (long) (overGoalBonusD*100);
+
+				//内勤管理奖
+				String officeManageBonusStr = officeManageBonusIpt.getText();
+				officeManageBonusStr = officeManageBonusStr.replaceAll(",", "");
+				Double officeManageBonusD = Double.parseDouble(officeManageBonusStr);
+				Long officeManageBonus = (long) (officeManageBonusD*100);
+
+				//满勤奖
+				String fullDutyBonusStr = fullDutyBonusIpt.getText();
+				fullDutyBonusStr = fullDutyBonusStr.replaceAll(",", "");
+				Double fullDutyBonusD = Double.parseDouble(fullDutyBonusStr);
+				Long fullDutyBonus = (long) (fullDutyBonusD*100);
+
+				//本月罚款
+				String amercementStr = amercementIpt.getText();
+				amercementStr = amercementStr.replaceAll(",", "");
+				Double amercementD = Double.parseDouble(amercementStr);
+				Long amercement = (long) (amercementD*100);
+
+				//公司借款
+				String companyLendStr = companyLendIpt.getText();
+				companyLendStr = companyLendStr.replaceAll(",", "");
+				Double companyLendD = Double.parseDouble(companyLendStr);
+				Long companyLend = (long) (companyLendD*100);
+
+				//直销奖
+				String directSellMoneyStr = directSellMoneyIpt.getText();
+				directSellMoneyStr = directSellMoneyStr.replaceAll(",", "");
+				Double directSellMoneyD = Double.parseDouble(directSellMoneyStr);
+				Long directSellMoney = (long) (directSellMoneyD*100);
+
+				//差额奖
+				String balanceMoneyStr = balanceMoneyIpt.getText();
+				balanceMoneyStr = balanceMoneyStr.replaceAll(",", "");
+				Double balanceMoneyD = Double.parseDouble(balanceMoneyStr);
+				Long balanceMoney = (long) (balanceMoneyD*100);
 				Salary temp = new Salary();
 				if(null != salary) {
 					BeanUtil.copyBean(salary, temp);
@@ -609,9 +662,20 @@ public class SalaryDialog {
 				temp.setDeductMoney(deductMoney);
 				temp.setTotalMoney(totalMoney);
 				temp.setUpdateDate(new Date());
+				temp.setTotalReachGoalBonus(totalReachGoalBonus);
+				temp.setAmercement(amercement);
+				temp.setBalanceMoney(balanceMoney);
+				temp.setFullDutyBonus(fullDutyBonus);
+				temp.setOfficeManageBonus(officeManageBonus);
+				temp.setOverGoalBonus(overGoalBonus);
+				temp.setReachGoalBonus(reachGoalBonus);
+				temp.setDirectSellMoney(directSellMoney);
+				temp.setCompanyLend(companyLend);
 				int status = statusComb.getSelectedIndex();
 				temp.setStatus(status);
 				temp.setMemo(memoTxt.getText());
+				temp.setSupposedMoney(salaryService.getSupposedMoney(temp));
+				temp.setTotalMoney(salaryService.getTotalSalary(temp));
 				boolean success = false;
 				try {
 					if(null == temp.getId()) {
